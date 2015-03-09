@@ -6,4 +6,4 @@ arithmetic.
 
 This work is driven by the `JWST Data Analysis Development Forum`_.
 
-.. _JWST Data Analysis Forum: https://confluence.stsci.edu/display/JWSTDATF/JWST+Data+Analysis+Development+Forum
+.. _JWST Data Analysis Development Forum: https://confluence.stsci.edu/display/JWSTDATF/JWST+Data+Analysis+Development+Forum
