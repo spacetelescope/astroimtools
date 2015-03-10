@@ -5,7 +5,7 @@ Tools for image statistics.
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
-from astropy.stats import sigma_clip
+from astropy.stats import sigma_clip, biweight_location, biweight_midvariance
 from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.extern.six import string_types
@@ -86,6 +86,20 @@ class ImageStatistics(object):
         The maximum pixel value.
         """
         return np.max(self.goodvals)
+
+    @lazyproperty
+    def biweight_location(self):
+        """
+        The biweight location of the pixel values.
+        """
+        return biweight_location(self.goodvals)
+
+    @lazyproperty
+    def biweight_midvariance(self):
+        """
+        The biweight midvariance of the pixel values.
+        """
+        return biweight_midvariance(self.goodvals)
 
     @lazyproperty
     def skew(self):
