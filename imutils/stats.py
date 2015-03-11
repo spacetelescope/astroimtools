@@ -5,7 +5,8 @@ Tools for image statistics.
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
-from astropy.stats import sigma_clip, biweight_location, biweight_midvariance
+from astropy.stats import (sigma_clip, biweight_location,
+                           biweight_midvariance, mad_std)
 from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.extern.six import string_types
@@ -67,7 +68,7 @@ class ImageStatistics(object):
         return 3. * np.median(self.goodvals) - 2. * np.mean(self.goodvals)
 
     @lazyproperty
-    def stddev(self):
+    def std(self):
         """
         The standard deviation of the pixel values.
         """
@@ -86,6 +87,24 @@ class ImageStatistics(object):
         The maximum pixel value.
         """
         return np.max(self.goodvals)
+
+    @lazyproperty
+    def mad_std(self):
+        """
+        A robust standard deviation using the median absolute deviation
+        (MAD).
+
+        The standard deviation estimator is given by:
+
+        .. math::
+
+            \\sigma \\approx \\frac{\\textrm{MAD}}{\Phi^{-1}(3/4)} \\approx 1.4826 \ \\textrm{MAD}
+
+        where :math:`\Phi^{-1}(P)` is the normal inverse cumulative
+        distribution function evaluated at probability :math:`P = 3/4`.
+        """
+
+        return mad_std(self.goodvals)
 
     @lazyproperty
     def biweight_location(self):
@@ -172,7 +191,7 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1, cenfunc=np.median,
                                        varfunc=np.var))
 
     output_columns = None
-    default_columns = ['name', 'npix', 'mean', 'stddev', 'min', 'max']
+    default_columns = ['name', 'npix', 'mean', 'std', 'min', 'max']
     if columns is not None:
         output_columns = np.atleast_1d(columns)
     if output_columns is None:
