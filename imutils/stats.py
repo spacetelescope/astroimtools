@@ -22,6 +22,21 @@ class ImageStatistics(object):
         """
         Parameters
         ----------
+        data : `~numpy.ndarray` or list of `~numpy.ndarray`
+            Data array(s) on which to calculate statistics.
+
+        mask : bool `numpy.ndarray` or list of bool `~numpy.ndarray`, optional
+            A boolean mask (or list of masks) with the same shape as
+            ``data``, where a `True` value indicates the corresponding
+            element of ``data`` is masked.  Masked pixels are excluded
+            when computing the image statistics.
+
+        name : str or list of str
+            The name (or list of names) to attach to the input data
+            array(s).
+
+        ...
+
         """
 
         if mask is not None:
@@ -64,7 +79,6 @@ class ImageStatistics(object):
         """
         The mode of the pixel values.
         """
-        # TODO: replace with histogram-based mode
         return 3. * np.median(self.goodvals) - 2. * np.mean(self.goodvals)
 
     @lazyproperty
@@ -155,6 +169,9 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1, cenfunc=np.median,
 
     name : str or list of str
         The name (or list of names) to attach to the input data array(s).
+
+    ...
+
     """
 
     imstats = []
