@@ -17,26 +17,47 @@ __all__ = ['ImageStatistics', 'imstats']
 
 
 class ImageStatistics(object):
+    """Class to calculate sigma-clipped image statistics."""
+
     def __init__(self, data, mask=None, name=None, sigma=3., iters=1,
-                 cenfunc=np.median, varfunc=np.var):
+                 cenfunc=np.ma.median, varfunc=np.var):
         """
         Parameters
         ----------
-        data : `~numpy.ndarray` or list of `~numpy.ndarray`
-            Data array(s) on which to calculate statistics.
+        data : `~numpy.ndarray`
+            Data array on which to calculate statistics.
 
-        mask : bool `numpy.ndarray` or list of bool `~numpy.ndarray`, optional
-            A boolean mask (or list of masks) with the same shape as
-            ``data``, where a `True` value indicates the corresponding
-            element of ``data`` is masked.  Masked pixels are excluded
-            when computing the image statistics.
+        mask : bool `numpy.ndarray`, optional
+            A boolean mask with the same shape as ``data``, where a
+            `True` value indicates the corresponding element of ``data``
+            is masked.  Masked pixels are excluded when computing the
+            image statistics.
 
-        name : str or list of str
-            The name (or list of names) to attach to the input data
-            array(s).
+        name : str, optional
+            The name to attach to the input data array.
 
-        ...
+        sigma : float, optional
+            The number of standard deviations (*not* variances) to use
+            as the clipping limit.
 
+        iters : int or `None`, optional
+            The number of iterations to perform clipping for, or `None`
+            to clip until convergence is achieved (i.e. continue until
+            the last iteration clips nothing).
+
+        cenfunc : callable, optional
+            The technique to compute the center for the clipping. Must
+            be a callable that takes in a masked array and outputs the
+            central value.  Defaults to the median (`numpy.ma.median`).
+
+        varfunc : callable, optional
+            The technique to compute the standard deviation about the
+            center. Must be a callable that takes in a masked array and
+            outputs a width estimator::
+
+                deviation**2 > sigma**2 * varfunc(deviation)
+
+            Defaults to the variance (`numpy.var`).
         """
 
         if mask is not None:
@@ -105,8 +126,10 @@ class ImageStatistics(object):
     @lazyproperty
     def mad_std(self):
         """
-        A robust standard deviation using the median absolute deviation
-        (MAD).
+        A robust standard deviation using the `median absolute deviation
+        (MAD)
+        <http://en.wikipedia.org/wiki/Median_absolute_deviation>`_.
+        The MAD is defined as ``median(abs(a - median(a)))``.
 
         The standard deviation estimator is given by:
 
@@ -151,8 +174,8 @@ class ImageStatistics(object):
         return kurtosis(self.goodvals)
 
 
-def imstats(data, mask=None, name=None, sigma=3., iters=1, cenfunc=np.median,
-            varfunc=np.var, columns=None):
+def imstats(data, mask=None, name=None, sigma=3., iters=1,
+            cenfunc=np.ma.median, varfunc=np.var, columns=None):
     """
     Compute image statistics.
 
@@ -170,8 +193,56 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1, cenfunc=np.median,
     name : str or list of str
         The name (or list of names) to attach to the input data array(s).
 
-    ...
+    sigma : float, optional
+        The number of standard deviations (*not* variances) to use
+        as the clipping limit.
 
+    iters : int or `None`, optional
+        The number of iterations to perform clipping for, or `None`
+        to clip until convergence is achieved (i.e. continue until
+        the last iteration clips nothing).
+
+    cenfunc : callable, optional
+        The technique to compute the center for the clipping. Must
+        be a callable that takes in a masked array and outputs the
+        central value.  Defaults to the median (`numpy.ma.median`).
+
+    varfunc : callable, optional
+        The technique to compute the standard deviation about the
+        center. Must be a callable that takes in a masked array and
+        outputs a width estimator::
+
+            deviation**2 > sigma**2 * varfunc(deviation)
+
+        Defaults to the variance (`numpy.var`).
+
+    columns : str or list of str, optional
+        The names of columns, in order, to include in the output
+        `~astropy.table.Table`.  The allowed column names are
+        'biweight_location', 'biweight_midvariance', 'kurtosis',
+        'mad_std', 'max', 'mean', 'median', 'min', 'mode', 'npix',
+        'skew', and 'std'.  The default is ``['name', 'npix', 'mean',
+        'std', 'min', 'max']``.
+
+    Returns
+    -------
+    table : `~astropy.table.Table`
+        A table containing the calculated image statistics.  Each table
+        row corresponds to a single data array.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from imutils import imstats
+    >>> data = np.arange(10)
+    >>> columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
+    >>> tbl = imstats(data, columns=columns)
+    >>> tbl
+    <Table masked=False length=1>
+      mean   median   mode       std         mad_std     min   max
+    float64 float64 float64    float64       float64    int64 int64
+    ------- ------- ------- ------------- ------------- ----- -----
+        4.5     4.5     4.5 2.87228132327 3.70650554626     0     9
     """
 
     imstats = []
