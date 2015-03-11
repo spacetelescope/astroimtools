@@ -1,0 +1,7 @@
+numpy
+scipy
+matplotlib
+Cython
+networkx # needed by scikit-image, not auto-installed for some reason
+scikit-image
+-e git+http://github.com/astropy/astropy.git#egg=astropy
