@@ -17,6 +17,9 @@ from astropy.utils.exceptions import AstropyUserWarning
 __all__ = ['ImageStatistics', 'imstats', 'minmax', 'listpixels']
 
 
+warnings.filterwarnings('always', category=AstropyUserWarning)
+
+
 class ImageStatistics(object):
     """Class to calculate sigma-clipped image statistics."""
 
