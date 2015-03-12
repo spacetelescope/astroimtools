@@ -10,6 +10,7 @@ from astropy.stats import (sigma_clip, biweight_location,
 from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.extern.six import string_types
+from astropy.nddata import NDData
 from itertools import izip_longest
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
@@ -213,25 +214,17 @@ class ImageStatistics(object):
         return kurtosis(self.goodvals)
 
 
-def imstats(data, mask=None, name=None, sigma=3., iters=1,
-            cenfunc=np.ma.median, varfunc=np.var, columns=None,
-            lower_bound=None, upper_bound=None):
+def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
+            varfunc=np.var, columns=None, lower_bound=None, upper_bound=None):
     """
     Compute image statistics.
 
     Parameters
     ----------
-    data : `~numpy.ndarray` or list of `~numpy.ndarray`
-        Data array(s) on which to calculate statistics.
-
-    mask : bool `numpy.ndarray` or list of bool `~numpy.ndarray`, optional
-        A boolean mask (or list of masks) with the same shape as
-        ``data``, where a `True` value indicates the corresponding
-        element of ``data`` is masked.  Masked pixels are excluded when
+    nddata : `~astropy.nddata.NDData` or list of `~astropy.nddata.NDData`
+        NDData object containing the data array and optional mask on
+        which to calculate statistics.  Masked pixels are excluded when
         computing the image statistics.
-
-    name : str or list of str
-        The name (or list of names) to attach to the input data array(s).
 
     sigma : float, optional
         The number of standard deviations (*not* variances) to use
@@ -296,41 +289,26 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1,
     """
 
     imstats = []
-    if isinstance(data, list):
-        if len(data) == 0:
-            raise ValueError('data is an empty list')
+    if isinstance(nddata, list):
+        if len(nddata) == 0:
+            raise ValueError('nddata is an empty list')
 
-        if mask is not None:
-            if not isinstance(mask, list):
-                raise ValueError('mask must be a list if data is a list')
-            if len(mask) != len(data):
-                raise ValueError('length of mask list must match length of '
-                                 'data list')
-        else:
-            mask = [None]
-
-        if name is not None:
-            if not isinstance(name, list):
-                raise ValueError('name must be a list if data is a list')
-            if len(name) != len(data):
-                raise ValueError('length of name list must match length of '
-                                 'data list')
-        else:
-            name = [None]
-
-        for (data_arr, mask_arr, name_val) in izip_longest(data, mask, name):
-            imstats.append(ImageStatistics(data_arr, mask=mask_arr,
-                                           name=name_val, sigma=sigma,
-                                           iters=iters, cenfunc=cenfunc,
-                                           varfunc=varfunc,
-                                           lower_bound=lower_bound,
-                                           upper_bound=upper_bound))
+        for nddata_obj in nddata:
+            if not isinstance(nddata_obj, NDData):
+                raise ValueError('nddata must be an astropy.nddata.NDData '
+                                 'object')
+            imstats.append(ImageStatistics(nddata_obj.data,
+                mask=nddata_obj.mask, name=nddata_obj.meta.get('name', None),
+                sigma=sigma, iters=iters, cenfunc=cenfunc, varfunc=varfunc,
+                lower_bound=lower_bound, upper_bound=upper_bound))
     else:
-        imstats.append(ImageStatistics(data, mask=mask, name=name,
-                                       sigma=sigma, iters=iters,
-                                       cenfunc=cenfunc, varfunc=varfunc,
-                                       lower_bound=lower_bound,
-                                       upper_bound=upper_bound))
+        if not isinstance(nddata, NDData):
+            raise ValueError('nddata must be an astropy.nddata.NDData '
+                             'object')
+        imstats.append(ImageStatistics(nddata.data, mask=nddata.mask,
+            name=nddata.meta.get('name', None), sigma=sigma, iters=iters,
+            cenfunc=cenfunc, varfunc=varfunc, lower_bound=lower_bound,
+            upper_bound=upper_bound))
 
     output_columns = None
     default_columns = ['name', 'npixels', 'mean', 'std', 'min', 'max']
