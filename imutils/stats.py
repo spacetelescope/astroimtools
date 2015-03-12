@@ -16,7 +16,7 @@ import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
 
-__all__ = ['ImageStatistics', 'imstats', 'minmax']
+__all__ = ['ImageStatistics', 'imstats', 'minmax', 'listpixels']
 
 
 class ImageStatistics(object):
@@ -363,3 +363,29 @@ def minmax(data, mask=None, axis=None):
         funcs = [np.min, np.max]
 
     return funcs[0](data, axis=axis), funcs[1](data, axis=axis)
+
+
+def listpixels(data, x_range=None, y_range=None):
+    """
+    Return a `~astropy.table.Table` listing the ``(x, y)`` positions
+    and ``data`` values.
+    """
+
+    if x_range is None:
+        x_slice = slice(0, data.shape[1])
+    else:
+        x_slice = slice(x_range[0], x_range[1])
+
+    if y_range is None:
+        y_slice = slice(0, data.shape[0])
+    else:
+        y_slice = slice(y_range[0], y_range[1])
+
+    yy, xx = np.mgrid[y_slice, x_slice]
+    values = data[yy, xx]
+
+    tbl = Table()
+    tbl['x'] = xx.ravel()
+    tbl['y'] = yy.ravel()
+    tbl['value'] = values.ravel()
+    return tbl
