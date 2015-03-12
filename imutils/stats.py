@@ -81,7 +81,7 @@ class ImageStatistics(object):
                 raise ValueError('mask and data must have the same shape')
             if np.all(mask):
                 raise ValueError('All data values are masked')
-            data = np.ma.MaskedArray(nddata.data, nddata.mask)
+            data = np.ma.MaskedArray(nddata.data, mask)
             data_clip = sigma_clip(data, sig=sigma, iters=iters)
         else:
             data_clip = sigma_clip(nddata.data, sig=sigma, iters=iters)
@@ -300,32 +300,38 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
     """
 
     imstats = []
-    if isinstance(nddata, list):
-        if len(nddata) == 0:
-            raise ValueError('nddata is an empty list')
+    if not isinstance(nddata, list):
+        nddata = [nddata]
 
-        for nddata_obj in nddata:
-            imstats.append(ImageStatistics(nddata_obj, sigma=sigma,
-                                           iters=iters, cenfunc=cenfunc,
-                                           varfunc=varfunc,
-                                           lower_bound=lower_bound,
-                                           upper_bound=upper_bound))
-    else:
-        imstats.append(ImageStatistics(nddata, sigma=sigma, iters=iters,
-                                       cenfunc=cenfunc, varfunc=varfunc,
+    if len(nddata) == 0:
+        raise ValueError('nddata is an empty list')
+
+    for nddata_obj in nddata:
+        imstats.append(ImageStatistics(nddata_obj, sigma=sigma,
+                                       iters=iters, cenfunc=cenfunc,
+                                       varfunc=varfunc,
                                        lower_bound=lower_bound,
                                        upper_bound=upper_bound))
 
     output_columns = None
     default_columns = ['name', 'npixels', 'mean', 'std', 'min', 'max']
-    if columns is not None:
-        output_columns = np.atleast_1d(columns)
-    if output_columns is None:
+    property_columns = ['biweight_location', 'biweight_midvariance',
+                        'kurtosis', 'mad_std', 'max', 'mean', 'median',
+                        'min', 'mode', 'npixels', 'nrejected', 'skew',
+                        'std']
+
+    if columns is None:
         output_columns = default_columns
+    else:
+        output_columns = np.atleast_1d(columns)
 
     output_table = Table()
     for column in output_columns:
-        values = [getattr(imgstats, column) for imgstats in imstats]
+        if column not in property_columns:
+            values = [nddata_obj.meta.get(column, None) for nddata_obj
+                      in nddata]
+        else:
+            values = [getattr(imgstats, column) for imgstats in imstats]
         output_table[column] = values
 
     return output_table
