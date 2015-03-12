@@ -87,6 +87,7 @@ class ImageStatistics(object):
             data_clip = sigma_clip(nddata.data, sig=sigma, iters=iters)
 
         self.goodvals = data_clip.data[~data_clip.mask]
+        self.total_pixels = nddata.data.size
 
     def __getitem__(self, key):
         return getattr(self, key, None)
@@ -122,6 +123,13 @@ class ImageStatistics(object):
         The number of unclipped pixels.
         """
         return len(self.goodvals)
+
+    @lazyproperty
+    def nrejected(self):
+        """
+        The number of rejected (clipped) pixels.
+        """
+        return self.total_pixels - self.npixels
 
     @lazyproperty
     def mean(self):
@@ -256,7 +264,7 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
         `~astropy.table.Table`.  The column names can include any of the
         statistic names: 'biweight_location', 'biweight_midvariance',
         'kurtosis', 'mad_std', 'max', 'mean', 'median', 'min', 'mode',
-        'npixels', 'skew', 'std' or a name of a key in the
+        'npixels', 'nrejected', 'skew', 'std' or a name of a key in the
         `astropy.nddata.NDData.meta` dictionary.  The default is
         ``['name', 'npixels', 'mean', 'std', 'min', 'max']``.
 
