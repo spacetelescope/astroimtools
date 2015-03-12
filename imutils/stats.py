@@ -75,7 +75,7 @@ class ImageStatistics(object):
         return getattr(self, key, None)
 
     @lazyproperty
-    def npix(self):
+    def npixels(self):
         """
         The number of unclipped pixels.
         """
@@ -220,8 +220,8 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1,
         The names of columns, in order, to include in the output
         `~astropy.table.Table`.  The allowed column names are
         'biweight_location', 'biweight_midvariance', 'kurtosis',
-        'mad_std', 'max', 'mean', 'median', 'min', 'mode', 'npix',
-        'skew', and 'std'.  The default is ``['name', 'npix', 'mean',
+        'mad_std', 'max', 'mean', 'median', 'min', 'mode', 'npixels',
+        'skew', and 'std'.  The default is ``['name', 'npixels', 'mean',
         'std', 'min', 'max']``.
 
     Returns
@@ -279,7 +279,7 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1,
                                        varfunc=np.var))
 
     output_columns = None
-    default_columns = ['name', 'npix', 'mean', 'std', 'min', 'max']
+    default_columns = ['name', 'npixels', 'mean', 'std', 'min', 'max']
     if columns is not None:
         output_columns = np.atleast_1d(columns)
     if output_columns is None:
