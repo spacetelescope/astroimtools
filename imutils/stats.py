@@ -9,9 +9,7 @@ from astropy.stats import (sigma_clip, biweight_location,
                            biweight_midvariance, mad_std)
 from astropy.utils import lazyproperty
 from astropy.table import Table
-from astropy.extern.six import string_types
 from astropy.nddata import NDData
-from itertools import izip_longest
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
@@ -22,23 +20,15 @@ __all__ = ['ImageStatistics', 'imstats', 'minmax', 'listpixels']
 class ImageStatistics(object):
     """Class to calculate sigma-clipped image statistics."""
 
-    def __init__(self, data, mask=None, name=None, sigma=3., iters=1,
-                 cenfunc=np.ma.median, varfunc=np.var, lower_bound=None,
-                 upper_bound=None):
+    def __init__(self, nddata, sigma=3., iters=1, cenfunc=np.ma.median,
+                 varfunc=np.var, lower_bound=None, upper_bound=None):
         """
         Parameters
         ----------
-        data : `~numpy.ndarray`
-            Data array on which to calculate statistics.
-
-        mask : bool `numpy.ndarray`, optional
-            A boolean mask with the same shape as ``data``, where a
-            `True` value indicates the corresponding element of ``data``
-            is masked.  Masked pixels are excluded when computing the
-            image statistics.
-
-        name : str, optional
-            The name to attach to the input data array.
+        nddata : `~astropy.nddata.NDData`
+            NDData object containing the data array and optional mask on
+            which to calculate statistics.  Masked pixels are excluded
+            when computing the image statistics.
 
         sigma : float, optional
             The number of standard deviations (*not* variances) to use
@@ -74,26 +64,29 @@ class ImageStatistics(object):
             `None` means that no upper bound is applied (default).
         """
 
-        nan_mask = None
-        if np.any(np.isnan(data)):
-            warnings.warn(('data array contains at least one np.nan. NaN '
-                           'values will be masked.'), AstropyUserWarning)
-            nan_mask = np.isnan(data)
+        if not isinstance(nddata, NDData):
+            raise ValueError('nddata input must be an astropy.nddata.NDData '
+                             'object')
 
-        mask = self._create_mask(data, mask, nan_mask, lower_bound,
-                                 upper_bound)
+        nan_mask = None
+        if np.any(np.isnan(nddata.data)):
+            warnings.warn(('The data array contains at least one np.nan. NaN '
+                           'values will be masked.'), AstropyUserWarning)
+            nan_mask = np.isnan(nddata.data)
+
+        mask = self._create_mask(nddata.data, nddata.mask, nan_mask,
+                                 lower_bound, upper_bound)
         if mask is not None:
-            if mask.shape != data.shape:
+            if mask.shape != nddata.data.shape:
                 raise ValueError('mask and data must have the same shape')
             if np.all(mask):
                 raise ValueError('All data values are masked')
-            data = np.ma.MaskedArray(data, mask)
+            data = np.ma.MaskedArray(nddata.data, nddata.mask)
+            data_clip = sigma_clip(data, sig=sigma, iters=iters)
+        else:
+            data_clip = sigma_clip(nddata.data, sig=sigma, iters=iters)
 
-        data_clip = sigma_clip(data, sig=sigma, iters=iters)
         self.goodvals = data_clip.data[~data_clip.mask]
-        if name is not None and not isinstance(name, string_types):
-            raise ValueError('name must be a string')
-        self.name = name
 
     def __getitem__(self, key):
         return getattr(self, key, None)
@@ -260,11 +253,12 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
 
     columns : str or list of str, optional
         The names of columns, in order, to include in the output
-        `~astropy.table.Table`.  The allowed column names are
-        'biweight_location', 'biweight_midvariance', 'kurtosis',
-        'mad_std', 'max', 'mean', 'median', 'min', 'mode', 'npixels',
-        'skew', and 'std'.  The default is ``['name', 'npixels', 'mean',
-        'std', 'min', 'max']``.
+        `~astropy.table.Table`.  The column names can include any of the
+        statistic names: 'biweight_location', 'biweight_midvariance',
+        'kurtosis', 'mad_std', 'max', 'mean', 'median', 'min', 'mode',
+        'npixels', 'skew', 'std' or a name of a key in the
+        `astropy.nddata.NDData.meta` dictionary.  The default is
+        ``['name', 'npixels', 'mean', 'std', 'min', 'max']``.
 
     lower_bound : float, optional
         The minimum data value to include in the statistics.  All pixel
@@ -303,21 +297,16 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
             raise ValueError('nddata is an empty list')
 
         for nddata_obj in nddata:
-            if not isinstance(nddata_obj, NDData):
-                raise ValueError('nddata must be an astropy.nddata.NDData '
-                                 'object')
-            imstats.append(ImageStatistics(nddata_obj.data,
-                mask=nddata_obj.mask, name=nddata_obj.meta.get('name', None),
-                sigma=sigma, iters=iters, cenfunc=cenfunc, varfunc=varfunc,
-                lower_bound=lower_bound, upper_bound=upper_bound))
+            imstats.append(ImageStatistics(nddata_obj, sigma=sigma,
+                                           iters=iters, cenfunc=cenfunc,
+                                           varfunc=varfunc,
+                                           lower_bound=lower_bound,
+                                           upper_bound=upper_bound))
     else:
-        if not isinstance(nddata, NDData):
-            raise ValueError('nddata must be an astropy.nddata.NDData '
-                             'object')
-        imstats.append(ImageStatistics(nddata.data, mask=nddata.mask,
-            name=nddata.meta.get('name', None), sigma=sigma, iters=iters,
-            cenfunc=cenfunc, varfunc=varfunc, lower_bound=lower_bound,
-            upper_bound=upper_bound))
+        imstats.append(ImageStatistics(nddata, sigma=sigma, iters=iters,
+                                       cenfunc=cenfunc, varfunc=varfunc,
+                                       lower_bound=lower_bound,
+                                       upper_bound=upper_bound))
 
     output_columns = None
     default_columns = ['name', 'npixels', 'mean', 'std', 'min', 'max']
