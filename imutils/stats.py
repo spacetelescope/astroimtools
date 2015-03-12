@@ -326,9 +326,9 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1,
                                            lower_bound=lower_bound,
                                            upper_bound=upper_bound))
     else:
-        imstats.append(ImageStatistics(data, mask=mask, name=name, sigma=3.,
-                                       iters=1, cenfunc=np.median,
-                                       varfunc=np.var,
+        imstats.append(ImageStatistics(data, mask=mask, name=name,
+                                       sigma=sigma, iters=iters,
+                                       cenfunc=cenfunc, varfunc=varfunc,
                                        lower_bound=lower_bound,
                                        upper_bound=upper_bound))
 
