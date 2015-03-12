@@ -11,6 +11,8 @@ from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.extern.six import string_types
 from itertools import izip_longest
+import warnings
+from astropy.utils.exceptions import AstropyUserWarning
 
 
 __all__ = ['ImageStatistics', 'imstats']
@@ -70,6 +72,11 @@ class ImageStatistics(object):
             pixel values greater than ``upper_bound`` will be ignored.
             `None` means that no upper bound is applied (default).
         """
+
+        if np.any(np.isnan(data)):
+            warnings.warn(('data array contains at least one np.nan. '
+                           'Please create a mask for these values (e.g. '
+                           'with np.isnan())'), AstropyUserWarning)
 
         mask = self._create_mask(data, mask, lower_bound, upper_bound)
         if mask is not None:
