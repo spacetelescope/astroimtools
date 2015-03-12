@@ -16,7 +16,7 @@ import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
 
-__all__ = ['ImageStatistics', 'imstats']
+__all__ = ['ImageStatistics', 'imstats', 'minmax']
 
 
 class ImageStatistics(object):
@@ -323,3 +323,43 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
         output_table[column] = values
 
     return output_table
+
+
+def minmax(data, mask=None, axis=None):
+    """
+    Return the minimum and maximum values of an array or the minimum and
+    maximum along an axis.
+
+    Parameters
+    ----------
+    data : array-like
+        The input data.
+
+    mask : array_like (bool), optional
+        A boolean mask, with the same shape as ``data``, where a `True`
+        value indicates the corresponding element of ``data`` is masked.
+
+    axis : int, optional
+        The axis along which to operate.  By default, flattened input is
+        used.
+
+    Returns
+    -------
+    min : scalar or `~numpy.ndarray`
+        The minimum value of ``data``.  If ``axis`` is `None`, the
+        result is a scalar value.  If ``axis`` is input, the result is
+        an array of dimension ``data.ndim - 1``.
+
+    max : scalar or `~numpy.ndarray`
+        The maximum value of ``data``.  If ``axis`` is `None`, the
+        result is a scalar value.  If ``axis`` is input, the result is
+        an array of dimension ``data.ndim - 1``.
+    """
+
+    if mask is not None:
+        funcs = [np.ma.min, np.ma.max]
+        data = np.ma.masked_array(data, mask=mask)
+    else:
+        funcs = [np.min, np.max]
+
+    return funcs[0](data, axis=axis), funcs[1](data, axis=axis)
