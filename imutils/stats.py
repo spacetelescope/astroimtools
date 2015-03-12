@@ -62,12 +62,12 @@ class ImageStatistics(object):
 
             Defaults to the variance (`numpy.var`).
 
-        lower_bound : array-like, optional
+        lower_bound : float, optional
             The minimum data value to include in the statistics.  All
             pixel values less than ``lower_bound`` will be ignored.
             `None` means that no lower bound is applied (default).
 
-        upper_bound : array-like, optional
+        upper_bound : float, optional
             The maximum data value to include in the statistics.  All
             pixel values greater than ``upper_bound`` will be ignored.
             `None` means that no upper bound is applied (default).
@@ -264,12 +264,12 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1,
         'skew', and 'std'.  The default is ``['name', 'npixels', 'mean',
         'std', 'min', 'max']``.
 
-    lower_bound : array-like, optional
+    lower_bound : float, optional
         The minimum data value to include in the statistics.  All pixel
         values less than ``lower_bound`` will be ignored.  `None` means
         that no lower bound is applied (default).
 
-    upper_bound : array-like, optional
+    upper_bound : float, optional
         The maximum data value to include in the statistics.  All pixel
         values greater than ``upper_bound`` will be ignored.  `None` means
         that no upper bound is applied (default).
