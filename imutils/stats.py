@@ -74,12 +74,14 @@ class ImageStatistics(object):
             `None` means that no upper bound is applied (default).
         """
 
+        nan_mask = None
         if np.any(np.isnan(data)):
-            warnings.warn(('data array contains at least one np.nan. '
-                           'Please create a mask for these values (e.g. '
-                           'with np.isnan())'), AstropyUserWarning)
+            warnings.warn(('data array contains at least one np.nan. NaN '
+                           'values will be masked.'), AstropyUserWarning)
+            nan_mask = np.isnan(data)
 
-        mask = self._create_mask(data, mask, lower_bound, upper_bound)
+        mask = self._create_mask(data, mask, nan_mask, lower_bound,
+                                 upper_bound)
         if mask is not None:
             if mask.shape != data.shape:
                 raise ValueError('mask and data must have the same shape')
@@ -97,7 +99,7 @@ class ImageStatistics(object):
         return getattr(self, key, None)
 
     @staticmethod
-    def _create_mask(data, mask, lower_bound, upper_bound):
+    def _create_mask(data, mask, nan_mask, lower_bound, upper_bound):
         if lower_bound is not None and upper_bound is not None:
             bound_mask = np.logical_or(data < lower_bound, data > upper_bound)
         elif lower_bound is not None and upper_bound is None:
@@ -112,6 +114,13 @@ class ImageStatistics(object):
                 mask = np.logical_or(mask, bound_mask)
             else:
                 mask = bound_mask
+
+        if nan_mask is not None:
+            if mask is not None:
+                mask = np.logical_or(mask, nan_mask)
+            else:
+                mask = nan_mask
+
         return mask
 
     @lazyproperty
