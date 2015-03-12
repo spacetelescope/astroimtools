@@ -20,7 +20,8 @@ class ImageStatistics(object):
     """Class to calculate sigma-clipped image statistics."""
 
     def __init__(self, data, mask=None, name=None, sigma=3., iters=1,
-                 cenfunc=np.ma.median, varfunc=np.var):
+                 cenfunc=np.ma.median, varfunc=np.var, lower_bound=None,
+                 upper_bound=None):
         """
         Parameters
         ----------
@@ -58,11 +59,24 @@ class ImageStatistics(object):
                 deviation**2 > sigma**2 * varfunc(deviation)
 
             Defaults to the variance (`numpy.var`).
+
+        lower_bound : array-like, optional
+            The minimum data value to include in the statistics.  All
+            pixel values less than ``lower_bound`` will be ignored.
+            `None` means that no lower bound is applied (default).
+
+        upper_bound : array-like, optional
+            The maximum data value to include in the statistics.  All
+            pixel values greater than ``upper_bound`` will be ignored.
+            `None` means that no upper bound is applied (default).
         """
 
+        mask = self._create_mask(data, mask, lower_bound, upper_bound)
         if mask is not None:
             if mask.shape != data.shape:
                 raise ValueError('mask and data must have the same shape')
+            if np.all(mask):
+                raise ValueError('All data values are masked')
             data = np.ma.MaskedArray(data, mask)
 
         data_clip = sigma_clip(data, sig=sigma, iters=iters)
@@ -73,6 +87,24 @@ class ImageStatistics(object):
 
     def __getitem__(self, key):
         return getattr(self, key, None)
+
+    @staticmethod
+    def _create_mask(data, mask, lower_bound, upper_bound):
+        if lower_bound is not None and upper_bound is not None:
+            bound_mask = np.logical_or(data < lower_bound, data > upper_bound)
+        elif lower_bound is not None and upper_bound is None:
+            bound_mask = (data < lower_bound)
+        elif lower_bound is None and upper_bound is not None:
+            bound_mask = (data > upper_bound)
+        else:
+            bound_mask = None
+
+        if bound_mask is not None:
+            if mask is not None:
+                mask = np.logical_or(mask, bound_mask)
+            else:
+                mask = bound_mask
+        return mask
 
     @lazyproperty
     def npixels(self):
@@ -175,7 +207,8 @@ class ImageStatistics(object):
 
 
 def imstats(data, mask=None, name=None, sigma=3., iters=1,
-            cenfunc=np.ma.median, varfunc=np.var, columns=None):
+            cenfunc=np.ma.median, varfunc=np.var, columns=None,
+            lower_bound=None, upper_bound=None):
     """
     Compute image statistics.
 
@@ -223,6 +256,16 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1,
         'mad_std', 'max', 'mean', 'median', 'min', 'mode', 'npixels',
         'skew', and 'std'.  The default is ``['name', 'npixels', 'mean',
         'std', 'min', 'max']``.
+
+    lower_bound : array-like, optional
+        The minimum data value to include in the statistics.  All pixel
+        values less than ``lower_bound`` will be ignored.  `None` means
+        that no lower bound is applied (default).
+
+    upper_bound : array-like, optional
+        The maximum data value to include in the statistics.  All pixel
+        values greater than ``upper_bound`` will be ignored.  `None` means
+        that no upper bound is applied (default).
 
     Returns
     -------
@@ -272,11 +315,15 @@ def imstats(data, mask=None, name=None, sigma=3., iters=1,
             imstats.append(ImageStatistics(data_arr, mask=mask_arr,
                                            name=name_val, sigma=sigma,
                                            iters=iters, cenfunc=cenfunc,
-                                           varfunc=varfunc))
+                                           varfunc=varfunc,
+                                           lower_bound=lower_bound,
+                                           upper_bound=upper_bound))
     else:
         imstats.append(ImageStatistics(data, mask=mask, name=name, sigma=3.,
                                        iters=1, cenfunc=np.median,
-                                       varfunc=np.var))
+                                       varfunc=np.var,
+                                       lower_bound=lower_bound,
+                                       upper_bound=upper_bound))
 
     output_columns = None
     default_columns = ['name', 'npixels', 'mean', 'std', 'min', 'max']
