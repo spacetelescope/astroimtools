@@ -386,6 +386,7 @@ def listpixels(data, position, shape, subarray_indices=False):
     Parameters
     ----------
     data : array-like
+        The input data.
 
     position : tuple
         ``(row, col)`` (``(y, x)``) position of the subarray center with
@@ -398,6 +399,12 @@ def listpixels(data, position, shape, subarray_indices=False):
         If `True` then the returned positions are relative to the small
         subarray.  If `False` (default) then the returned positions are
         relative to the ``data`` array.
+
+    Returns
+    -------
+    table : `~astropy.table.Table`
+        A table containing the ``x`` and ``y`` positions and data
+        values.
     """
 
     slices_large, slices_small = overlap_slices(data.shape, shape, position)
