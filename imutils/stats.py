@@ -9,7 +9,7 @@ from astropy.stats import (sigma_clip, biweight_location,
                            biweight_midvariance, mad_std)
 from astropy.utils import lazyproperty
 from astropy.table import Table
-from astropy.nddata import NDData
+from astropy.nddata import NDData, support_nddata
 from astropy.nddata.utils import overlap_slices
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
@@ -333,6 +333,7 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
     return output_table
 
 
+@support_nddata
 def minmax(data, mask=None, axis=None):
     """
     Return the minimum and maximum values of an array or the minimum and
@@ -362,6 +363,11 @@ def minmax(data, mask=None, axis=None):
         The maximum value of ``data``.  If ``axis`` is `None`, the
         result is a scalar value.  If ``axis`` is input, the result is
         an array of dimension ``data.ndim - 1``.
+
+    Notes
+    -----
+    This function is decorated with `~astropy.nddata.support_nddata` and
+    thus supports `~astropy.nddata.NDData` objects as input.
     """
 
     if mask is not None:
@@ -373,6 +379,7 @@ def minmax(data, mask=None, axis=None):
     return funcs[0](data, axis=axis), funcs[1](data, axis=axis)
 
 
+@support_nddata
 def listpixels(data, position, shape, subarray_indices=False):
     """
     Return a `~astropy.table.Table` listing the ``(row, col)``
@@ -405,6 +412,11 @@ def listpixels(data, position, shape, subarray_indices=False):
     table : `~astropy.table.Table`
         A table containing the ``x`` and ``y`` positions and data
         values.
+
+    Notes
+    -----
+    This function is decorated with `~astropy.nddata.support_nddata` and
+    thus supports `~astropy.nddata.NDData` objects as input.
     """
 
     data = np.asanyarray(data)
