@@ -24,7 +24,8 @@ class ImageStatistics(object):
     """Class to calculate sigma-clipped image statistics."""
 
     def __init__(self, nddata, sigma=3., iters=1, cenfunc=np.ma.median,
-                 varfunc=np.var, lower_bound=None, upper_bound=None):
+                 varfunc=np.var, lower_bound=None, upper_bound=None,
+                 mask_value=None):
         """
         Parameters
         ----------
@@ -65,60 +66,44 @@ class ImageStatistics(object):
             The maximum data value to include in the statistics.  All
             pixel values greater than ``upper_bound`` will be ignored.
             `None` means that no upper bound is applied (default).
+
+        mask_value : float, optional
+            Data values to mask.
         """
 
         if not isinstance(nddata, NDData):
             raise ValueError('nddata input must be an astropy.nddata.NDData '
                              'object')
 
-        nan_mask = None
-        if np.any(np.isnan(nddata.data)):
-            warnings.warn(('The data array contains at least one np.nan. NaN '
-                           'values will be masked.'), AstropyUserWarning)
-            nan_mask = np.isnan(nddata.data)
-
-        mask = self._create_mask(nddata.data, nddata.mask, nan_mask,
-                                 lower_bound, upper_bound)
-        if mask is not None:
-            if mask.shape != nddata.data.shape:
+        if nddata.mask is not None:
+            if nddata.mask.shape != nddata.data.shape:
                 raise ValueError('mask and data must have the same shape')
-            if np.all(mask):
-                raise ValueError('All data values are masked')
-            data = np.ma.MaskedArray(nddata.data, mask)
-            data_clip = sigma_clip(data, sig=sigma, iters=iters)
+            data = np.ma.MaskedArray(nddata.data, nddata.mask)
         else:
-            data_clip = sigma_clip(nddata.data, sig=sigma, iters=iters)
+            data = np.ma.MaskedArray(nddata.data, None)
 
+        if lower_bound is not None:
+            data = np.ma.masked_less(data, lower_bound)
+        if upper_bound is not None:
+            data = np.ma.masked_greater(data, upper_bound)
+        if mask_value is not None:
+            data = np.ma.masked_values(data, mask_value)
+
+        if np.any(np.isnan(nddata.data)):
+            warnings.warn(('The data array contains at least one unmasked '
+                           'np.nan. NaN values will be masked.'),
+                          AstropyUserWarning)
+            data.mask |= np.isnan(nddata.data)
+
+        if np.all(data.mask):
+            raise ValueError('All data values are masked')
+
+        data_clip = sigma_clip(data, sig=sigma, iters=iters)
         self.goodvals = data_clip.data[~data_clip.mask]
         self.total_pixels = nddata.data.size
 
     def __getitem__(self, key):
         return getattr(self, key, None)
-
-    @staticmethod
-    def _create_mask(data, mask, nan_mask, lower_bound, upper_bound):
-        if lower_bound is not None and upper_bound is not None:
-            bound_mask = np.logical_or(data < lower_bound, data > upper_bound)
-        elif lower_bound is not None and upper_bound is None:
-            bound_mask = (data < lower_bound)
-        elif lower_bound is None and upper_bound is not None:
-            bound_mask = (data > upper_bound)
-        else:
-            bound_mask = None
-
-        if bound_mask is not None:
-            if mask is not None:
-                mask = np.logical_or(mask, bound_mask)
-            else:
-                mask = bound_mask
-
-        if nan_mask is not None:
-            if mask is not None:
-                mask = np.logical_or(mask, nan_mask)
-            else:
-                mask = nan_mask
-
-        return mask
 
     @lazyproperty
     def npixels(self):
