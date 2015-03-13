@@ -11,6 +11,8 @@ from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.nddata import NDData, support_nddata
 from astropy.nddata.utils import overlap_slices
+from astropy.coordinates import SkyCoord
+from astropy.wcs.utils import skycoord_to_pixel
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
@@ -380,7 +382,7 @@ def minmax(data, mask=None, axis=None):
 
 
 @support_nddata
-def listpixels(data, position, shape, subarray_indices=False):
+def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     """
     Return a `~astropy.table.Table` listing the ``(row, col)``
     (``(y, x)``) positions and ``data`` values for a subarray.
@@ -396,8 +398,10 @@ def listpixels(data, position, shape, subarray_indices=False):
         The input data.
 
     position : tuple
-        ``(row, col)`` (``(y, x)``) position of the subarray center with
-        respect to the data array.
+        The position of the subarray center with respect to the data
+        array.  The position can be specified either as a ``(row, col)``
+        (``(y, x)``) tuple or a `~astropy.coordinates.SkyCoord`, in
+        which case ``wcs`` is a required input.
 
     shape : tuple
         The shape (``(ny, nx)``) of the subarray.
@@ -406,6 +410,10 @@ def listpixels(data, position, shape, subarray_indices=False):
         If `True` then the returned positions are relative to the small
         subarray.  If `False` (default) then the returned positions are
         relative to the ``data`` array.
+
+    wcs : `~astropy.wcs.WCS`, optional
+        The WCS transformation to use if ``position`` is a
+        `~astropy.coordinates.SkyCoord`.
 
     Returns
     -------
@@ -418,6 +426,13 @@ def listpixels(data, position, shape, subarray_indices=False):
     This function is decorated with `~astropy.nddata.support_nddata` and
     thus supports `~astropy.nddata.NDData` objects as input.
     """
+
+    if isinstance(position, SkyCoord):
+        if wcs is None:
+            raise ValueError('wcs must be input if positions is a SkyCoord')
+
+        x, y = skycoord_to_pixel(position, wcs, mode='all')
+        position = (y, x)
 
     data = np.asanyarray(data)
     slices_large, slices_small = overlap_slices(data.shape, shape, position)
