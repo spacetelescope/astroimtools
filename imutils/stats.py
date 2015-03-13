@@ -68,7 +68,8 @@ class ImageStatistics(object):
             `None` means that no upper bound is applied (default).
 
         mask_value : float, optional
-            Data values to mask.
+            A data value (e.g., ``0.0``) to be masked.  ``mask_value``
+            will be masked in addition to any input ``mask``.
         """
 
         if not isinstance(nddata, NDData):
@@ -213,7 +214,8 @@ class ImageStatistics(object):
 
 
 def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
-            varfunc=np.var, columns=None, lower_bound=None, upper_bound=None):
+            varfunc=np.var, columns=None, lower_bound=None, upper_bound=None,
+            mask_value=None):
     """
     Compute image statistics.
 
@@ -266,6 +268,10 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
         values greater than ``upper_bound`` will be ignored.  `None` means
         that no upper bound is applied (default).
 
+    mask_value : float, optional
+        A data value (e.g., ``0.0``) to be masked.  ``mask_value`` will
+        be masked in addition to any input ``mask``.
+
     Returns
     -------
     table : `~astropy.table.Table`
@@ -299,7 +305,8 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
                                        iters=iters, cenfunc=cenfunc,
                                        varfunc=varfunc,
                                        lower_bound=lower_bound,
-                                       upper_bound=upper_bound))
+                                       upper_bound=upper_bound,
+                                       mask_value=mask_value))
 
     output_columns = None
     default_columns = ['name', 'npixels', 'mean', 'std', 'min', 'max']
