@@ -407,6 +407,7 @@ def listpixels(data, position, shape, subarray_indices=False):
         values.
     """
 
+    data = np.asanyarray(data)
     slices_large, slices_small = overlap_slices(data.shape, shape, position)
     slices = slices_large
     if subarray_indices:
