@@ -10,6 +10,7 @@ from astropy.stats import (sigma_clip, biweight_location,
 from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.nddata import NDData
+from astropy.nddata.utils import overlap_slices
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
@@ -372,27 +373,44 @@ def minmax(data, mask=None, axis=None):
     return funcs[0](data, axis=axis), funcs[1](data, axis=axis)
 
 
-def listpixels(data, x_range=None, y_range=None):
+def listpixels(data, position, shape, subarray_indices=False):
     """
-    Return a `~astropy.table.Table` listing the ``(x, y)`` positions
-    and ``data`` values.
+    Return a `~astropy.table.Table` listing the ``(row, col)``
+    (``(y, x)``) positions and ``data`` values for a subarray.
+
+    Given a certain position of the center of the small array, with
+    respect to the large array, the array indices and values are
+    returned.  This function takes care of the correct behavior at the
+    boundaries, where the small array is appropriately trimmed.
+
+    Parameters
+    ----------
+    data : array-like
+
+    position : tuple
+        ``(row, col)`` (``(y, x)``) position of the subarray center with
+        respect to the data array.
+
+    shape : tuple
+        The shape (``(ny, nx)``) of the subarray.
+
+    subarray_indices : bool, optional
+        If `True` then the returned positions are relative to the small
+        subarray.  If `False` (default) then the returned positions are
+        relative to the ``data`` array.
     """
 
-    if x_range is None:
-        x_slice = slice(0, data.shape[1])
-    else:
-        x_slice = slice(x_range[0], x_range[1])
+    slices_large, slices_small = overlap_slices(data.shape, shape, position)
+    slices = slices_large
+    if subarray_indices:
+        slices = slices_small
 
-    if y_range is None:
-        y_slice = slice(0, data.shape[0])
-    else:
-        y_slice = slice(y_range[0], y_range[1])
-
-    yy, xx = np.mgrid[y_slice, x_slice]
+    yy, xx = np.mgrid[slices]
     values = data[yy, xx]
 
     tbl = Table()
     tbl['x'] = xx.ravel()
     tbl['y'] = yy.ravel()
     tbl['value'] = values.ravel()
+
     return tbl
