@@ -295,7 +295,7 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
 
     imstats = []
     if not isinstance(nddata, list):
-        nddata = [nddata]
+        nddata = np.atleast_1d(nddata)
 
     if len(nddata) == 0:
         raise ValueError('nddata is an empty list')
