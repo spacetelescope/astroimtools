@@ -11,14 +11,20 @@ from astropy.nddata import NDData
 __all__ = ['basic_fits_to_nddata']
 
 
-def basic_fits_to_nddata(fits_filename, exten=0):
+def basic_fits_to_nddata(filename, exten=0):
     """
-    Extremely simple reader.
+    Extremely simple FITS to `~astropy.nddata.NDData` reader.
 
-    Q:  default mask from ERR and DQ arrays (bad pixels and coverage mask)
+    Parameters
+    ----------
+    filename : str
+        The path to a FITS file.
+
+    exten : int, optional
+        The FITS extension number for the ``data`` array.  Default is 0.
     """
 
-    hdulist = fits.open(fits_filename)
+    hdulist = fits.open(filename)
     header = hdulist[exten].header
     data = hdulist[exten].data
     return NDData(data, meta=header)
