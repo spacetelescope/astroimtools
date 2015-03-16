@@ -387,24 +387,25 @@ def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     Return a `~astropy.table.Table` listing the ``(row, col)``
     (``(y, x)``) positions and ``data`` values for a subarray.
 
-    Given a certain position of the center of the small array, with
-    respect to the large array, the array indices and values are
-    returned.  This function takes care of the correct behavior at the
-    boundaries, where the small array is appropriately trimmed.
+    Given a position of the center of the subarray, with respect to the
+    large array, the array indices and values are returned.  This
+    function takes care of the correct behavior at the boundaries, where
+    the small array is appropriately trimmed.
 
     Parameters
     ----------
     data : array-like
         The input data.
 
-    position : tuple
+    position : tuple (int) or `~astropy.coordinates.SkyCoord`
         The position of the subarray center with respect to the data
-        array.  The position can be specified either as a ``(row, col)``
-        (``(y, x)``) tuple or a `~astropy.coordinates.SkyCoord`, in
-        which case ``wcs`` is a required input.
+        array.  The position can be specified either as an integer
+        ``(row, col)`` (``(y, x)``) tuple or a
+        `~astropy.coordinates.SkyCoord`, in which case ``wcs`` is a
+        required input.
 
-    shape : tuple
-        The shape (``(ny, nx)``) of the subarray.
+    shape : tuple (int)
+        The integer shape (``(ny, nx)``) of the subarray.
 
     subarray_indices : bool, optional
         If `True` then the returned positions are relative to the small
@@ -425,6 +426,32 @@ def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     -----
     This function is decorated with `~astropy.nddata.support_nddata` and
     thus supports `~astropy.nddata.NDData` objects as input.
+
+    See Also
+    --------
+    :func:`astropy.nddata.utils.overlap_slices`
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from imutils import listpixels
+    >>> data = np.arange(625).reshape(25, 25)
+    >>> tbl = listpixels(data, (10, 12), (3, 3))
+    >>> print(len(tbl))
+    3
+
+    >>> tbl.pprint(max_lines=-1)
+     x   y  value
+    --- --- -----
+     11   9   236
+     12   9   237
+     13   9   238
+     11  10   261
+     12  10   262
+     13  10   263
+     11  11   286
+     12  11   287
+     13  11   288
     """
 
     if isinstance(position, SkyCoord):
