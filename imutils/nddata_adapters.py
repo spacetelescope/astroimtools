@@ -13,7 +13,10 @@ __all__ = ['basic_fits_to_nddata']
 
 def basic_fits_to_nddata(filename, exten=0):
     """
-    Extremely simple FITS to `~astropy.nddata.NDData` reader.
+    Read a single FITS extension into a `~astropy.nddata.NDData` object.
+
+    This is an *extremely* simple reader that reads data from only a
+    single FITS extension.
 
     Parameters
     ----------
@@ -22,6 +25,13 @@ def basic_fits_to_nddata(filename, exten=0):
 
     exten : int, optional
         The FITS extension number for the ``data`` array.  Default is 0.
+
+    Returns
+    -------
+    nddata : `~astropy.nddata.NDData`
+        An `~astropy.nddata.NDData` object with a ``data`` attribute
+        containing the FITS data array and a ``meta`` attribute,
+        containing the FITS header as a python `dict`.
     """
 
     hdulist = fits.open(filename)
