@@ -24,12 +24,14 @@ warnings.filterwarnings('always', category=AstropyUserWarning)
 
 
 class ImageStatistics(object):
-    """Class to calculate sigma-clipped image statistics."""
+    """Class to calculate (sigma-clipped) image statistics."""
 
-    def __init__(self, nddata, sigma=3., iters=1, cenfunc=np.ma.median,
+    def __init__(self, nddata, sigma=None, iters=1, cenfunc=np.ma.median,
                  varfunc=np.var, lower_bound=None, upper_bound=None,
                  mask_value=None):
         """
+        Set the ``sigma`` keyword to perform sigma clipping.
+
         Parameters
         ----------
         nddata : `~astropy.nddata.NDData`
@@ -37,24 +39,27 @@ class ImageStatistics(object):
             which to calculate statistics.  Masked pixels are excluded
             when computing the image statistics.
 
-        sigma : float, optional
-            The number of standard deviations (*not* variances) to use
-            as the clipping limit.
+        sigma : `None` or float, optional
+            The number of standard deviations to use as the sigma
+            clipping limit.  If `None` (default), then sigma clipping is
+            not performed.
 
         iters : int or `None`, optional
-            The number of iterations to perform clipping for, or `None`
+            The number of sigma clipping iterations to perform, or `None`
             to clip until convergence is achieved (i.e. continue until
             the last iteration clips nothing).
 
         cenfunc : callable, optional
-            The technique to compute the center for the clipping. Must
-            be a callable that takes in a masked array and outputs the
-            central value.  Defaults to the median (`numpy.ma.median`).
+            The technique to compute the center for the sigma clipping.
+            Must be a callable that takes in a masked array and outputs
+            the central value.  Defaults to the median
+            (`numpy.ma.median`).
 
         varfunc : callable, optional
             The technique to compute the standard deviation about the
-            center. Must be a callable that takes in a masked array and
-            outputs a width estimator::
+            center for the sigma clipping. Must be a callable that takes
+            in a masked array and outputs a width estimator.  Masked
+            (rejected) pixels are those where::
 
                 deviation**2 > sigma**2 * varfunc(deviation)
 
@@ -102,8 +107,11 @@ class ImageStatistics(object):
         if np.all(data.mask):
             raise ValueError('All data values are masked')
 
-        data_clip = sigma_clip(data, sig=sigma, iters=iters)
-        self.goodvals = data_clip.data[~data_clip.mask]
+        if sigma is None:
+            self.goodvals = data.ravel()
+        else:
+            data_clip = sigma_clip(data, sig=sigma, iters=iters)
+            self.goodvals = data_clip.data[~data_clip.mask]
         self.total_pixels = nddata.data.size
 
     def __getitem__(self, key):
@@ -216,11 +224,12 @@ class ImageStatistics(object):
         return kurtosis(self.goodvals)
 
 
-def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
+def imstats(nddata, sigma=None, iters=1, cenfunc=np.ma.median,
             varfunc=np.var, columns=None, lower_bound=None, upper_bound=None,
             mask_value=None):
     """
-    Compute image statistics.
+    Compute image statistics.  Set the ``sigma`` keyword to perform
+    sigma clipping.
 
     Parameters
     ----------
@@ -229,24 +238,26 @@ def imstats(nddata, sigma=3., iters=1, cenfunc=np.ma.median,
         which to calculate statistics.  Masked pixels are excluded when
         computing the image statistics.
 
-    sigma : float, optional
-        The number of standard deviations (*not* variances) to use
-        as the clipping limit.
+    sigma : `None` or float, optional
+        The number of standard deviations to use as the sigma clipping
+        limit.  If `None` (default), then sigma clipping is not
+        performed.
 
     iters : int or `None`, optional
-        The number of iterations to perform clipping for, or `None`
-        to clip until convergence is achieved (i.e. continue until
-        the last iteration clips nothing).
+        The number of sigma clipping iterations to perform, or `None` to
+        clip until convergence is achieved (i.e. continue until the last
+        iteration clips nothing).
 
     cenfunc : callable, optional
-        The technique to compute the center for the clipping. Must
-        be a callable that takes in a masked array and outputs the
+        The technique to compute the center for the sigma clipping.
+        Must be a callable that takes in a masked array and outputs the
         central value.  Defaults to the median (`numpy.ma.median`).
 
     varfunc : callable, optional
-        The technique to compute the standard deviation about the
-        center. Must be a callable that takes in a masked array and
-        outputs a width estimator::
+        The technique to compute the standard deviation about the center
+        for the sigma clipping. Must be a callable that takes in a
+        masked array and outputs a width estimator.  Masked (rejected)
+        pixels are those where::
 
             deviation**2 > sigma**2 * varfunc(deviation)
 
