@@ -49,9 +49,9 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, header_keywords=None):
                     value = None
                 meta_out[key] = value
     elif operator == 'min':
-        mdata = np.minimum(data1, data2)
+        mdata = np.minimum(mdata1, mdata2)
     elif operator == 'max':
-        mdata = np.maximum(data1, data2)
+        mdata = np.maximum(mdata1, mdata2)
 
     nddata_out = NDData(np.ma.filled(mdata, fill_value=fill_value),
                         mask=mdata.mask, meta=meta_out)
