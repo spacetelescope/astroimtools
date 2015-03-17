@@ -98,21 +98,23 @@ class ImageStatistics(object):
         if mask_value is not None:
             data = np.ma.masked_values(data, mask_value)
 
-        if np.any(np.isnan(nddata.data)):
+        nmasked = data.count()
+        data = np.ma.masked_invalid(data)    # mask np.nan, np.inf
+        if data.count() != nmasked:
             warnings.warn(('The data array contains at least one unmasked '
-                           'np.nan. NaN values will be masked.'),
-                          AstropyUserWarning)
-            data.mask |= np.isnan(nddata.data)
+                           'invalid value (NaN or inf). These values will be '
+                           'automatically masked.'), AstropyUserWarning)
 
         if np.all(data.mask):
             raise ValueError('All data values are masked')
 
         if sigma is None:
-            self.goodvals = data.ravel()
+            self.goodvals = np.ma.ravel(data)
         else:
             data_clip = sigma_clip(data, sig=sigma, iters=iters)
             self.goodvals = data_clip.data[~data_clip.mask]
-        self.total_pixels = nddata.data.size
+
+        self.masked_data = data
 
     def __getitem__(self, key):
         return getattr(self, key, None)
@@ -122,14 +124,14 @@ class ImageStatistics(object):
         """
         The number of unclipped pixels.
         """
-        return len(self.goodvals)
+        return self.masked_data.count()
 
     @lazyproperty
     def nrejected(self):
         """
         The number of rejected (clipped) pixels.
         """
-        return self.total_pixels - self.npixels
+        return np.ma.count_masked(self.masked_data)
 
     @lazyproperty
     def mean(self):
