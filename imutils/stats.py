@@ -108,12 +108,9 @@ class ImageStatistics(object):
         if np.all(data.mask):
             raise ValueError('All data values are masked')
 
-        if sigma is None:
-            self.goodvals = np.ma.ravel(data)
-        else:
-            data_clip = sigma_clip(data, sig=sigma, iters=iters)
-            self.goodvals = data_clip.data[~data_clip.mask]
-
+        if sigma is not None:
+            data = sigma_clip(data, sig=sigma, iters=iters)
+        self.goodvals = data.data[~data.mask]
         self.masked_data = data
 
     def __getitem__(self, key):
