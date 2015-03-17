@@ -12,7 +12,7 @@ from astropy.wcs import WCS
 __all__ = ['imarith']
 
 
-def imarith(nddata1, nddata2, operator):
+def imarith(nddata1, nddata2, operator, fill_value=0.0):
     """
     Perform basic arithmetic on two `~astropy.nddata.NDData` objects and
     return a new `~astropy.nddata.NDData` object.
@@ -38,6 +38,7 @@ def imarith(nddata1, nddata2, operator):
     elif operator == 'max':
         mdata = np.maximum(data1, data2)
 
-    nddata_out = NDData(mdata.data, mask=mdata.mask)
+    nddata_out = NDData(np.ma.filled(mdata, fill_value=fill_value),
+                        mask=mdata.mask)
 
     return nddata_out
