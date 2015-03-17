@@ -272,7 +272,7 @@ def imstats(nddata, sigma=None, iters=1, cenfunc=np.ma.median,
         'kurtosis', 'mad_std', 'max', 'mean', 'median', 'min', 'mode',
         'npixels', 'nrejected', 'skew', 'std' or a name of a key in the
         `astropy.nddata.NDData.meta` dictionary.  The default is
-        ``['name', 'npixels', 'mean', 'std', 'min', 'max']``.
+        ``['npixels', 'mean', 'std', 'min', 'max']``.
 
     lower_bound : float, optional
         The minimum data value to include in the statistics.  All pixel
@@ -325,7 +325,7 @@ def imstats(nddata, sigma=None, iters=1, cenfunc=np.ma.median,
                                        mask_value=mask_value))
 
     output_columns = None
-    default_columns = ['name', 'npixels', 'mean', 'std', 'min', 'max']
+    default_columns = ['npixels', 'mean', 'std', 'min', 'max']
     property_columns = ['biweight_location', 'biweight_midvariance',
                         'kurtosis', 'mad_std', 'max', 'mean', 'median',
                         'min', 'mode', 'npixels', 'nrejected', 'skew',
