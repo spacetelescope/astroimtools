@@ -13,7 +13,7 @@ import copy
 __all__ = ['imarith']
 
 
-def imarith(nddata1, nddata2, operator, fill_value=0.0, header_keywords=None):
+def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
     """
     Perform basic arithmetic on two `~astropy.nddata.NDData` objects and
     return a new `~astropy.nddata.NDData` object.
@@ -28,8 +28,8 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, header_keywords=None):
         raise ValueError('nddata1 and nddata2 arrays must have the same '
                          'shape')
 
-    if header_keywords is not None:
-        header_keywords = np.atleast_1d(header_keywords)
+    if keywords is not None:
+        keywords = np.atleast_1d(keywords)
 
     mdata1 = np.ma.masked_array(nddata1.data, mask=nddata1.mask)
     mdata2 = np.ma.masked_array(nddata2.data, mask=nddata2.mask)
@@ -38,8 +38,8 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, header_keywords=None):
     if operator in allowed_operators[:5]:
         data_expr = 'mdata1 {0} mdata2'.format(operator)
         mdata = eval(data_expr)
-        if header_keywords is not None:
-            for key in header_keywords:
+        if keywords is not None:
+            for key in keywords:
                 value1 = nddata1.meta.get(key, None)
                 value2 = nddata2.meta.get(key, None)
                 if value1 is not None and value2 is not None:
