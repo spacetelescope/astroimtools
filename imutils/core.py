@@ -6,6 +6,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
 from astropy.nddata import NDData
+from astropy import log
 import copy
 
 
@@ -76,6 +77,9 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
                                          mdata1)**2 +
                                         (nddata2.uncertainty.value /
                                          mdata2)**2)
+        else:
+            log.info("Error propagation is not performed for the '//', "
+                     "'min', and 'max' operators.")
         uncertainty_out = copy.deepcopy(nddata1.uncertainty)
         uncertainty_out.value = error_out
     else:
