@@ -70,9 +70,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
                     value = min(value1, value2)
                 elif operator == 'max':
                     value = max(value1, value2)
-            else:
-                value = None
-            meta_out[key] = value
+                meta_out[key] = value
 
     # propagate errors
     if nddata1.uncertainty is not None and nddata2.uncertainty is not None:
