@@ -10,7 +10,21 @@ from astropy.wcs import WCS
 import copy
 
 
-__all__ = ['imarith']
+__all__ = ['StdUncertainty', 'imarith']
+
+
+class StdUncertainty(object):
+    """
+    `~astropy.nddata.NDData` uncertainty class to hold 1-sigma standard
+    deviations.
+    """
+
+    def __init__(self, value):
+        self.value = value
+
+    @property
+    def uncertainty_type(self):
+        return 'std'
 
 
 def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
