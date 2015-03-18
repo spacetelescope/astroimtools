@@ -6,7 +6,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
 from astropy.nddata import NDData
-from astropy.wcs import WCS
 import copy
 
 
@@ -81,7 +80,6 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
         uncertainty_out.value = error_out
     else:
         uncertainty_out = None
-
 
     return NDData(np.ma.filled(mdata, fill_value=fill_value),
                   uncertainty=uncertainty_out, mask=mdata.mask, meta=meta_out)
