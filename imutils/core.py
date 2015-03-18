@@ -80,8 +80,13 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
         else:
             log.info("Error propagation is not performed for the '//', "
                      "'min', and 'max' operators.")
-        uncertainty_out = copy.deepcopy(nddata1.uncertainty)
-        uncertainty_out.value = error_out
+            error_out = None
+
+        if error_out is not None:
+            uncertainty_out = copy.deepcopy(nddata1.uncertainty)
+            uncertainty_out.value = error_out
+        else:
+            uncertainty_out = None
     else:
         uncertainty_out = None
 
