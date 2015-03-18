@@ -81,6 +81,7 @@ package_info['package_data'][PACKAGENAME].append('data/*')
 # Define entry points for command-line scripts
 entry_points = {}
 entry_points['console_scripts'] = [
+    'imarith = imutils.scripts.imarith:main',
     'imstats = imutils.scripts.imstats:main',
     'fitsinfo = imutils.scripts.fitsinfo:main',
 ]
