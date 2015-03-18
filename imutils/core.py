@@ -179,8 +179,10 @@ def block_replicate(data, block_size, conserve_sum=True):
     data : array_like (1D or 2D)
         The data to be block replicated.
 
-    block_size : int
-        Integer upsampling factor along each axis.
+    block_size : int or array_like (int)
+        The integer block size (upsampling factor) along each axis.  If
+        ``block_size`` is a scalar and ``data`` is a 2D array, then the
+        data will be upsampled by ``block_size`` along both dimensions.
 
     conserve_sum : bool
         If `True` (the default) then the block-replicated data is
@@ -211,23 +213,34 @@ def block_replicate(data, block_size, conserve_sum=True):
     """
 
     data = np.asanyarray(data)
-    block_size = int(block_size)
+    block_size = np.atleast_1d(block_size)
+
+    if data.ndim == 2 and len(block_size) == 1:
+        block_size = [block_size, block_size]
+
+    if len(block_size) != data.ndim:
+        raise ValueError('`block_size` must have the same length as '
+                         '`data.shape`')
+
+    block_size = np.array([int(i) for i in block_size])
+
     if data.ndim == 1:
         output = np.broadcast_arrays(
             data.reshape(data.shape[0], 1),
-            np.ones((1, block_size)))[0].reshape(data.shape[0]*block_size)
+            np.ones((1, block_size[0])))[0].reshape(
+                data.shape[0]*block_size[0])
 
     elif data.ndim == 2:
         output = np.broadcast_arrays(
             data.reshape(data.shape[0], 1, data.shape[1], 1),
-            np.ones((1, block_size, 1, block_size)))[0].reshape(
-                data.shape[0]*block_size, data.shape[1]*block_size)
+            np.ones((1, block_size[0], 1, block_size[1])))[0].reshape(
+                data.shape[0]*block_size[0], data.shape[1]*block_size[1])
 
     else:
         raise ValueError('data must be 1D or 2D')
 
     if conserve_sum:
-        output = output / float(block_size)**(data.ndim)
+        output = output / float(np.prod(block_size))
 
     return output
 
