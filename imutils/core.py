@@ -103,6 +103,47 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
 def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
     """
     Downsample data by applying a function to local blocks.
+
+    If ``data`` is not perfectly divisible by ``block_size`` along a
+    given axis then the data will be trimmed (from the end) along that
+    axis.
+
+    WCS propagation currently works only if ``data`` is a 2D image.
+
+    Parameters
+    ----------
+    data : array_like
+        The data to be resampled.
+
+    block_size : array_like (int)
+        An array containing the integer downsampling factor along each
+        axis.  ``block_size`` must have the same length as
+        ``data.shape``.
+
+    function : callable
+        The method to use to downsample the data.  Must be a callable
+        that takes in a `~numpy.ndarray` along with an ``axis`` keyword,
+        which defines the axis along which the function is applied.  The
+        default is `~numpy.sum`, which provides block summation (and
+        conserves the data sum).
+
+    wcs : `~astropy.wcs.WCS`, optional
+        The WCS corresponding to ``data``.  If ``wcs`` is input, then
+        the transformed WCS will be output (``wcs_output``).  WCS
+        propagation currently works only if ``data`` is a 2D image.
+
+    wcs_origin : {0, 1}, optional
+        Whether the WCS contains 0 or 1-based pixel coordinates.  The
+        default is 0.  For FITS WCS, set ``wcs_origin=1``.
+
+    Returns
+    -------
+    output : array_like
+        The resampled data.
+
+    wcs_output : `~astropy.wcs.WCS`, optional
+        The transformed WCS.  Returned only if ``wcs`` is input and
+        ``data`` is a 2D image.
     """
 
     from skimage.measure import block_reduce
@@ -132,6 +173,25 @@ def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
 def _scale_image_wcs(wcs, scale, origin=0):
     """
     Scale the WCS for a 2D image.
+
+    Parameters
+    ----------
+    wcs : `~astropy.wcs.WCS`
+        The WCS corresponding to ``data``.  If ``wcs`` is input, then
+        the transformed WCS will be output (``wcs_output``).  WCS
+        propagation currently works only if ``data`` is a 2D image.
+
+    scale : 2-tuple
+        Scale ratio along each data axis.
+
+    origin : {0, 1}, optional
+        Whether the WCS contains 0 or 1-based pixel coordinates.  The
+        default is 0.  For FITS WCS, set ``wcs_origin=1``.
+
+    Returns
+    -------
+    wcs_output : `~astropy.wcs.WCS`, optional
+        The transformed WCS.
     """
 
     # interally use scale in (x, y) order to match WCS order convention
