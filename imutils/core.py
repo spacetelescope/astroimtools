@@ -48,24 +48,31 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
     mdata1 = np.ma.masked_array(nddata1.data, mask=nddata1.mask)
     mdata2 = np.ma.masked_array(nddata2.data, mask=nddata2.mask)
 
-    meta_out = copy.deepcopy(nddata1.meta)
     if operator in allowed_operators[:5]:
         data_expr = 'mdata1 {0} mdata2'.format(operator)
         mdata = eval(data_expr)
-        if keywords is not None:
-            for key in keywords:
-                value1 = nddata1.meta.get(key, None)
-                value2 = nddata2.meta.get(key, None)
-                if value1 is not None and value2 is not None:
-                    hdr_expr = 'value1 {0} value2'.format(operator)
-                    value = eval(hdr_expr)
-                else:
-                    value = None
-                meta_out[key] = value
     elif operator == 'min':
         mdata = np.minimum(mdata1, mdata2)
     elif operator == 'max':
         mdata = np.maximum(mdata1, mdata2)
+
+    # keyword arithmetic
+    meta_out = copy.deepcopy(nddata1.meta)
+    if keywords is not None:
+        for key in keywords:
+            value1 = nddata1.meta.get(key, None)
+            value2 = nddata2.meta.get(key, None)
+            if value1 is not None and value2 is not None:
+                if operator in allowed_operators[:5]:
+                    hdr_expr = 'value1 {0} value2'.format(operator)
+                    value = eval(hdr_expr)
+                elif operator == 'min':
+                    value = min(value1, value2)
+                elif operator == 'max':
+                    value = max(value1, value2)
+            else:
+                value = None
+            meta_out[key] = value
 
     # propagate errors
     if nddata1.uncertainty is not None and nddata2.uncertainty is not None:
