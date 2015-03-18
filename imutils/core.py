@@ -172,11 +172,11 @@ def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
 
 def block_replicate(data, block_size, conserve_sum=True):
     """
-    Upsample a 1D or 2D data array by block replication.
+    Upsample a 1D, 2D, or 3D data array by block replication.
 
     Parameters
     ----------
-    data : array_like (1D or 2D)
+    data : array_like (1D, 2D, or 3D)
         The data to be block replicated.
 
     block_size : int or array_like (int)
@@ -185,9 +185,8 @@ def block_replicate(data, block_size, conserve_sum=True):
         data will be upsampled by ``block_size`` along both dimensions.
 
     conserve_sum : bool
-        If `True` (the default) then the block-replicated data is
-        divided by ``block_size**N``, where ``N`` is the ``data``
-        dimension.
+        If `True` (the default) then the sum of the output
+        block-replicated data will equal the sum of the input ``data``.
 
     Returns
     -------
@@ -215,8 +214,8 @@ def block_replicate(data, block_size, conserve_sum=True):
     data = np.asanyarray(data)
     block_size = np.atleast_1d(block_size)
 
-    if data.ndim == 2 and len(block_size) == 1:
-        block_size = [block_size, block_size]
+    if data.ndim > 1 and len(block_size) == 1:
+        block_size = np.repeat(block_size, data.ndim)
 
     if len(block_size) != data.ndim:
         raise ValueError('`block_size` must have the same length as '
@@ -232,12 +231,27 @@ def block_replicate(data, block_size, conserve_sum=True):
 
     elif data.ndim == 2:
         output = np.broadcast_arrays(
-            data.reshape(data.shape[0], 1, data.shape[1], 1),
-            np.ones((1, block_size[0], 1, block_size[1])))[0].reshape(
-                data.shape[0]*block_size[0], data.shape[1]*block_size[1])
+            data.reshape(data.shape[0], 1,
+                         data.shape[1], 1),
+            np.ones((1, block_size[0],
+                     1, block_size[1])))[0].reshape(
+                         data.shape[0] * block_size[0],
+                         data.shape[1] * block_size[1])
+
+    elif data.ndim == 3:
+        output = np.broadcast_arrays(
+            data.reshape(data.shape[0], 1,
+                         data.shape[1], 1,
+                         data.shape[2], 1),
+            np.ones((1, block_size[0],
+                     1, block_size[1],
+                     1, block_size[2])))[0].reshape(
+                         data.shape[0] * block_size[0],
+                         data.shape[1] * block_size[1],
+                         data.shape[2] * block_size[2])
 
     else:
-        raise ValueError('data must be 1D or 2D')
+        raise ValueError('data.ndim must be <= 3')
 
     if conserve_sum:
         output = output / float(np.prod(block_size))
