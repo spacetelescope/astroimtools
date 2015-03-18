@@ -1,6 +1,6 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 """
-Tools reading FITS files into NDData objects.
+NDData tools for interfacing with FITS files.
 """
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -46,26 +46,22 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
     Write a `~astropy.nddata.NDData` object to a FITS file.
     """
 
-    hdu = fits.ImageHDU(data=nddata.data, header=nddata.meta)
-    hdu.header['EXTNAME'] = 'SCI'
+    if nddata.meta is not None:
+        hdu = fits.PrimaryHDU(header=fits.Header(nddata.meta))
+    else:
+        hdu = fits.PrimaryHDU()
     hdus = [hdu]
 
-    if nddata.uncertainty is not None:
-        hdu = fits.ImageHDU(data=nddata.uncertainty.value)
-        hdu.header['EXTNAME'] = 'ERR'
-        hdus.append(hdu)
+    hdus.append(fits.ImageHDU(data=nddata.data))
+    hdus[-1].header['EXTNAME'] = 'SCI'
 
-    if nddata.dq is not None:
-        if nddata.mask is not None:
-            nddata.dq |= nddata.mask.astype(np.int)
-        hdu = fits.ImageHDU(data=nddata.dq)
-        hdu.header['EXTNAME'] = 'DQ'
-        hdus.append(hdu)
-    else:
-        if nddata.mask is not None:
-            hdu = fits.ImageHDU(data=nddata.mask.astype(np.int))
-            hdu.header['EXTNAME'] = 'DQ'
-            hdus.append(hdu)
+    if nddata.uncertainty is not None:
+        hdus.append(fits.ImageHDU(data=nddata.uncertainty.value))
+        hdus[-1].header['EXTNAME'] = 'ERR'
+
+    if nddata.mask is not None:
+        hdus.append(fits.ImageHDU(data=nddata.mask.astype(np.int)))
+        hdus[-1].header['EXTNAME'] = 'DQ'
 
     hdulist = fits.HDUList(hdus)
     hdulist.writeto(filename, clobber=clobber)
