@@ -11,7 +11,7 @@ import copy
 from astropy.wcs import WCS
 
 
-__all__ = ['StdUncertainty', 'imarith', 'block_reduce']
+__all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate']
 
 
 class StdUncertainty(object):
@@ -168,6 +168,68 @@ def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
         wcs_out = None
 
     return data_reduced, wcs_out
+
+
+def block_replicate(data, block_size, conserve_sum=True):
+    """
+    Upsample a 1D or 2D data array by block replication.
+
+    Parameters
+    ----------
+    data : array_like (1D or 2D)
+        The data to be block replicated.
+
+    block_size : int
+        Integer upsampling factor along each axis.
+
+    conserve_sum : bool
+        If `True` (the default) then the block-replicated data is
+        divided by ``block_size**N``, where ``N`` is the ``data``
+        dimension.
+
+    Returns
+    -------
+    output : array_like
+        The block-replicated data.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from imutils import block_replicate
+    >>> data = np.array([[0., 1.], [2., 3.]])
+    >>> block_replicate(data, 2)
+    array([[ 0.  ,  0.  ,  0.25,  0.25],
+           [ 0.  ,  0.  ,  0.25,  0.25],
+           [ 0.5 ,  0.5 ,  0.75,  0.75],
+           [ 0.5 ,  0.5 ,  0.75,  0.75]])
+
+    >>> block_replicate(data, 2, conserve_sum=False)
+    array([[ 0.,  0.,  1.,  1.],
+           [ 0.,  0.,  1.,  1.],
+           [ 2.,  2.,  3.,  3.],
+           [ 2.,  2.,  3.,  3.]])
+    """
+
+    data = np.asanyarray(data)
+    block_size = int(block_size)
+    if data.ndim == 1:
+        output = np.broadcast_arrays(
+            data.reshape(data.shape[0], 1),
+            np.ones((1, block_size)))[0].reshape(data.shape[0]*block_size)
+
+    elif data.ndim == 2:
+        output = np.broadcast_arrays(
+            data.reshape(data.shape[0], 1, data.shape[1], 1),
+            np.ones((1, block_size, 1, block_size)))[0].reshape(
+                data.shape[0]*block_size, data.shape[1]*block_size)
+
+    else:
+        raise ValueError('data must be 1D or 2D')
+
+    if conserve_sum:
+        output = output / float(block_size)**(data.ndim)
+
+    return output
 
 
 def _scale_image_wcs(wcs, scale, origin=0):
