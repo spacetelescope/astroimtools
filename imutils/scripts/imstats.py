@@ -2,9 +2,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
-import astropy.io.fits as fits
 from astropy.table import Column
-from astropy.nddata import NDData
 from astropy.utils.compat import argparse
 from ..stats import imstats
 from ..nddata_adapters import basic_fits_to_nddata
@@ -18,8 +16,8 @@ def main(args=None):
     parser.add_argument('-e', '--exten', metavar='exten', type=int,
                         default=0, help='')
     parser.add_argument('-s', '--sigma', metavar='sigma', type=float,
-                        default=3., help=('The number of standard '
-                        'deviations to use as the clipping limit'))
+                        default=3., help='The number of standard '
+                        'deviations to use as the clipping limit')
     parser.add_argument('-i', '--iters', metavar='iters', type=int,
                         default=1, help='')
     parser.add_argument('-c', '--columns', metavar='columns', type=str,
@@ -33,7 +31,7 @@ def main(args=None):
                         type=float, default=None, help='')
     args = parser.parse_args(args)
 
-    # TODO: better FITS file to NDData object adapter
+    # TODO: better FITS to NDData object adapters!
     nddata = []
     for fits_fn in args.fits_filename:
         nddata.append(basic_fits_to_nddata(fits_fn, exten=args.exten))
