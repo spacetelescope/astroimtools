@@ -53,7 +53,21 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
     elif operator == 'max':
         mdata = np.maximum(mdata1, mdata2)
 
-    nddata_out = NDData(np.ma.filled(mdata, fill_value=fill_value),
-                        mask=mdata.mask, meta=meta_out)
+    # propagate errors
+    if nddata1.uncertainty is not None and nddata2.uncertainty is not None:
+        if operator in ['+', '-']:
+            error_out = np.sqrt(nddata1.uncertainty.value**2 +
+                                nddata2.uncertainty.value**2)
+        elif operator in ['*', '/']:
+            error_out = mdata * np.sqrt((nddata1.uncertainty.value /
+                                         mdata1)**2 +
+                                        (nddata2.uncertainty.value /
+                                         mdata2)**2)
+        uncertainty_out = copy.deepcopy(nddata1.uncertainty)
+        uncertainty_out.value = error_out
+    else:
+        uncertainty_out = None
 
-    return nddata_out
+
+    return NDData(np.ma.filled(mdata, fill_value=fill_value),
+                  uncertainty=uncertainty_out, mask=mdata.mask, meta=meta_out)
