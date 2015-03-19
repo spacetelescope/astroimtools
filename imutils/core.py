@@ -16,7 +16,7 @@ from astropy import log
 
 
 __all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate',
-           'listpixels']
+           'radial_distance', 'listpixels']
 
 
 class StdUncertainty(object):
@@ -262,6 +262,18 @@ def block_replicate(data, block_size, conserve_sum=True):
         output = output / float(np.prod(block_size))
 
     return output
+
+
+def radial_distance(shape, position):
+    """
+    Return an array where each value is the Euclidean distance from a
+    given position.
+    """
+
+    x = np.arange(shape[1]) - position[1]
+    y = np.arange(shape[0]) - position[0]
+    xx, yy = np.meshgrid(x, y)
+    return np.sqrt(xx**2 + yy**2)
 
 
 @support_nddata
