@@ -5,13 +5,18 @@ Image utilities.
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
-from astropy.nddata import NDData
-from astropy import log
 import copy
+from astropy.table import Table
+from astropy.nddata import NDData, support_nddata
+from astropy.nddata.utils import overlap_slices
+from astropy.coordinates import SkyCoord
 from astropy.wcs import WCS
+from astropy.wcs.utils import skycoord_to_pixel
+from astropy import log
 
 
-__all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate']
+__all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate',
+           'listpixels']
 
 
 class StdUncertainty(object):
@@ -257,6 +262,103 @@ def block_replicate(data, block_size, conserve_sum=True):
         output = output / float(np.prod(block_size))
 
     return output
+
+
+@support_nddata
+def listpixels(data, position, shape, subarray_indices=False, wcs=None):
+    """
+    Return a `~astropy.table.Table` listing the ``(row, col)``
+    (``(y, x)``) positions and ``data`` values for a subarray.
+
+    Given a position of the center of the subarray, with respect to the
+    large array, the array indices and values are returned.  This
+    function takes care of the correct behavior at the boundaries, where
+    the small array is appropriately trimmed.
+
+    Parameters
+    ----------
+    data : array-like
+        The input data.
+
+    position : tuple (int) or `~astropy.coordinates.SkyCoord`
+        The position of the subarray center with respect to the data
+        array.  The position can be specified either as an integer
+        ``(row, col)`` (``(y, x)``) tuple or a
+        `~astropy.coordinates.SkyCoord`, in which case ``wcs`` is a
+        required input.
+
+    shape : tuple (int)
+        The integer shape (``(ny, nx)``) of the subarray.
+
+    subarray_indices : bool, optional
+        If `True` then the returned positions are relative to the small
+        subarray.  If `False` (default) then the returned positions are
+        relative to the ``data`` array.
+
+    wcs : `~astropy.wcs.WCS`, optional
+        The WCS transformation to use if ``position`` is a
+        `~astropy.coordinates.SkyCoord`.
+
+    Returns
+    -------
+    table : `~astropy.table.Table`
+        A table containing the ``x`` and ``y`` positions and data
+        values.
+
+    Notes
+    -----
+    This function is decorated with `~astropy.nddata.support_nddata` and
+    thus supports `~astropy.nddata.NDData` objects as input.
+
+    See Also
+    --------
+    :func:`astropy.nddata.utils.overlap_slices`
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from imutils import listpixels
+    >>> data = np.arange(625).reshape(25, 25)
+    >>> tbl = listpixels(data, (10, 12), (3, 3))
+    >>> print(len(tbl))
+    3
+
+    >>> tbl.pprint(max_lines=-1)
+     x   y  value
+    --- --- -----
+     11   9   236
+     12   9   237
+     13   9   238
+     11  10   261
+     12  10   262
+     13  10   263
+     11  11   286
+     12  11   287
+     13  11   288
+    """
+
+    if isinstance(position, SkyCoord):
+        if wcs is None:
+            raise ValueError('wcs must be input if positions is a SkyCoord')
+
+        x, y = skycoord_to_pixel(position, wcs, mode='all')
+        position = (y, x)
+
+    data = np.asanyarray(data)
+    slices_large, slices_small = overlap_slices(data.shape, shape, position)
+    slices = slices_large
+    if subarray_indices:
+        slices = slices_small
+
+    yy, xx = np.mgrid[slices]
+    values = data[yy, xx]
+
+    tbl = Table()
+    tbl['x'] = xx.ravel()
+    tbl['y'] = yy.ravel()
+    tbl['value'] = values.ravel()
+
+    return tbl
 
 
 def _scale_image_wcs(wcs, scale, origin=0):
