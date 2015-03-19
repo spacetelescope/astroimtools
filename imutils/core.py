@@ -12,11 +12,12 @@ from astropy.nddata.utils import overlap_slices
 from astropy.coordinates import SkyCoord
 from astropy.wcs import WCS
 from astropy.wcs.utils import skycoord_to_pixel
+from astropy.utils import lazyproperty
 from astropy import log
 
 
 __all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate',
-           'radial_distance', 'listpixels']
+           'radial_distance', 'listpixels', 'Cutout']
 
 
 class StdUncertainty(object):
@@ -274,6 +275,41 @@ def radial_distance(shape, position):
     y = np.arange(shape[0]) - position[0]
     xx, yy = np.meshgrid(x, y)
     return np.sqrt(xx**2 + yy**2)
+
+
+class Cutout(object):
+    def __init__(self, data, position, shape, wcs=None):
+        if isinstance(position, SkyCoord):
+            if wcs is None:
+                raise ValueError('wcs must be input if position is a '
+                                 'SkyCoord')
+
+            x, y = skycoord_to_pixel(position, wcs, mode='all')
+            position = (y, x)
+
+        data = np.asanyarray(data)
+        slices_large, slices_small = overlap_slices(data.shape, shape,
+                                                    position)
+        self.slices_large = slices_large
+        self.slices_small = slices_small
+        self.data = data[slices_large]
+
+    @staticmethod
+    def _calc_bbox(slices):
+        """
+        Calculate minimimal bounding box.
+        Output:  (bottom, left, top, right)   (y0, x0, y1, x1)
+        """
+        return (slices[0].start, slices[1].start,
+                slices[0].stop, slices[1].stop)
+
+    @lazyproperty
+    def bbox_large(self):
+        return self._calc_bbox(self.slices_large)
+
+    @lazyproperty
+    def bbox_small(self):
+        return self._calc_bbox(self.slices_small)
 
 
 @support_nddata
