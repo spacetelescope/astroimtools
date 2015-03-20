@@ -447,10 +447,12 @@ def mask_databounds(nddata, mask=None, lower_bound=None, upper_bound=None,
     if np.all(data.mask):
         raise ValueError('All data values are masked')
 
-    nddata_out = copy.deepcopy(nddata)
-    nddata_out.mask = data.mask
-
-    return nddata_out
+    if np.any(data.mask):
+        nddata_out = copy.deepcopy(nddata)
+        nddata_out.mask = data.mask
+        return nddata_out
+    else:
+        return nddata
 
 
 def _scale_image_wcs(wcs, scale, origin=0):
