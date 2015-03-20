@@ -10,14 +10,10 @@ from astropy.stats import (sigma_clip, biweight_location,
 from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.nddata import NDData, support_nddata
-import warnings
-from astropy.utils.exceptions import AstropyUserWarning
+from .core import mask_databounds
 
 
 __all__ = ['ImageStatistics', 'imstats', 'minmax']
-
-
-warnings.filterwarnings('always', category=AstropyUserWarning)
 
 
 class ImageStatistics(object):
@@ -81,26 +77,8 @@ class ImageStatistics(object):
             raise ValueError('nddata input must be an astropy.nddata.NDData '
                              'object')
 
-        if nddata.mask is not None:
-            if nddata.mask.shape != nddata.data.shape:
-                raise ValueError('mask and data must have the same shape')
-            data = np.ma.MaskedArray(nddata.data, nddata.mask)
-        else:
-            data = np.ma.MaskedArray(nddata.data, None)
-
-        if lower_bound is not None:
-            data = np.ma.masked_less(data, lower_bound)
-        if upper_bound is not None:
-            data = np.ma.masked_greater(data, upper_bound)
-        if mask_value is not None:
-            data = np.ma.masked_values(data, mask_value)
-
-        nmasked = data.count()
-        data = np.ma.masked_invalid(data)    # mask np.nan, np.inf
-        if data.count() != nmasked:
-            warnings.warn(('The data array contains at least one unmasked '
-                           'invalid value (NaN or inf). These values will be '
-                           'automatically masked.'), AstropyUserWarning)
+        nddata = mask_databounds(nddata)
+        data = np.ma.MaskedArray(nddata.data, nddata.mask)
 
         if np.all(data.mask):
             raise ValueError('All data values are masked')
