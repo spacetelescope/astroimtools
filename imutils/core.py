@@ -137,6 +137,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
                   uncertainty=uncertainty_out, mask=mdata.mask, meta=meta_out)
 
 
+@support_nddata
 def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
     """
     Downsample data by applying a function to local blocks.
@@ -207,6 +208,7 @@ def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
     return data_reduced, wcs_out
 
 
+@support_nddata
 def block_replicate(data, block_size, conserve_sum=True):
     """
     Upsample a 1D, 2D, or 3D data array by block replication.
