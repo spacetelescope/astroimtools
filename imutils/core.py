@@ -14,10 +14,12 @@ from astropy.wcs import WCS
 from astropy.wcs.utils import skycoord_to_pixel
 from astropy.utils import lazyproperty
 from astropy import log
+import warnings
+from astropy.utils.exceptions import AstropyUserWarning
 
 
 __all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate',
-           'radial_distance', 'listpixels', 'Cutout']
+           'radial_distance', 'listpixels', 'Cutout', 'mask_databounds']
 
 
 class StdUncertainty(object):
@@ -407,6 +409,48 @@ def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     tbl['value'] = values.ravel()
 
     return tbl
+
+
+def mask_databounds(nddata, mask=None, lower_bound=None, upper_bound=None,
+                    mask_value=None):
+    """
+    Update a `~astropy.nddata.NDData` mask by masking data values that
+    are below a lower bound, above an upper bound, equal to particular
+    value, or are invalid (e.g. np.nan or np.inf).
+    """
+
+    if not isinstance(nddata, NDData):
+        raise ValueError('nddata input must be an astropy.nddata.NDData '
+                         'object')
+
+    if nddata.mask is not None:
+        if nddata.mask.shape != nddata.data.shape:
+            raise ValueError('mask and data must have the same shape')
+        data = np.ma.MaskedArray(nddata.data, nddata.mask)
+    else:
+        data = np.ma.MaskedArray(nddata.data, None)
+
+    if lower_bound is not None:
+        data = np.ma.masked_less(data, lower_bound)
+    if upper_bound is not None:
+        data = np.ma.masked_greater(data, upper_bound)
+    if mask_value is not None:
+        data = np.ma.masked_values(data, mask_value)
+
+    nmasked = data.count()
+    data = np.ma.masked_invalid(data)    # mask np.nan, np.inf
+    if data.count() != nmasked:
+        warnings.warn(('The data array contains at least one unmasked '
+                       'invalid value (NaN or inf). These values will be '
+                       'automatically masked.'), AstropyUserWarning)
+
+    if np.all(data.mask):
+        raise ValueError('All data values are masked')
+
+    nddata_out = copy.deepcopy(nddata)
+    nddata_out.mask = data.mask
+
+    return nddata_out
 
 
 def _scale_image_wcs(wcs, scale, origin=0):
