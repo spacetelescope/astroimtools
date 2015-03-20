@@ -19,7 +19,8 @@ from astropy.utils.exceptions import AstropyUserWarning
 
 
 __all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate',
-           'radial_distance', 'listpixels', 'Cutout', 'mask_databounds']
+           'radial_distance', 'listpixels', 'Cutout', 'NDDataCutout',
+           'mask_databounds']
 
 
 class StdUncertainty(object):
@@ -295,6 +296,51 @@ class Cutout(object):
         self.slices_large = slices_large
         self.slices_small = slices_small
         self.data = data[slices_large]
+
+    @staticmethod
+    def _calc_bbox(slices):
+        """
+        Calculate minimimal bounding box.
+        Output:  (bottom, left, top, right)   (y0, x0, y1, x1)
+        """
+        return (slices[0].start, slices[1].start,
+                slices[0].stop, slices[1].stop)
+
+    @lazyproperty
+    def bbox_large(self):
+        return self._calc_bbox(self.slices_large)
+
+    @lazyproperty
+    def bbox_small(self):
+        return self._calc_bbox(self.slices_small)
+
+
+class NDDataCutout(object):
+    def __init__(self, nddata, position, shape):
+        if isinstance(position, SkyCoord):
+            if nddata.wcs is None:
+                raise ValueError('nddata must contain WCS if the input '
+                                 'position is a SkyCoord')
+
+            x, y = skycoord_to_pixel(position, nddata.wcs, mode='all')
+            position = (y, x)
+
+        data = np.asanyarray(nddata.data)
+        print(data.shape, shape, position)
+        slices_large, slices_small = overlap_slices(data.shape, shape,
+                                                    position)
+        self.slices_large = slices_large
+        self.slices_small = slices_small
+
+        data = nddata.data[slices_large]
+        mask = None
+        uncertainty = None
+        if nddata.mask is not None:
+            mask = nddata.mask[slices_large]
+        if nddata.uncertainty is not None:
+            uncertainty = nddata.uncertainty[slices_large]
+
+        self.nddata = NDData(data, mask=mask, uncertainty=uncertainty)
 
     @staticmethod
     def _calc_bbox(slices):
