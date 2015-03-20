@@ -41,12 +41,40 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
     """
     Perform basic arithmetic on two `~astropy.nddata.NDData` objects and
     return a new `~astropy.nddata.NDData` object.
+
+    Parameters
+    ----------
+    nddata1 : `~astropy.nddata.NDData` or scalar
+        ``nddata1`` and ``nddata2`` cannot both be scalars.
+
+    nddata2 : `~astropy.nddata.NDData` or scalar
+        ``nddata1`` and ``nddata2`` cannot both be scalars.
     """
 
     allowed_operators = ['+', '-', '*', '/', '//', 'min', 'max']
     operator = operator.strip()
     if operator not in allowed_operators:
         raise ValueError('operator "{0}" is not allowed'.format(operator))
+
+    if not isinstance(nddata1, NDData) and not isinstance(nddata2, NDData):
+        raise ValueError('nddata1 or nddata2 input must be an '
+                         'astropy.nddata.NDData object.')
+
+    # if nddata1 is a scalar, then make it a NDData object
+    if not isinstance(nddata1, NDData):
+        nddata1 = np.asanyarray(nddata1)
+        if nddata1.size != 1:
+            raise ValueError('nddata1 input must be an astropy.nddata.NDData '
+                             'object or a scalar.')
+        nddata1 = NDData(np.full(nddata2.data.shape, nddata1))
+
+    # if nddata2 is a scalar, then make it a NDData object
+    if not isinstance(nddata2, NDData):
+        nddata2 = np.asanyarray(nddata2)
+        if nddata2.size != 1:
+            raise ValueError('nddata2 input must be an astropy.nddata.NDData '
+                             'object or a scalar.')
+        nddata2 = NDData(np.full(nddata1.data.shape, nddata2))
 
     if nddata1.data.shape != nddata2.data.shape:
         raise ValueError('nddata1 and nddata2 arrays must have the same '
