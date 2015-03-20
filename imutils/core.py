@@ -138,7 +138,8 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
 
 
 @support_nddata
-def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
+def block_reduce(data, block_size, error=None, func=np.sum, wcs=None,
+                 wcs_origin=0):
     """
     Downsample data by applying a function to local blocks.
 
@@ -158,6 +159,10 @@ def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
         axis.  ``block_size`` must have the same length as
         ``data.shape``.
 
+    error : array-like
+        The 1-sigma pixelwise errors of ``data``.  Errors will be
+        propagated only if ``func`` is ``np.sum`` or ``np.mean``.
+
     function : callable
         The method to use to downsample the data.  Must be a callable
         that takes in a `~numpy.ndarray` along with an ``axis`` keyword,
@@ -176,8 +181,12 @@ def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
 
     Returns
     -------
-    output : array_like
+    output : array-like
         The resampled data.
+
+    error : array-like
+        The propagated error array.  Returned only if ``func`` is
+        ``np.sum`` or ``np.mean``.
 
     wcs_output : `~astropy.wcs.WCS`, optional
         The transformed WCS.  Returned only if ``wcs`` is input and
@@ -205,7 +214,15 @@ def block_reduce(data, block_size, func=np.sum, wcs=None, wcs_origin=0):
     else:
         wcs_out = None
 
-    return data_reduced, wcs_out
+    error_out = None
+    if error is not None:
+        if func == np.sum or func == np.mean:
+            error_out = np.sqrt(block_reduce(error**2, tuple(block_size),
+                                             func=func))
+        if func == np.mean:
+            error_out /= len(data)
+
+    return data_reduced, error_out, wcs_out
 
 
 @support_nddata
