@@ -346,6 +346,8 @@ class Cutout(object):
         self.slices_large = slices_large
         self.slices_small = slices_small
         self.data = data[slices_large]
+        self.requested_position = position
+        self.requested_shape = shape
 
     @staticmethod
     def _calc_bbox(slices):
@@ -355,6 +357,25 @@ class Cutout(object):
         """
         return (slices[0].start, slices[1].start,
                 slices[0].stop, slices[1].stop)
+
+    @lazyproperty
+    def origin(self):
+        """
+        The origin pixel of the cutout in the large array.
+        """
+        slices = self.slices_large
+        return np.array([slices[0].start, slices[1].start])
+
+    @lazyproperty
+    def position(self):
+        """
+        The actual "central" position in the large array.
+        """
+        slices = self.slices_large
+        return (slices[0].start + np.int(np.ceil(
+            (slices[0].stop - slices[0].start - 1) / 2.)),
+            (slices[1].start + np.int(np.ceil(
+                (slices[1].stop - slices[1].start - 1) / 2.))))
 
     @lazyproperty
     def bbox_large(self):
