@@ -23,6 +23,9 @@ __all__ = ['StdUncertainty', 'imarith', 'block_reduce', 'block_replicate',
            'mask_databounds']
 
 
+warnings.filterwarnings('always', category=AstropyUserWarning)
+
+
 class StdUncertainty(object):
     """
     `~astropy.nddata.NDData` uncertainty class to hold 1-sigma standard
