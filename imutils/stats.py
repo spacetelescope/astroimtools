@@ -78,15 +78,25 @@ class ImageStatistics(object):
                              'object')
 
         nddata = mask_databounds(nddata)
-        data = np.ma.MaskedArray(nddata.data, nddata.mask)
-
-        if np.all(data.mask):
+        if np.all(nddata.mask):
             raise ValueError('All data values are masked')
+
+        if nddata.mask is not None:
+            data = np.ma.MaskedArray(nddata.data, nddata.mask)
+        else:
+            data = nddata.data
 
         if sigma is not None:
             data = sigma_clip(data, sig=sigma, iters=iters)
-        self.goodvals = data.data[~data.mask]
-        self.masked_data = data
+
+        if np.ma.is_masked(data):
+            self.goodvals = data.data[~data.mask]
+            self._npixels = np.ma.count(data)
+            self._nrejected = np.ma.count_masked(data)
+        else:
+            self.goodvals = data
+            self._npixels = data.size
+            self._nrejected = 0
 
     def __getitem__(self, key):
         return getattr(self, key, None)
@@ -96,14 +106,14 @@ class ImageStatistics(object):
         """
         The number of unclipped pixels.
         """
-        return self.masked_data.count()
+        return self._npixels
 
     @lazyproperty
     def nrejected(self):
         """
         The number of rejected (clipped) pixels.
         """
-        return np.ma.count_masked(self.masked_data)
+        return self._nrejected
 
     @lazyproperty
     def mean(self):
