@@ -7,6 +7,7 @@ from __future__ import (absolute_import, division, print_function,
 import numpy as np
 import astropy.io.fits as fits
 from astropy.nddata import NDData
+from astropy import log
 
 
 __all__ = ['basic_fits_to_nddata', 'basic_nddata_to_fits']
@@ -65,5 +66,6 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
 
     hdulist = fits.HDUList(hdus)
     hdulist.writeto(filename, clobber=clobber)
+    log.info('Wrote {0}'.format(filename))
 
     return
