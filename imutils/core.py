@@ -514,11 +514,12 @@ def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     data = np.asanyarray(data)
     slices_large, slices_small = overlap_slices(data.shape, shape, position)
     slices = slices_large
-    if subarray_indices:
-        slices = slices_small
-
     yy, xx = np.mgrid[slices]
     values = data[yy, xx]
+
+    if subarray_indices:
+        slices = slices_small
+        yy, xx = np.mgrid[slices]
 
     tbl = Table()
     tbl['x'] = xx.ravel()
