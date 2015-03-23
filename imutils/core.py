@@ -350,6 +350,14 @@ class Cutout(object):
         self.requested_shape = shape
 
     @staticmethod
+    def _calc_center(slices):
+        """
+        Calculate the center position.
+        """
+        return (slices[0].start + (slices[0].stop - slices[0].start) / 2.,
+                (slices[1].start + slices[1].stop - slices[1].start) / 2.)
+
+    @staticmethod
     def _calc_bbox(slices):
         """
         Calculate minimimal bounding box.
@@ -376,6 +384,20 @@ class Cutout(object):
             (slices[0].stop - slices[0].start - 1) / 2.)),
             (slices[1].start + np.int(np.ceil(
                 (slices[1].stop - slices[1].start - 1) / 2.))))
+
+    @lazyproperty
+    def center_large(self):
+        """
+        The central position of the subarray in the large array.
+        """
+        return self._calc_center(self.slices_large)
+
+    @lazyproperty
+    def center_small(self):
+        """
+        The central position of the subarray.
+        """
+        return self._calc_center(self.slices_small)
 
     @lazyproperty
     def bbox_large(self):
