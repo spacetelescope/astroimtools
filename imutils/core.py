@@ -197,16 +197,27 @@ def block_reduce(data, block_size, error=None, func=np.sum, wcs=None,
     """
 
     from skimage.measure import block_reduce
+
     data = np.asanyarray(data)
+
+    block_size = np.atleast_1d(block_size)
+    if data.ndim > 1 and len(block_size) == 1:
+        block_size = np.repeat(block_size, data.ndim)
+
     if len(block_size) != data.ndim:
-        raise ValueError('`block_size` must have the same length as '
-                         '`data.shape`')
+        raise ValueError('`block_size` must be a scalar or have the same '
+                         'length as `data.shape`')
 
     block_size = np.array([int(i) for i in block_size])
-    size_new = np.array(data.shape) // block_size
-    size_init = size_new * block_size
-    if size_init[0] != data.shape[0] or size_init[1] != data.shape[1]:
-        data = data[:size_init[0], :size_init[1]]   # trim data if necessary
+    size_resampled = np.array(data.shape) // block_size
+    size_init = size_resampled * block_size
+
+    # trim data if necessary
+    for i in range(data.ndim):
+        if data.shape[i] != size_init[i]:
+            data = data.swapaxes(0, i)
+            data = data[:size_init[i]]
+            data = data.swapaxes(0, i)
 
     data_reduced = block_reduce(data, tuple(block_size), func=func)
 
