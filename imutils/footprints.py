@@ -14,28 +14,26 @@ __all__ = ['circular_footprint', 'circular_annulus_footprint',
 
 def circular_footprint(radius, dtype=np.int):
     """
-    Create a 2D circular footprint.
+    Create a circular footprint.
 
     A pixel is considered to be entirely in or out of the footprint
-    depending on whether its center is in or out of the circle.  The
+    depending on whether its center is in or out of the footprint.  The
     size of the output array is the minimal bounding box for the
-    circular footprint.
+    footprint.
 
     Parameters
     ----------
     radius : int
         The radius of the circular footprint.
 
-    Other Parameters
-    ----------------
-    dtype : data-type
+    dtype : data-type, optional
         The data type of the output `~numpy.ndarray`.
 
     Returns
     -------
     footprint : `~numpy.ndarray`
-        A circular footprint where array elements are 1 within the
-        footprint and 0 otherwise.
+        A footprint where array elements are 1 within the footprint and
+        0 otherwise.
     """
 
     x = np.arange(-radius, radius + 1)
@@ -44,6 +42,32 @@ def circular_footprint(radius, dtype=np.int):
 
 
 def circular_annulus_footprint(radius_inner, radius_outer, dtype=np.int):
+    """
+    Create a circular annulus footprint.
+
+    A pixel is considered to be entirely in or out of the footprint
+    depending on whether its center is in or out of the footprint.  The
+    size of the output array is the minimal bounding box for the
+    footprint.
+
+    Parameters
+    ----------
+    radius_inner : int
+        The inner radius of the circular annulus.
+
+    radius_outer : int
+        The outer radius of the circular annulus.
+
+    dtype : data-type, optional
+        The data type of the output `~numpy.ndarray`.
+
+    Returns
+    -------
+    footprint : `~numpy.ndarray`
+        A footprint where array elements are 1 within the footprint and
+        0 otherwise.
+    """
+
     size = (radius_outer * 2) + 1
     y, x = np.mgrid[0:size, 0:size]
     circle_outer = Ellipse2D(1, radius_outer, radius_outer, radius_outer,
@@ -54,6 +78,36 @@ def circular_annulus_footprint(radius_inner, radius_outer, dtype=np.int):
 
 
 def elliptical_footprint(a, b, theta=0, dtype=np.int):
+    """
+    Create an elliptical footprint.
+
+    A pixel is considered to be entirely in or out of the footprint
+    depending on whether its center is in or out of the footprint.  The
+    size of the output array is the minimal bounding box for the
+    footprint.
+
+    Parameters
+    ----------
+    a : int
+        The semimajor axis.
+
+    b : int
+        The semiminor axis.
+
+    theta : float, optional
+        The angle in radians of the semimajor axis.  The angle is
+        measured counterclockwise from the positive x axis.
+
+    dtype : data-type, optional
+        The data type of the output `~numpy.ndarray`.
+
+    Returns
+    -------
+    footprint : `~numpy.ndarray`
+        A footprint where array elements are 1 within the footprint and
+        0 otherwise.
+    """
+
     size = (a * 2) + 1
     y, x = np.mgrid[0:size, 0:size]
     ellipse = Ellipse2D(1, a, a, a, b, theta=theta)(x, y)
@@ -66,6 +120,39 @@ def elliptical_footprint(a, b, theta=0, dtype=np.int):
 
 def elliptical_annulus_footprint(a_inner, a_outer, b_outer, theta=0,
                                  dtype=np.int):
+    """
+    Create an elliptical annulus footprint.
+
+    A pixel is considered to be entirely in or out of the footprint
+    depending on whether its center is in or out of the footprint.  The
+    size of the output array is the minimal bounding box for the
+    footprint.
+
+    Parameters
+    ----------
+    a_inner : int
+        The inner semimajor axis.
+
+    a_outer : int
+        The outer semimajor axis.
+
+    b_outer : int
+        The outer semimajor axis.
+
+    theta : float, optional
+        The angle in radians of the semimajor axis.  The angle is
+        measured counterclockwise from the positive x axis.
+
+    dtype : data-type, optional
+        The data type of the output `~numpy.ndarray`.
+
+    Returns
+    -------
+    footprint : `~numpy.ndarray`
+        A footprint where array elements are 1 within the footprint and
+        0 otherwise.
+    """
+
     size = (a_outer * 2) + 1
     y, x = np.mgrid[0:size, 0:size]
     ellipse_outer = Ellipse2D(1, a_outer, a_outer, a_outer, b_outer,
