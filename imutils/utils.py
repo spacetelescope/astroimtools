@@ -5,9 +5,10 @@ Image utilities.
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
+from astropy.modeling.models import Ellipse2D
 
 
-__all__ = ['circular_footprint']
+__all__ = ['circular_footprint', 'circular_annulus_footprint']
 
 
 def circular_footprint(radius, dtype=np.int):
@@ -39,3 +40,13 @@ def circular_footprint(radius, dtype=np.int):
     x = np.arange(-radius, radius + 1)
     xx, yy = np.meshgrid(x, x)
     return np.array((xx**2 + yy**2) <= radius**2, dtype=dtype)
+
+
+def circular_annulus_footprint(radius_inner, radius_outer, dtype=np.int):
+    size = (radius_outer * 2) + 1
+    y, x = np.mgrid[0:size, 0:size]
+    circle_outer = Ellipse2D(1, radius_outer, radius_outer, radius_outer,
+                             radius_outer, theta=0)(x, y)
+    circle_inner = Ellipse2D(1., radius_outer, radius_outer, radius_inner,
+                             radius_inner, theta=0)(x, y)
+    return np.asarray(circle_outer - circle_inner, dtype=dtype)
