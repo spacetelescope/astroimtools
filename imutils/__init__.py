@@ -15,3 +15,4 @@ if not _ASTROPY_SETUP_:
     from .core import *
     from .stats import *
     from .nddata_adapters import *
+    from .utils import *
