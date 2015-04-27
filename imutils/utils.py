@@ -8,7 +8,8 @@ import numpy as np
 from astropy.modeling.models import Ellipse2D
 
 
-__all__ = ['circular_footprint', 'circular_annulus_footprint']
+__all__ = ['circular_footprint', 'circular_annulus_footprint',
+           'elliptical_footprint']
 
 
 def circular_footprint(radius, dtype=np.int):
@@ -50,3 +51,14 @@ def circular_annulus_footprint(radius_inner, radius_outer, dtype=np.int):
     circle_inner = Ellipse2D(1., radius_outer, radius_outer, radius_inner,
                              radius_inner, theta=0)(x, y)
     return np.asarray(circle_outer - circle_inner, dtype=dtype)
+
+
+def elliptical_footprint(a, b, theta=0, dtype=np.int):
+    size = (a * 2) + 1
+    y, x = np.mgrid[0:size, 0:size]
+    ellipse = Ellipse2D(1, a, a, a, b, theta=theta)(x, y)
+
+    # crop to minimal bounding box
+    yi, xi = ellipse.nonzero()
+    idx = (slice(min(yi), max(yi) + 1), slice(min(xi), max(xi) + 1))
+    return np.asarray(ellipse[idx], dtype=dtype)
