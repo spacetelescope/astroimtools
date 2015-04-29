@@ -242,17 +242,17 @@ def block_reduce(data, block_size, error=None, func=np.sum, wcs=None,
 @support_nddata
 def block_replicate(data, block_size, conserve_sum=True):
     """
-    Upsample a 1D, 2D, or 3D data array by block replication.
+    Upsample a data array by block replication.
 
     Parameters
     ----------
-    data : array_like (1D, 2D, or 3D)
+    data : array_like
         The data to be block replicated.
 
     block_size : int or array_like (int)
-        The integer block size (upsampling factor) along each axis.  If
-        ``block_size`` is a scalar and ``data`` is a 2D array, then the
-        data will be upsampled by ``block_size`` along both dimensions.
+        The integer block size along each axis.  If ``block_size`` is a
+        scalar and ``data`` has more than one dimension, then
+        ``block_size`` will be used for for every axis.
 
     conserve_sum : bool
         If `True` (the default) then the sum of the output
@@ -266,7 +266,7 @@ def block_replicate(data, block_size, conserve_sum=True):
     Examples
     --------
     >>> import numpy as np
-    >>> from imutils import block_replicate
+    >>> from astropy.nddata.utils import block_replicate
     >>> data = np.array([[0., 1.], [2., 3.]])
     >>> block_replicate(data, 2)
     array([[ 0.  ,  0.  ,  0.25,  0.25],
@@ -282,51 +282,22 @@ def block_replicate(data, block_size, conserve_sum=True):
     """
 
     data = np.asanyarray(data)
-    block_size = np.atleast_1d(block_size)
 
+    block_size = np.atleast_1d(block_size)
     if data.ndim > 1 and len(block_size) == 1:
         block_size = np.repeat(block_size, data.ndim)
 
     if len(block_size) != data.ndim:
-        raise ValueError('`block_size` must have the same length as '
-                         '`data.shape`')
+        raise ValueError('`block_size` must be a scalar or have the same '
+                         'length as `data.shape`')
 
-    block_size = np.array([int(i) for i in block_size])
-
-    if data.ndim == 1:
-        output = np.broadcast_arrays(
-            data.reshape(data.shape[0], 1),
-            np.ones((1, block_size[0])))[0].reshape(
-                data.shape[0]*block_size[0])
-
-    elif data.ndim == 2:
-        output = np.broadcast_arrays(
-            data.reshape(data.shape[0], 1,
-                         data.shape[1], 1),
-            np.ones((1, block_size[0],
-                     1, block_size[1])))[0].reshape(
-                         data.shape[0] * block_size[0],
-                         data.shape[1] * block_size[1])
-
-    elif data.ndim == 3:
-        output = np.broadcast_arrays(
-            data.reshape(data.shape[0], 1,
-                         data.shape[1], 1,
-                         data.shape[2], 1),
-            np.ones((1, block_size[0],
-                     1, block_size[1],
-                     1, block_size[2])))[0].reshape(
-                         data.shape[0] * block_size[0],
-                         data.shape[1] * block_size[1],
-                         data.shape[2] * block_size[2])
-
-    else:
-        raise ValueError('data.ndim must be <= 3')
+    for i in range(data.ndim):
+        data = np.repeat(data, block_size[i], axis=i)
 
     if conserve_sum:
-        output = output / float(np.prod(block_size))
+        data = data / float(np.prod(block_size))
 
-    return output
+    return data
 
 
 def radial_distance(shape, position):
