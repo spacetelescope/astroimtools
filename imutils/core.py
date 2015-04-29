@@ -144,7 +144,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
 def block_reduce(data, block_size, error=None, func=np.sum, wcs=None,
                  wcs_origin=0):
     """
-    Downsample data by applying a function to local blocks.
+    Downsample a data array by applying a function to local blocks.
 
     If ``data`` is not perfectly divisible by ``block_size`` along a
     given axis then the data will be trimmed (from the end) along that
@@ -157,10 +157,10 @@ def block_reduce(data, block_size, error=None, func=np.sum, wcs=None,
     data : array_like
         The data to be resampled.
 
-    block_size : array_like (int)
-        An array containing the integer downsampling factor along each
-        axis.  ``block_size`` must have the same length as
-        ``data.shape``.
+    block_size : int or array_like (int)
+        The integer block size along each axis.  If ``block_size`` is a
+        scalar and ``data`` has more than one dimension, then
+        ``block_size`` will be used for for every axis.
 
     error : array-like
         The 1-sigma pixelwise errors of ``data``.  Errors will be
