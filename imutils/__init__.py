@@ -16,3 +16,4 @@ if not _ASTROPY_SETUP_:
     from .stats import *
     from .nddata_adapters import *
     from .footprints import *
+    from .idw import *
