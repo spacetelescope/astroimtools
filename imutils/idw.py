@@ -7,7 +7,7 @@ __vdate__ = '2015-04-25'
 __author__ = "Mihai Cara"
 
 
-__all__ = [ 'ShepardIDWInterpolator' ]
+__all__ = ['ShepardIDWInterpolator']
 
 
 class ShepardIDWInterpolator(object):
@@ -119,6 +119,7 @@ class ShepardIDWInterpolator(object):
     1D vector of values).
 
     """
+
     def __init__(self, coord, vals, weights=None, leafsize=10):
 
         coord = np.asarray(coord)
@@ -173,7 +174,6 @@ class ShepardIDWInterpolator(object):
         self.ncoord = ncoord
         self.vals = vals
         self.weights = weights
-
 
     def __call__(self, pts, nbr=8, eps=0.0, p=1, reg=0.0, confdist=1e-12, dtype=np.float):
         """
@@ -263,7 +263,7 @@ class ShepardIDWInterpolator(object):
             raise ValueError("Input point coordinate(s) must be an array-like "
                              "object of dimensionality no larger than 2.")
 
-        pts = np.reshape(pts, (-1,self.ncoord_dim))
+        pts = np.reshape(pts, (-1, self.ncoord_dim))
         npts = pts.shape[0]
 
         d, idx = self.kdtree.query(pts, k=nbr, eps=eps)
@@ -292,7 +292,7 @@ class ShepardIDWInterpolator(object):
                     ival[k] = self.vals[idk[confused][0]]
                     continue
 
-            w = 1.0 / (dk**p + reg)
+            w = 1.0 / (dk ** p + reg)
             if self.weights is not None:
                 w *= self.weights[idk]
 
