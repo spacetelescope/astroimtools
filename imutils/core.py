@@ -454,7 +454,7 @@ def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     position : tuple (int) or `~astropy.coordinates.SkyCoord`
         The position of the subarray center with respect to the data
         array.  The position can be specified either as an integer
-        ``(row, col)`` (``(y, x)``) tuple or a
+        ``(row, col)`` (``(y, x)``) tuple of pixel coordinates or a
         `~astropy.coordinates.SkyCoord`, in which case ``wcs`` is a
         required input.
 
