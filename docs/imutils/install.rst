@@ -1,0 +1,95 @@
+************
+Installation
+************
+
+Requirements
+============
+
+Imutils has the following strict requirements:
+
+* `Python <http://www.python.org/>`_ 2.7, 3.3, 3.4 or 3.5
+
+* `Numpy <http://www.numpy.org/>`_ 1.6 or later
+
+* `Astropy`_ 1.0 or later
+
+Some functionality is available only if the following optional
+dependencies are installed:
+
+* `Scipy`_
+
+.. _Scipy: http://www.scipy.org/
+.. _pip: https://pip.pypa.io/en/latest/
+.. _conda: http://conda.pydata.org/docs/
+
+
+Installing Imutils Using pip
+==============================
+
+To install the latest imutils **stable** version with `pip`_, simply
+run::
+
+    pip install --no-deps imutils
+
+To install the current imutils **development** version using
+`pip`_::
+
+    pip install --no-deps git+https://github.com/spacetelescope/imutils.git
+
+.. note::
+
+    The ``--no-deps`` flag is optional, but highly recommended if you
+    already have Numpy and Astropy installed, since otherwise pip will
+    sometimes try to "help" you by upgrading your Numpy and Astropy
+    installations, which may not always be desired.
+
+.. note::
+
+    If you get a ``PermissionError`` this means that you do not have
+    the required administrative access to install new packages to your
+    Python installation.  In this case you may consider using the
+    ``--user`` option to install the package into your home directory.
+    You can read more about how to do this in the `pip documentation
+    <http://www.pip-installer.org/en/1.2.1/other-tools.html#using-pip-with-the-user-scheme>`_.
+
+    Do **not** install imutils or other third-party packages using
+    ``sudo`` unless you are fully aware of the risks.
+
+
+Obtaining the Source Package
+----------------------------
+
+Stable Version
+^^^^^^^^^^^^^^
+
+The latest stable source package for photutils can be `downloaded here
+<https://pypi.python.org/pypi/photutils>`_.
+
+Development Version
+^^^^^^^^^^^^^^^^^^^
+
+The latest development version of imutils can be cloned from github
+using this command::
+
+   git clone git://github.com/spacetelescope/imutils.git
+
+
+Testing an Installed Imutils
+==============================
+
+The easiest way to test your installed version of imutils is running
+correctly is to use the :func:`imutils.test()` function:
+
+.. doctest-skip::
+
+    >>> import imutils
+    >>> photutils.test()
+
+The tests should run and print out any failures, which you can report
+at the `Imutils issue tracker
+<http://github.com/spacetelescope/imutils/issues>`_.
+
+.. note::
+
+    This way of running the tests may not work if you do it in the
+    imutils source distribution directory.
