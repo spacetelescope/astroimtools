@@ -16,7 +16,7 @@ Imutils has the following strict requirements:
 Some functionality is available only if the following optional
 dependencies are installed:
 
-* `Scipy`_
+* `Scipy`_ 0.15 or later
 
 .. _Scipy: http://www.scipy.org/
 .. _pip: https://pip.pypa.io/en/latest/
@@ -57,21 +57,21 @@ To install the current imutils **development** version using
 
 
 Obtaining the Source Package
-----------------------------
+============================
 
 Stable Version
-^^^^^^^^^^^^^^
+--------------
 
-The latest stable source package for photutils can be `downloaded here
-<https://pypi.python.org/pypi/photutils>`_.
+The latest stable source package for imutils will be available from
+`PyPI <https://pypi.python.org/>`_ once released.
 
 Development Version
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 The latest development version of imutils can be cloned from github
 using this command::
 
-   git clone git://github.com/spacetelescope/imutils.git
+   git clone https://github.com/spacetelescope/imutils.git
 
 
 Testing an Installed Imutils
@@ -83,10 +83,10 @@ correctly is to use the :func:`imutils.test()` function:
 .. doctest-skip::
 
     >>> import imutils
-    >>> photutils.test()
+    >>> imutils.test()
 
 The tests should run and print out any failures, which you can report
-at the `Imutils issue tracker
+to the `Imutils issue tracker
 <http://github.com/spacetelescope/imutils/issues>`_.
 
 .. note::
