@@ -19,7 +19,7 @@ from astropy.utils.exceptions import AstropyUserWarning
 
 
 __all__ = ['StdUncertainty', 'imarith', 'radial_distance', 'listpixels',
-           'Cutout', 'NDDataCutout', 'mask_databounds']
+           'NDDataCutout', 'mask_databounds']
 
 
 warnings.filterwarnings('always', category=AstropyUserWarning)
@@ -149,84 +149,6 @@ def radial_distance(shape, position):
     y = np.arange(shape[0]) - position[0]
     xx, yy = np.meshgrid(x, y)
     return np.sqrt(xx**2 + yy**2)
-
-
-class Cutout(object):
-    def __init__(self, data, position, shape, wcs=None):
-        if isinstance(position, SkyCoord):
-            if wcs is None:
-                raise ValueError('wcs must be input if position is a '
-                                 'SkyCoord')
-
-            x, y = skycoord_to_pixel(position, wcs, mode='all')
-            position = (y, x)
-
-        data = np.asanyarray(data)
-        slices_large, slices_small = overlap_slices(data.shape, shape,
-                                                    position)
-        self.slices_large = slices_large
-        self.slices_small = slices_small
-        self.data = data[slices_large]
-        self.requested_position = position
-        self.requested_shape = shape
-
-    @staticmethod
-    def _calc_center(slices):
-        """
-        Calculate the center position.
-        """
-        return (slices[0].start + (slices[0].stop - slices[0].start) / 2.,
-                (slices[1].start + slices[1].stop - slices[1].start) / 2.)
-
-    @staticmethod
-    def _calc_bbox(slices):
-        """
-        Calculate minimimal bounding box.
-        Output:  (bottom, left, top, right)   (y0, x0, y1, x1)
-        """
-        return (slices[0].start, slices[1].start,
-                slices[0].stop, slices[1].stop)
-
-    @lazyproperty
-    def origin(self):
-        """
-        The origin pixel of the cutout in the large array.
-        """
-        slices = self.slices_large
-        return np.array([slices[0].start, slices[1].start])
-
-    @lazyproperty
-    def position(self):
-        """
-        The actual "central" position in the large array.
-        """
-        slices = self.slices_large
-        return (slices[0].start + np.int(np.ceil(
-            (slices[0].stop - slices[0].start - 1) / 2.)),
-            (slices[1].start + np.int(np.ceil(
-                (slices[1].stop - slices[1].start - 1) / 2.))))
-
-    @lazyproperty
-    def center_large(self):
-        """
-        The central position of the subarray in the large array.
-        """
-        return self._calc_center(self.slices_large)
-
-    @lazyproperty
-    def center_small(self):
-        """
-        The central position of the subarray.
-        """
-        return self._calc_center(self.slices_small)
-
-    @lazyproperty
-    def bbox_large(self):
-        return self._calc_bbox(self.slices_large)
-
-    @lazyproperty
-    def bbox_small(self):
-        return self._calc_bbox(self.slices_small)
 
 
 class NDDataCutout(object):
