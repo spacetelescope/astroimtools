@@ -62,8 +62,9 @@ Obtaining the Source Package
 Stable Version
 --------------
 
-The latest stable source package for astroimtools will be available
-from `PyPI <https://pypi.python.org/>`_ once released.
+The latest stable source package for astroimtools can be `downloaded
+here <https://pypi.python.org/pypi/astroimtools>`_.
+
 
 Development Version
 -------------------
