@@ -12,8 +12,9 @@ from ._astropy_init import *
 
 # For egg_info test builds to pass, put package imports here.
 if not _ASTROPY_SETUP_:
-    from .core import *
-    from .stats import *
+    from .arithmetic import *
+    from .filtering import *
+    from .interpolation import *
     from .nddata_adapters import *
-    from .footprints import *
-    from .idw import *
+    from .statistics import *
+    from .utils import *

@@ -28,9 +28,9 @@ class ImageStatistics(object):
         Parameters
         ----------
         nddata : `~astropy.nddata.NDData`
-            NDData object containing the data array and optional mask on
-            which to calculate statistics.  Masked pixels are excluded
-            when computing the image statistics.
+            NDData object containing the data array (and an optional
+            mask) on which to calculate statistics.  Masked pixels are
+            excluded when computing the image statistics.
 
         sigma : `None` or float, optional
             The number of standard deviations to use as the sigma
