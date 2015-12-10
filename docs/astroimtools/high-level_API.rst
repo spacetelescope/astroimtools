@@ -1,5 +1,5 @@
 Reference/API
 =============
 
-.. automodapi:: imutils
+.. automodapi:: astroimtools
     :no-heading:
