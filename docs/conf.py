@@ -96,8 +96,8 @@ release = package.__version__
 # global configuration are listed below, commented out.
 
 html_theme_options = {
-    'logotext1': 'astroim',  # white, semi-bold
-    'logotext2': 'tools',    # orange, light
+    'logotext1': 'astro',  # white, semi-bold
+    'logotext2': 'imtools',    # orange, light
     'logotext3': ':docs'     # white, light
 }
 
