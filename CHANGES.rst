@@ -2,4 +2,4 @@
 0.1 (unreleased)
 ----------------
 
-imutils requires Astropy version 1.0 or later.
+astroimtools requires Astropy version 1.0 or later.

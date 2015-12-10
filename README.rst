@@ -1,5 +1,5 @@
-imutils
-=======
+astroimtools
+============
 
 This package provides convenience tools for image statistics and
 arithmetic.
