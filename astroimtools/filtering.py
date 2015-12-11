@@ -1,6 +1,6 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 """
-Image utilities.
+Image filtering utilities.
 """
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -137,7 +137,11 @@ def elliptical_annulus_footprint(a_inner, a_outer, b_outer, theta=0,
         The outer semimajor axis.
 
     b_outer : int
-        The outer semimajor axis.
+        The outer semiminor axis.  The inner semiminor axis is
+        calculated by using the same axis ratio as the semimajor axis:
+
+        .. math::
+            b_{inner} = b_{outer} \\frac{a_{inner}}{a_{outer}}
 
     theta : float, optional
         The angle in radians of the semimajor axis.  The angle is
