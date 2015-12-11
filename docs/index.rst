@@ -30,7 +30,8 @@ Tools Documentation
     astroimtools/arithmetic.rst
     astroimtools/interpolation.rst
     astroimtools/filtering.rst
-    astroimtools/misc.rst
+    astroimtools/nddata_adapters.rst
+    astroimtools/utils.rst
     astroimtools/high-level_API.rst
 
 

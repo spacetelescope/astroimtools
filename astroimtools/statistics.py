@@ -10,7 +10,7 @@ from astropy.stats import (sigma_clip, biweight_location,
 from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.nddata import NDData, support_nddata
-from .core import mask_databounds
+from .utils import mask_databounds
 
 
 __all__ = ['ImageStatistics', 'imstats', 'minmax']

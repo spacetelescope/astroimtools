@@ -1,5 +1,0 @@
-Misc Tools
-==========
-
-Introduction
-------------

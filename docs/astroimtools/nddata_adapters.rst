@@ -1,4 +1,4 @@
-Filtering Tools
+NDData Adapters
 ===============
 
 Introduction
@@ -8,4 +8,4 @@ Introduction
 Reference/API
 -------------
 
-.. automodapi:: astroimtools.filtering
+.. automodapi:: astroimtools.nddata_adapters
