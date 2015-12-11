@@ -1,11 +1,8 @@
 Filtering Tools
 ===============
 
-Introduction
-------------
-
-
 Reference/API
 -------------
 
 .. automodapi:: astroimtools.filtering
+    :no-heading:

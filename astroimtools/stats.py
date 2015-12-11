@@ -83,6 +83,8 @@ class NDDataStats(object):
     """
     Class to calculate (sigma-clipped) image statistics on NDData
     objects.
+
+    Set the ``sigma`` keyword to perform sigma clipping.
     """
 
     def __init__(self, nddata, sigma=None, sigma_lower=None, sigma_upper=None,
@@ -90,8 +92,6 @@ class NDDataStats(object):
                  lower_bound=None, upper_bound=None, mask_value=None,
                  mask_invalid=True):
         """
-        Set the ``sigma`` keyword to perform sigma clipping.
-
         Parameters
         ----------
         nddata : `~astropy.nddata.NDData`

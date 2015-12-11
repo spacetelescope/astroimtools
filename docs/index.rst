@@ -7,8 +7,7 @@ Astroimtools Overview
 =====================
 
 **Astroimtools** is an open-source Python package to provide
-convenience tools, including some command-line tools, for image
-statistics, interpolation, filtering, and arithmetic.  It is an open
+convenience tools for working with astronomical images.  It is an open
 source (BSD licensed) Python package.  Bug reports, comments, and help
 with development are very welcome.
 
@@ -26,9 +25,8 @@ Tools Documentation
     :maxdepth: 1
 
     astroimtools/scripts.rst
-    astroimtools/statistics.rst
+    astroimtools/stats.rst
     astroimtools/arithmetic.rst
-    astroimtools/interpolation.rst
     astroimtools/filtering.rst
     astroimtools/nddata_adapters.rst
     astroimtools/utils.rst
