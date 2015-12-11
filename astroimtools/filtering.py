@@ -34,6 +34,16 @@ def circular_footprint(radius, dtype=np.int):
     footprint : `~numpy.ndarray`
         A footprint where array elements are 1 within the footprint and
         0 otherwise.
+
+    Examples
+    --------
+    >>> from astroimtools import circular_footprint
+    >>> circular_footprint(2)
+    array([[0, 0, 1, 0, 0],
+           [0, 1, 1, 1, 0],
+           [1, 1, 1, 1, 1],
+           [0, 1, 1, 1, 0],
+           [0, 0, 1, 0, 0]])
     """
 
     x = np.arange(-radius, radius + 1)
@@ -66,7 +76,20 @@ def circular_annulus_footprint(radius_inner, radius_outer, dtype=np.int):
     footprint : `~numpy.ndarray`
         A footprint where array elements are 1 within the footprint and
         0 otherwise.
+
+    Examples
+    --------
+    >>> from astroimtools import circular_footprint
+    >>> circular_annulus_footprint(1, 2)
+    array([[0, 0, 1, 0, 0],
+           [0, 1, 0, 1, 0],
+           [1, 0, 0, 0, 1],
+           [0, 1, 0, 1, 0],
+           [0, 0, 1, 0, 0]])
     """
+
+    if radius_inner > radius_outer:
+        raise ValueError('radius_outer must be >= radius_inner')
 
     size = (radius_outer * 2) + 1
     y, x = np.mgrid[0:size, 0:size]
@@ -106,7 +129,21 @@ def elliptical_footprint(a, b, theta=0, dtype=np.int):
     footprint : `~numpy.ndarray`
         A footprint where array elements are 1 within the footprint and
         0 otherwise.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from astroimtools import elliptical_footprint
+    >>> elliptical_footprint(3, 1, theta=np.pi/4.)
+    array([[1, 1, 0, 0, 0],
+           [1, 1, 1, 0, 0],
+           [0, 1, 1, 1, 0],
+           [0, 0, 1, 1, 1],
+           [0, 0, 0, 1, 1]])
     """
+
+    if b > a:
+        raise ValueError('a must be >= b')
 
     size = (a * 2) + 1
     y, x = np.mgrid[0:size, 0:size]
@@ -118,7 +155,7 @@ def elliptical_footprint(a, b, theta=0, dtype=np.int):
     return np.asarray(ellipse[idx], dtype=dtype)
 
 
-def elliptical_annulus_footprint(a_inner, a_outer, b_outer, theta=0,
+def elliptical_annulus_footprint(a_inner, a_outer, b_inner, theta=0,
                                  dtype=np.int):
     """
     Create an elliptical annulus footprint.
@@ -136,12 +173,13 @@ def elliptical_annulus_footprint(a_inner, a_outer, b_outer, theta=0,
     a_outer : int
         The outer semimajor axis.
 
-    b_outer : int
-        The outer semiminor axis.  The inner semiminor axis is
-        calculated by using the same axis ratio as the semimajor axis:
+    b_inner : int
+        The inner semiminor axis.  The outer semiminor axis is
+        calculated using the same axis ratio as the semimajor axis:
 
         .. math::
-            b_{inner} = b_{outer} \\frac{a_{inner}}{a_{outer}}
+            b_{outer} = b_{inner} \\left( \\frac{a_{outer}}{a_{inner}}
+            \\right)
 
     theta : float, optional
         The angle in radians of the semimajor axis.  The angle is
@@ -155,13 +193,32 @@ def elliptical_annulus_footprint(a_inner, a_outer, b_outer, theta=0,
     footprint : `~numpy.ndarray`
         A footprint where array elements are 1 within the footprint and
         0 otherwise.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from astroimtools import elliptical_annulus_footprint
+    >>> elliptical_annulus_footprint(2, 4, 1, theta=np.pi/4.)
+    array([[0, 1, 1, 0, 0, 0, 0],
+           [1, 1, 1, 1, 0, 0, 0],
+           [1, 1, 0, 0, 1, 0, 0],
+           [0, 1, 0, 0, 0, 1, 0],
+           [0, 0, 1, 0, 0, 1, 1],
+           [0, 0, 0, 1, 1, 1, 1],
+           [0, 0, 0, 0, 1, 1, 0]])
     """
+
+    if a_inner > a_outer:
+        raise ValueError('a_outer must be >= a_inner')
+
+    if b_inner > a_inner:
+        raise ValueError('a_inner must be >= b_inner')
 
     size = (a_outer * 2) + 1
     y, x = np.mgrid[0:size, 0:size]
+    b_outer = b_inner * (a_outer / a_inner)
     ellipse_outer = Ellipse2D(1, a_outer, a_outer, a_outer, b_outer,
                               theta=theta)(x, y)
-    b_inner = b_outer * (a_inner / a_outer)
     ellipse_inner = Ellipse2D(1, a_outer, a_outer, a_inner, b_inner,
                               theta=theta)(x, y)
     annulus = ellipse_outer - ellipse_inner
