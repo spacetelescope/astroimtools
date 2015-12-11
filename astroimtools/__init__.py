@@ -14,7 +14,6 @@ from ._astropy_init import *
 if not _ASTROPY_SETUP_:
     from .arithmetic import *
     from .filtering import *
-    from .interpolation import *
     from .nddata_adapters import *
     from .statistics import *
     from .utils import *
