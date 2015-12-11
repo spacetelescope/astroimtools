@@ -1,6 +1,6 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 """
-Image utilities.
+Misc utilities.
 """
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -10,13 +10,13 @@ from astropy.nddata import NDData, support_nddata
 from astropy.nddata.utils import overlap_slices
 from astropy.coordinates import SkyCoord
 from astropy.wcs.utils import skycoord_to_pixel
-from astropy.utils import lazyproperty
+from astropy.nddata.utils import Cutout2D
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
 
-__all__ = ['radial_distance', 'listpixels', 'NDDataCutout',
-           'mask_databounds']
+__all__ = ['radial_distance', 'listpixels', 'mask_databounds',
+           'nddata_cutout2d']
 
 
 warnings.filterwarnings('always', category=AstropyUserWarning)
@@ -167,16 +167,28 @@ def mask_databounds(data, mask=None, lower_bound=None, upper_bound=None,
         The data array.
 
     mask : bool `~numpy.ndarray`, optional
-        A mask...
+        A boolean mask array with the same shape as ``data``.
 
     lower_bound : float, optional
+        The value of the lower bound.  Data values lower than
+        ``lower_bound`` will be masked.
+
     upper_bound : float, optional
+        The value of the upper bound.  Data values greater than
+        ``upper_bound`` will be masked.
+
     value : float, optional
+        A data value (e.g., ``0.0``) to mask.
+
     mask_invalid : bool, optional
+        If `True` (the default), then any unmasked invalid values (e.g.
+        NaN, inf) will be masked.
 
     Returns
     -------
     mask : bool `~numpy.ndarray`
+        The resulting boolean mask array with the same shape as
+        ``data``.
 
     Examples
     --------
@@ -208,7 +220,7 @@ def mask_databounds(data, mask=None, lower_bound=None, upper_bound=None,
         if data.count() != nmasked:
             warnings.warn('The data array contains unmasked invalid '
                           'values (NaN or inf), which are now masked.',
-                           AstropyUserWarning)
+                          AstropyUserWarning)
 
     if np.all(data.mask):
         raise ValueError('All data values are masked')
@@ -216,46 +228,110 @@ def mask_databounds(data, mask=None, lower_bound=None, upper_bound=None,
     return data.mask
 
 
-class NDDataCutout(object):
-    def __init__(self, nddata, position, shape):
-        if isinstance(position, SkyCoord):
-            if nddata.wcs is None:
-                raise ValueError('nddata must contain WCS if the input '
-                                 'position is a SkyCoord')
+def nddata_cutout2d(nddata, position, size, mode='trim', fill_value=np.nan):
+    """
+    Create a 2D cutout of a `~astropy.nddata.NDData` object.
 
-            x, y = skycoord_to_pixel(position, nddata.wcs, mode='all')
-            position = (y, x)
+    Specifically, cutouts will made for the ``nddata.data`` and
+    ``nddata.mask`` (if present) arrays.  If ``nddata.wcs`` exists, then
+    it will also be updated.
 
-        data = np.asanyarray(nddata.data)
-        print(data.shape, shape, position)
-        slices_large, slices_small = overlap_slices(data.shape, shape,
-                                                    position)
-        self.slices_large = slices_large
-        self.slices_small = slices_small
+    Note that cutouts will not be made for ``nddata.uncertainty`` (if
+    present) because they are general objects and not arrays.
 
-        data = nddata.data[slices_large]
-        mask = None
-        uncertainty = None
-        if nddata.mask is not None:
-            mask = nddata.mask[slices_large]
-        if nddata.uncertainty is not None:
-            uncertainty = nddata.uncertainty[slices_large]
+    Parameters
+    ----------
+    nddata : `~astropy.nddata.NDData`
+        The 2D `~astropy.nddata.NDData` from which the cutout is taken.
 
-        self.nddata = NDData(data, mask=mask, uncertainty=uncertainty)
+    position : tuple or `~astropy.coordinates.SkyCoord`
+        The position of the cutout array's center with respect to the
+        ``nddata.data`` array.  The position can be specified either as
+        a ``(x, y)`` tuple of pixel coordinates or a
+        `~astropy.coordinates.SkyCoord`, in which case ``nddata.wcs``
+        must exist.
 
-    @staticmethod
-    def _calc_bbox(slices):
-        """
-        Calculate minimimal bounding box.
-        Output:  (bottom, left, top, right)   (y0, x0, y1, x1)
-        """
-        return (slices[0].start, slices[1].start,
-                slices[0].stop, slices[1].stop)
+    size : int, array-like, `~astropy.units.Quantity`
+        The size of the cutout array along each axis.  If ``size`` is a
+        scalar number or a scalar `~astropy.units.Quantity`, then a
+        square cutout of ``size`` will be created.  If ``size`` has two
+        elements, they should be in ``(ny, nx)`` order.  Scalar numbers
+        in ``size`` are assumed to be in units of pixels.  ``size`` can
+        also be a `~astropy.units.Quantity` object or contain
+        `~astropy.units.Quantity` objects.  Such
+        `~astropy.units.Quantity` objects must be in pixel or angular
+        units.  For all cases, ``size`` will be converted to an integer
+        number of pixels, rounding the the nearest integer.  See the
+        ``mode`` keyword for additional details on the final cutout
+        size.
 
-    @lazyproperty
-    def bbox_large(self):
-        return self._calc_bbox(self.slices_large)
+    mode : {'trim', 'partial', 'strict'}, optional
+        The mode used for creating the cutout data array.  For the
+        ``'partial'`` and ``'trim'`` modes, a partial overlap of the
+        cutout array and the input ``nddata.data`` array is sufficient.
+        For the ``'strict'`` mode, the cutout array has to be fully
+        contained within the ``nddata.data`` array, otherwise an
+        `~astropy.nddata.utils.PartialOverlapError` is raised.   In all
+        modes, non-overlapping arrays will raise a
+        `~astropy.nddata.utils.NoOverlapError`.  In ``'partial'`` mode,
+        positions in the cutout array that do not overlap with the
+        ``nddata.data`` array will be filled with ``fill_value``.  In
+        ``'trim'`` mode only the overlapping elements are returned, thus
+        the resulting cutout array may be smaller than the requested
+        ``size``.
 
-    @lazyproperty
-    def bbox_small(self):
-        return self._calc_bbox(self.slices_small)
+    fill_value : number, optional
+        If ``mode='partial'``, the value to fill pixels in the cutout
+        array that do not overlap with the input ``nddata.data``.
+        ``fill_value`` must have the same ``dtype`` as the input
+        ``nddata.data`` array.
+
+    Returns
+    -------
+    result : `~astropy.nddata.NDData`
+        A `~astropy.nddata.NDData` object with cutouts for the data and
+        mask, if input.
+
+    Examples
+    --------
+    >>> from astropy.nddata import NDData
+    >>> import astropy.units as u
+    >>> from astroimtools import nddata_cutout2d
+    >>> data = np.random.random((500, 500))
+    >>> unit = u.electron / u.s
+    >>> mask = (data > 0.7)
+    >>> meta = {'exptime': 1234 * u.s}
+    >>> nddata = NDData(data, mask=mask, unit=unit, meta=meta)
+    >>> cutout = nddata_cutout2d(nddata, (100, 100), (10, 10))
+    >>> cutout.data.shape
+    (10, 10)
+    >>> cutout.mask.shape
+    (10, 10)
+    >>> cutout.unit
+    Unit("electron / s")
+    """
+
+    if not isinstance(nddata, NDData):
+        raise ValueError('nddata input must be an NDData object')
+
+    if isinstance(position, SkyCoord):
+        if nddata.wcs is None:
+            raise ValueError('nddata must contain WCS if the input '
+                             'position is a SkyCoord')
+        position = skycoord_to_pixel(position, nddata.wcs, mode='all')
+
+    data_cutout = Cutout2D(np.asanyarray(nddata.data), position, size,
+                           wcs=nddata.wcs, mode=mode, fill_value=fill_value)
+    # need to create a new NDData instead of copying/replacing
+    nddata_out = NDData(data_cutout.data, unit=nddata.unit,
+                        uncertainty=nddata.uncertainty, meta=nddata.meta)
+
+    if nddata.wcs is not None:
+        nddata_out.wcs = data_cutout.wcs
+
+    if nddata.mask is not None:
+        mask_cutout = Cutout2D(np.asanyarray(nddata.mask), position, size,
+                               mode=mode, fill_value=fill_value)
+        nddata_out.mask = mask_cutout.data
+
+    return nddata_out
