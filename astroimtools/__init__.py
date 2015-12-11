@@ -15,5 +15,5 @@ if not _ASTROPY_SETUP_:
     from .arithmetic import *
     from .filtering import *
     from .nddata_adapters import *
-    from .statistics import *
+    from .stats import *
     from .utils import *
