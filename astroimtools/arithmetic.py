@@ -18,13 +18,13 @@ import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
 
-__all__ = ['imarith']
+__all__ = ['nddata_arith']
 
 
 warnings.filterwarnings('always', category=AstropyUserWarning)
 
 
-def imarith(nddata1, nddata2, operator, fill_value=0., keywords=None):
+def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     """
     Perform basic arithmetic on two `~astropy.nddata.NDData` objects and
     return a new `~astropy.nddata.NDData` object.
@@ -55,32 +55,32 @@ def imarith(nddata1, nddata2, operator, fill_value=0., keywords=None):
 
     Examples
     --------
-    >>> from astroimtools import imarith
+    >>> from astroimtools import nddata_arith
     >>> from astropy.nddata import NDData
     >>> nd1 = NDData([0, 1, 2, 3, 4])
     >>> nd2 = NDData([1, 7, 5, 4, 2])
 
-    >>> nd = imarith(nd1, 5, '+')
+    >>> nd = nddata_arith(nd1, 5, '+')
     >>> nd.data
     array([5, 6, 7, 8, 9])
 
-    >>> nd = imarith(nd1, 5, '*')
+    >>> nd = nddata_arith(nd1, 5, '*')
     >>> nd.data
     array([ 0,  5, 10, 15, 20])
 
-    >>> nd = imarith(nd1, nd2, '+')
+    >>> nd = nddata_arith(nd1, nd2, '+')
     >>> nd.data
     array([1, 8, 7, 7, 6])
 
-    >>> nd = imarith(nd1, nd2, 'min')
+    >>> nd = nddata_arith(nd1, nd2, 'min')
     >>> nd.data
     array([0, 1, 2, 3, 2])
 
-    >>> nd = imarith(nd1, 2, '/')
+    >>> nd = nddata_arith(nd1, 2, '/')
     >>> nd.data
     array([ 0. ,  0.5,  1. ,  1.5,  2. ])
 
-    >>> nd = imarith(nd1, 2, '//')
+    >>> nd = nddata_arith(nd1, 2, '//')
     >>> nd.data
     array([0, 0, 1, 1, 2])
 
@@ -88,7 +88,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0., keywords=None):
 
     >>> nd1.meta['exptime'] = 500
     >>> nd2.meta['exptime'] = 1000
-    >>> nd = imarith(nd1, nd2, '+', keywords='exptime')
+    >>> nd = nddata_arith(nd1, nd2, '+', keywords='exptime')
     >>> nd.meta['exptime']
     1500
 
@@ -96,7 +96,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0., keywords=None):
 
     >>> nd1.mask = (nd1.data > 3)
     >>> nd2.mask = (nd2.data < 2)
-    >>> nd = imarith (nd1, nd2, '+')
+    >>> nd = nddata_arith(nd1, nd2, '+')
     >>> nd.data
     array([0, 8, 7, 7, 0])
     >>> nd.mask

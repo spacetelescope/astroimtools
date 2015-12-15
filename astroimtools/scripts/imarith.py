@@ -1,11 +1,31 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
+"""
+``imarith`` is a command-line script based on
+``astroimtools.nddata_arith`` for performing basic arithmetic on arrays
+extracted from two FITS files.  The arithmetic is performed for the data
+in only a single FITS extension in both FITS file.
+
+Example usage:
+
+1.  Add the array in extension 1 of the first FITS file with extension 3
+    in the second FITS file, placing the result in "result.fits"::
+
+    $ imarith filename1.fits filename2.fits '+' -e1 1 -e2 3 -o 'result.fits'
+
+2.  Perform the same operation above, but also add the exposure time
+    values in the headers of the FITS files, placing the result in
+    "result.fits"::
+
+    $ imarith filename1.fits filename2.fits '+' -e1 1 -e2 3 -k 'exptime' -o 'result.fits'
+"""
+
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
 from astropy.utils.compat import argparse
 from astropy.nddata import NDData
 from ..nddata_adapters import basic_fits_to_nddata, basic_nddata_to_fits
-from ..core import imarith
+from ..arithmetic import nddata_arith
 
 
 def main(args=None):
@@ -31,7 +51,7 @@ def main(args=None):
 
     args = parser.parse_args(args)
 
-    # TODO: better FITS to NDData and NDData to FITS adapters
+    # TODO: we need better FITS to NDData and NDData to FITS adapters
     try:
         nddata1 = np.float(args.fits_filename[0])
     except ValueError:
@@ -50,7 +70,7 @@ def main(args=None):
     if args.keywords is not None:
         keywords = args.keywords.replace(' ', '').split(',')
 
-    nddata = imarith(nddata1, nddata2, args.operator,
+    nddata = nddata_arith(nddata1, nddata2, args.operator,
                      fill_value=args.fill_value, keywords=keywords)
 
     basic_nddata_to_fits(nddata, args.outfilename, clobber=args.clobber)
