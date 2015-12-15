@@ -7,7 +7,7 @@ from __future__ import (absolute_import, division, print_function,
 import numpy as np
 import copy
 from astropy.table import Table
-from astropy.nddata import NDData, support_nddata
+from astropy.nddata import NDData, support_nddata, StdDevUncertainty
 from astropy.nddata.utils import overlap_slices
 from astropy.coordinates import SkyCoord
 from astropy.wcs import WCS
@@ -18,24 +18,10 @@ import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
 
-__all__ = ['StdUncertainty', 'imarith']
+__all__ = ['imarith']
 
 
 warnings.filterwarnings('always', category=AstropyUserWarning)
-
-
-class StdUncertainty(object):
-    """
-    `~astropy.nddata.NDData` uncertainty class to hold 1-sigma standard
-    deviations.
-    """
-
-    def __init__(self, value):
-        self.value = value
-
-    @property
-    def uncertainty_type(self):
-        return 'std'
 
 
 def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
@@ -50,6 +36,14 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
 
     nddata2 : `~astropy.nddata.NDData` or scalar
         ``nddata1`` and ``nddata2`` cannot both be scalars.
+
+    operator : {'+', '-', '*', '/', '//', 'min', 'max'}
+
+    fill_value : float, optional
+
+    keywords : str or list of str, optional
+        List of keywords in the meta dictionaries of both nddata objects
+        to propagate the same as arithmetic.
     """
 
     allowed_operators = ['+', '-', '*', '/', '//', 'min', 'max']
@@ -114,12 +108,12 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
     # propagate errors
     if nddata1.uncertainty is not None and nddata2.uncertainty is not None:
         if operator in ['+', '-']:
-            error_out = np.sqrt(nddata1.uncertainty.value**2 +
-                                nddata2.uncertainty.value**2)
+            error_out = np.sqrt(nddata1.uncertainty.array**2 +
+                                nddata2.uncertainty.array**2)
         elif operator in ['*', '/']:
-            error_out = mdata * np.sqrt((nddata1.uncertainty.value /
+            error_out = mdata * np.sqrt((nddata1.uncertainty.array /
                                          mdata1)**2 +
-                                        (nddata2.uncertainty.value /
+                                        (nddata2.uncertainty.array /
                                          mdata2)**2)
         else:
             log.info("Error propagation is not performed for the '//', "
@@ -128,7 +122,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
 
         if error_out is not None:
             uncertainty_out = copy.deepcopy(nddata1.uncertainty)
-            uncertainty_out.value = error_out
+            uncertainty_out.array = error_out
         else:
             uncertainty_out = None
     else:
