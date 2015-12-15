@@ -96,9 +96,9 @@ release = package.__version__
 # global configuration are listed below, commented out.
 
 html_theme_options = {
-    'logotext1': 'astro',  # white, semi-bold
-    'logotext2': 'imtools',    # orange, light
-    'logotext3': ':docs'     # white, light
+    'logotext1': 'astro',    # white, semi-bold
+    'logotext2': 'imtools',  # orange, light
+    'logotext3': ''          # white, light
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
