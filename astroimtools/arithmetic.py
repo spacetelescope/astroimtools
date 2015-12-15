@@ -44,6 +44,60 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
     keywords : str or list of str, optional
         List of keywords in the meta dictionaries of both nddata objects
         to propagate the same as arithmetic.
+
+    Returns
+    -------
+    result : `~astropy.nddata.NDData`
+        NDData object resulting from the arithmetic operation.
+
+    Examples
+    --------
+    >>> from astroimtools import imarith
+    >>> from astropy.nddata import NDData
+    >>> nd1 = NDData([0, 1, 2, 3, 4])
+    >>> nd2 = NDData([1, 7, 5, 4, 2])
+
+    >>> nd = imarith(nd1, 5, '+')
+    >>> nd.data
+    array([5, 6, 7, 8, 9])
+
+    >>> nd = imarith(nd1, 5, '*')
+    >>> nd.data
+    array([ 0,  5, 10, 15, 20])
+
+    >>> nd = imarith(nd1, nd2, '+')
+    >>> nd.data
+    array([1, 8, 7, 7, 6])
+
+    >>> nd = imarith(nd1, nd2, 'min')
+    >>> nd.data
+    array([0, 1, 2, 3, 2])
+
+    >>> nd = imarith(nd1, 2, '/')
+    >>> nd.data
+    array([ 0. ,  0.5,  1. ,  1.5,  2. ])
+
+    >>> nd = imarith(nd1, 2, '//')
+    >>> nd.data
+    array([0, 0, 1, 1, 2])
+
+    The operand can also be applied to NDData meta keywords:
+
+    >>> nd1.meta['exptime'] = 500
+    >>> nd2.meta['exptime'] = 1000
+    >>> nd = imarith(nd1, nd2, '+', keywords='exptime')
+    >>> nd.meta['exptime']
+    1500
+
+    And the NDData masks are used in the operations:
+
+    >>> nd1.mask = (nd1.data > 3)
+    >>> nd2.mask = (nd2.data < 2)
+    >>> nd = imarith (nd1, nd2, '+')
+    >>> nd.data
+    array([0, 8, 7, 7, 0])
+    >>> nd.mask
+    array([ True, False, False, False,  True], dtype=bool)
     """
 
     allowed_operators = ['+', '-', '*', '/', '//', 'min', 'max']
@@ -61,7 +115,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
         if nddata1.size != 1:
             raise ValueError('nddata1 input must be an astropy.nddata.NDData '
                              'object or a scalar.')
-        nddata1 = NDData(np.full(nddata2.data.shape, nddata1))
+        nddata1 = NDData(np.zeros_like(nddata2.data) + nddata1)
 
     # if nddata2 is a scalar, then make it a NDData object
     if not isinstance(nddata2, NDData):
@@ -69,7 +123,7 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
         if nddata2.size != 1:
             raise ValueError('nddata2 input must be an astropy.nddata.NDData '
                              'object or a scalar.')
-        nddata2 = NDData(np.full(nddata1.data.shape, nddata2))
+        nddata2 = NDData(np.zeros_like(nddata1.data) + nddata2)
 
     if nddata1.data.shape != nddata2.data.shape:
         raise ValueError('nddata1 and nddata2 arrays must have the same '
