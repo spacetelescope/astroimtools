@@ -23,15 +23,15 @@ dependencies are installed:
 .. _conda: http://conda.pydata.org/docs/
 
 
-Installing astroimtools Using pip
+Installing Astroimtools Using pip
 =================================
 
-To install the latest astroimtools **stable** version with `pip`_,
+To install the latest Astroimtools **stable** version with `pip`_,
 simply run::
 
     pip install --no-deps astroimtools
 
-To install the current astroimtools **development** version using
+To install the current Astroimtools **development** version using
 `pip`_::
 
     pip install --no-deps git+https://github.com/spacetelescope/astroimtools.git
@@ -52,7 +52,7 @@ To install the current astroimtools **development** version using
     You can read more about how to do this in the `pip documentation
     <http://www.pip-installer.org/en/1.2.1/other-tools.html#using-pip-with-the-user-scheme>`_.
 
-    Do **not** install astroimtools or other third-party packages
+    Do **not** install Astroimtools or other third-party packages
     using ``sudo`` unless you are fully aware of the risks.
 
 
@@ -62,14 +62,14 @@ Obtaining the Source Package
 Stable Version
 --------------
 
-The latest stable source package for astroimtools can be `downloaded
+The latest stable source package for Astroimtools can be `downloaded
 here <https://pypi.python.org/pypi/astroimtools>`_.
 
 
 Development Version
 -------------------
 
-The latest development version of astroimtools can be cloned from
+The latest development version of Astroimtools can be cloned from
 github using this command::
 
    git clone https://github.com/spacetelescope/astroimtools.git
@@ -78,7 +78,7 @@ github using this command::
 Testing an Installed Astroimtools
 =================================
 
-The easiest way to test your installed version of astroimtools is
+The easiest way to test your installed version of Astroimtools is
 running correctly is to use the :func:`astroimtools.test()` function:
 
 .. doctest-skip::
@@ -93,4 +93,4 @@ to the `Astroimtools issue tracker
 .. note::
 
     This way of running the tests may not work if you do it in the
-    astroimtools source distribution directory.
+    Astroimtools source distribution directory.

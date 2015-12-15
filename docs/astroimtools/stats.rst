@@ -24,6 +24,11 @@ maximum values of an array (or along an array axis)::
 :func:`~astroimtools.minmax` also accepts a mask array to ignore certain data values::
 
     >>> mask = (data < 0.3)
+    >>> mask
+    array([[False, False,  True],
+           [ True, False, False],
+           [False, False, False]], dtype=bool)
+
     >>> minmax(data, mask=mask)
     (0.3163755545817859, 0.96451451973562163)
 
@@ -48,8 +53,8 @@ available statistics are:
   * ``'mode'``
   * ``'std'``
   * ``'mad_std'``
-  * ``'npixels'`` (for sigma-clipped statistics)
-  * ``'nrejected'`` (for sigma-clipped statistics)
+  * ``'npixels'``
+  * ``'nrejected'`` (number of pixels rejected by sigma clipping)
   * ``'min'``
   * ``'max'``
   * ``'biweight_location'``

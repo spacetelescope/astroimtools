@@ -69,7 +69,7 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
         The path of the output FITS file.
 
     clobber : bool, optional
-        Set to `True` to override ``filename`` if it already exists.
+        Set to `True` to overwrite ``filename`` if it already exists.
         The default is `False`.
     """
 

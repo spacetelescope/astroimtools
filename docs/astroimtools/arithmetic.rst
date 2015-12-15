@@ -4,12 +4,13 @@ Image Arithmetic
 Getting Started
 ---------------
 
-imarith
-^^^^^^^
+nddata_arith
+^^^^^^^^^^^^
 
-The :func:`~astroimtools.imarith` function can be used to perform
-basic arithmetic on two `~astropy.nddata.NDData` objects.  It returns
-a new `~astropy.nddata.NDData` object.  The operations that can be performed include:
+The :func:`~astroimtools.nddata_arith` function can be used to perform
+basic arithmetic on two `~astropy.nddata.NDData` objects, returning a
+new `~astropy.nddata.NDData` object.  The operations that can be
+performed include:
 
   * ``'+'``:  addition
   * ``'-'``:  subtraction
@@ -21,33 +22,33 @@ a new `~astropy.nddata.NDData` object.  The operations that can be performed inc
 
 First, let's define two `~astropy.nddata.NDData` objects::
 
-    >>> from astroimtools import imarith
+    >>> from astroimtools import nddata_arith
     >>> from astropy.nddata import NDData
     >>> nd1 = NDData([0, 1, 2, 3, 4])
     >>> nd2 = NDData([1, 7, 5, 4, 2])
 
 Now let's add the objects::
 
-    >>> nd = imarith(nd1, nd2, '+')
+    >>> nd = nddata_arith(nd1, nd2, '+')
     >>> nd.data
     array([1, 8, 7, 7, 6])
 
 or take the element-wise minimum of the two::
 
-    >>> nd = imarith(nd1, nd2, 'min')
+    >>> nd = nddata_arith(nd1, nd2, 'min')
     >>> nd.data
     array([0, 1, 2, 3, 2])
 
 The operations can also be performed with a single
 `~astropy.nddata.NDData` object and a scalar value::
 
-    >>> nd = imarith(nd1, 2, '/')
+    >>> nd = nddata_arith(nd1, 2, '/')
     >>> nd.data
     array([ 0. ,  0.5,  1. ,  1.5,  2. ])
 
 The ``'//'`` operator performs integer-truncated division::
 
-    >>> nd = imarith(nd1, 2, '//')
+    >>> nd = nddata_arith(nd1, 2, '//')
     >>> nd.data
     array([0, 0, 1, 1, 2])
 
@@ -61,14 +62,14 @@ NDData objects:
 Now, we include ``'exptime'`` in the keywords input (which could also
 be a list of keywords) to perform the operation on the exposure time::
 
-    >>> nd = imarith(nd1, nd2, '+', keywords='exptime')
+    >>> nd = nddata_arith(nd1, nd2, '+', keywords='exptime')
     >>> nd.data
     array([1, 8, 7, 7, 6])
     >>> nd.meta['exptime']
     1500
 
 If present, the `~astropy.nddata.NDData` masks are used in the
-operations such that if either value is masked then the output value
+operation such that if either value is masked then the output value
 will be masked.  First, let's add a mask for each::
 
     >>> nd1.mask = (nd1.data > 3)
@@ -76,15 +77,15 @@ will be masked.  First, let's add a mask for each::
 
 and then add them::
 
-    >>> nd = imarith (nd1, nd2, '+')
+    >>> nd = nddata_arith (nd1, nd2, '+')
     >>> nd.data
     array([0, 8, 7, 7, 0])
     >>> nd.mask
     array([ True, False, False, False,  True], dtype=bool)
 
-Note that the resulting `~astropy.nddata.NDData` object's mask is set.
-The data fill value for masked values can be set with the
-``fill_value`` keyword.
+Note that the resulting `~astropy.nddata.NDData` object's mask is
+propagated from the input masks.  The data fill value for masked
+values can be set with the ``fill_value`` keyword.
 
 
 Reference/API

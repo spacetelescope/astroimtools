@@ -118,8 +118,8 @@ def elliptical_footprint(a, b, theta=0, dtype=np.int):
         The semiminor axis.
 
     theta : float, optional
-        The angle in radians of the semimajor axis.  The angle is
-        measured counterclockwise from the positive x axis.
+        The rotation angle in radians of the semimajor axis.  The angle
+        is measured counterclockwise from the positive x axis.
 
     dtype : data-type, optional
         The data type of the output `~numpy.ndarray`.
@@ -182,8 +182,8 @@ def elliptical_annulus_footprint(a_inner, a_outer, b_inner, theta=0,
             \\right)
 
     theta : float, optional
-        The angle in radians of the semimajor axis.  The angle is
-        measured counterclockwise from the positive x axis.
+        The rotation angle in radians of the semimajor axis.  The angle
+        is measured counterclockwise from the positive x axis.
 
     dtype : data-type, optional
         The data type of the output `~numpy.ndarray`.

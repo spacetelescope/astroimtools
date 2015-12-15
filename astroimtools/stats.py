@@ -156,9 +156,9 @@ class NDDataStats(object):
             A data value (e.g., ``0.0``) to be masked.  ``mask_value``
             will be masked in addition to any input ``mask``.
 
-       mask_invalid : bool, optional
-           If `True` (the default), then any unmasked invalid values
-           (e.g.  NaN, inf) will be masked.
+        mask_invalid : bool, optional
+            If `True` (the default), then any unmasked invalid values
+            (e.g.  NaN, inf) will be masked.
 
         Examples
         --------
@@ -342,9 +342,9 @@ def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
     Parameters
     ----------
     nddata : `~astropy.nddata.NDData` or list of `~astropy.nddata.NDData`
-        NDData object containing the data array and optional mask on
-        which to calculate statistics.  Masked pixels are excluded when
-        computing the image statistics.
+        `~astropy.nddata.NDData` object containing the data array and
+        optional mask on which to calculate statistics.  Masked pixels
+        are excluded when computing the image statistics.
 
     sigma : `None` or float, optional
         The number of standard deviations to use for both the lower and
@@ -411,15 +411,16 @@ def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
         A data value (e.g., ``0.0``) to be masked.  ``mask_value`` will
         be masked in addition to any input ``mask``.
 
-   mask_invalid : bool, optional
-       If `True` (the default), then any unmasked invalid values (e.g.
-       NaN, inf) will be masked.
+    mask_invalid : bool, optional
+        If `True` (the default), then any unmasked invalid values (e.g.
+        NaN, inf) will be masked.
 
     Returns
     -------
     table : `~astropy.table.Table`
-        A table containing the calculated image statistics (or NDData
-        metadata).  Each table row corresponds to a single data array.
+        A table containing the calculated image statistics (or
+        `~astropy.nddata.NDData` metadata).  Each table row corresponds
+        to a single data array.
 
     Examples
     --------

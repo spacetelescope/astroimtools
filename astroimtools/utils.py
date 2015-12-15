@@ -65,8 +65,8 @@ def radial_distance(position, shape):
 @support_nddata
 def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     """
-    Return a `~astropy.table.Table` listing the ``(row, col)``
-    (``(y, x)``) positions and ``data`` values for a subarray.
+    Return a `~astropy.table.Table` listing the ``(y, x)`` positions and
+    ``data`` values for a subarray.
 
     Given a position of the center of the subarray, with respect to the
     large array, the array indices and values are returned.  This

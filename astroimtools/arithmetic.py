@@ -31,11 +31,10 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
 
     Parameters
     ----------
-    nddata1 : `~astropy.nddata.NDData` or scalar
-        ``nddata1`` and ``nddata2`` cannot both be scalars.
-
-    nddata2 : `~astropy.nddata.NDData` or scalar
-        ``nddata1`` and ``nddata2`` cannot both be scalars.
+    nddata1, nddata2 : `~astropy.nddata.NDData` or scalar
+        The `~astropy.nddata.NDData` objects (or scalar) on which
+        to perform the arithmetic operation.  Note that ``nddata1`` and
+        ``nddata2`` cannot both be scalars.
 
     operator : {'+', '-', '*', '/', '//', 'min', 'max'}
         The operator to apply to the inputs.
@@ -45,8 +44,9 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
         is masked.  The default is 0.
 
     keywords : str or list of str, optional
-        List of keywords in the meta dictionaries of both nddata objects
-        to propagate the same as arithmetic.
+        List of keywords in the meta dictionaries of both input
+        `~astropy.nddata.NDData` objects to propagate the same as
+        arithmetic.
 
     Returns
     -------
