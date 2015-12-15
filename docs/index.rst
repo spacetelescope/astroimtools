@@ -24,12 +24,12 @@ Tools Documentation
 .. toctree::
     :maxdepth: 1
 
-    astroimtools/scripts.rst
     astroimtools/stats.rst
     astroimtools/arithmetic.rst
     astroimtools/filtering.rst
     astroimtools/nddata_adapters.rst
     astroimtools/utils.rst
+    astroimtools/scripts.rst
     astroimtools/high-level_API.rst
 
 

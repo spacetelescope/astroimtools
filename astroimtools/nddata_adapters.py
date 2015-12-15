@@ -21,7 +21,8 @@ def basic_fits_to_nddata(filename, exten=0):
     single FITS extension.
 
     Note the the primary FITS header will always be included in the
-    NDData meta `dict`, regardless of the value of ``exten``.
+    `~astropy.nddata.NDData` meta `dict`, regardless of the value of
+    ``exten``.
 
     Parameters
     ----------
@@ -51,12 +52,13 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
     """
     Write a `~astropy.nddata.NDData` object to a FITS file.
 
-    That NDData data value will be saved in an extension called 'SCI'.
-    This simple writer will also attempt to save NDData uncertainty and
-    mask to an 'ERROR' and 'MASK' extension, respectively.
+    The `~astropy.nddata.NDData` data will be saved in a FITS extension
+    called 'SCI'.  This simple writer will also attempt to save the
+    `~astropy.nddata.NDData` uncertainty and mask to an 'ERROR' and
+    'MASK' FITS extension, respectively.
 
-    If present, the NDData meta dictionary will be stored as the FITS
-    header.
+    If present, the `~astropy.nddata.NDData` meta dictionary will be
+    stored as the FITS header.
 
     Parameters
     ----------

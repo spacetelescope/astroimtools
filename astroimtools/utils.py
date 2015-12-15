@@ -203,6 +203,7 @@ def mask_databounds(data, mask=None, lower_bound=None, upper_bound=None,
     if mask is None:
         data = np.ma.MaskedArray(data, mask=None)
     else:
+        mask = np.asanyarray(mask)
         if mask.shape != data.shape:
             raise ValueError('mask and data must have the same shape')
         data = np.ma.MaskedArray(data, mask=mask)
