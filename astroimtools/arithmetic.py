@@ -24,7 +24,7 @@ __all__ = ['imarith']
 warnings.filterwarnings('always', category=AstropyUserWarning)
 
 
-def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
+def imarith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     """
     Perform basic arithmetic on two `~astropy.nddata.NDData` objects and
     return a new `~astropy.nddata.NDData` object.
@@ -38,8 +38,11 @@ def imarith(nddata1, nddata2, operator, fill_value=0.0, keywords=None):
         ``nddata1`` and ``nddata2`` cannot both be scalars.
 
     operator : {'+', '-', '*', '/', '//', 'min', 'max'}
+        The operator to apply to the inputs.
 
     fill_value : float, optional
+        The fill value used in the output data when the resultant value
+        is masked.  The default is 0.
 
     keywords : str or list of str, optional
         List of keywords in the meta dictionaries of both nddata objects
