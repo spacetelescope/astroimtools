@@ -1,6 +1,6 @@
 numpy
 matplotlib
-Cython
+Cython>=0.23.4
 astropy-helpers
 #astropy
 -e git+http://github.com/astropy/astropy.git#egg=astropy
