@@ -70,26 +70,21 @@ Here is a simple example::
     >>> nd1 = NDData(np.arange(10))
     >>> columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
     >>> tbl = nddata_stats(nd1, columns=columns)
-    >>> tbl
-    <Table length=1>
-      mean   median   mode       std         mad_std     min   max
-    float64 float64 float64    float64       float64    int64 int64
-    ------- ------- ------- ------------- ------------- ----- -----
-        4.5     4.5     4.5 2.87228132327 3.70650554626     0     9
+    >>> print(tbl)
+    mean median mode      std         mad_std    min max
+    ---- ------ ---- ------------- ------------- --- ---
+     4.5    4.5  4.5 2.87228132327 3.70650554626   0   9
 
 Multiple `~astropy.nddata.NDData` objects can be input as a list,
 resulting in a multi-row output table::
 
     >>> nd2 = NDData(np.arange(20))
     >>> tbl = nddata_stats([nd1, nd2], columns=columns)
-    >>> tbl
-    <Table length=2>
-      mean   median   mode       std         mad_std     min   max
-    float64 float64 float64    float64       float64    int64 int64
-    ------- ------- ------- ------------- ------------- ----- -----
-        4.5     4.5     4.5 2.87228132327 3.70650554626     0     9
-        9.5     9.5     9.5 5.76628129734 7.41301109253     0    19
-
+    >>> print(tbl)
+    mean median mode      std         mad_std    min max
+    ---- ------ ---- ------------- ------------- --- ---
+     4.5    4.5  4.5 2.87228132327 3.70650554626   0   9
+     9.5    9.5  9.5 5.76628129734 7.41301109253   0  19
 
 Sigma-clipped statistics can be calculated by specifying the
 ``sigma``, ``sigma_lower``, and/or ``sigma_upper`` keywords.  For this
@@ -104,13 +99,11 @@ example, let's sigma clip at 3 standard deviations::
     >>> nd2 = NDData(arr2)
     >>> columns = ['npixels', 'nrejected', 'mean', 'median', 'std']
     >>> tbl = nddata_stats([nd1, nd2], sigma=3, columns=columns)
-    >>> tbl
-    <Table length=2>
+    >>> print(tbl)
     npixels nrejected      mean          median          std
-     int64    int64      float64        float64        float64
-     ------- --------- -------------- -------------- --------------
-        9900       100 0.502487325973 0.502480088488 0.289861511955
-        9900       100 0.500908259706 0.502192339391 0.289830629258
+    ------- --------- -------------- -------------- --------------
+       9900       100 0.502487325973 0.502480088488 0.289861511955
+       9900       100 0.500908259706 0.502192339391 0.289830629258
 
 
 Reference/API

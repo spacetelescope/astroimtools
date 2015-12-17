@@ -431,12 +431,10 @@ def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
     >>> nddata = NDData(np.arange(10))
     >>> columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
     >>> tbl = nddata_stats(nddata, columns=columns)
-    >>> tbl
-    <Table length=1>
-      mean   median   mode       std         mad_std     min   max
-    float64 float64 float64    float64       float64    int64 int64
-    ------- ------- ------- ------------- ------------- ----- -----
-        4.5     4.5     4.5 2.87228132327 3.70650554626     0     9
+    >>> print(tbl)
+    mean median mode      std         mad_std    min max
+    ---- ------ ---- ------------- ------------- --- ---
+     4.5    4.5  4.5 2.87228132327 3.70650554626   0   9
     """
 
     stats = []
