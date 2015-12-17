@@ -6,13 +6,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
 import copy
-from astropy.table import Table
-from astropy.nddata import NDData, support_nddata, StdDevUncertainty
-from astropy.nddata.utils import overlap_slices
-from astropy.coordinates import SkyCoord
-from astropy.wcs import WCS
-from astropy.wcs.utils import skycoord_to_pixel
-from astropy.utils import lazyproperty
+from astropy.nddata import NDData
 from astropy import log
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning

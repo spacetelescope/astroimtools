@@ -287,7 +287,8 @@ class NDDataStats(object):
 
         .. math::
 
-            \\sigma \\approx \\frac{\\textrm{MAD}}{\Phi^{-1}(3/4)} \\approx 1.4826 \ \\textrm{MAD}
+            \\sigma \\approx \\frac{\\textrm{MAD}}{\Phi^{-1}(3/4)}
+            \\approx 1.4826 \ \\textrm{MAD}
 
         where :math:`\Phi^{-1}(P)` is the normal inverse cumulative
         distribution function evaluated at probability :math:`P = 3/4`.

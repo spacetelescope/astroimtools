@@ -313,7 +313,7 @@ def nddata_cutout2d(nddata, position, size, mode='trim', fill_value=np.nan):
     Unit("electron / s")
     """
 
-	from astropy.nddata.utils import Cutout2D
+    from astropy.nddata.utils import Cutout2D
 
     if not isinstance(nddata, NDData):
         raise ValueError('nddata input must be an NDData object')
