@@ -1,5 +1,5 @@
 
-0.1 (unreleased)
+0.1 (2015-12-17)
 ----------------
 
-Astroimtools requires Astropy version 1.0 or later.
+Astroimtools requires Astropy version 1.1 or later.
