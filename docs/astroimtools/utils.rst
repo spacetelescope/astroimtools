@@ -131,7 +131,9 @@ units, a mask, and a meta `dict`::
     >>> nddata = NDData(data, mask=mask, unit=unit, meta=meta)
 
 Now let's create a 2D cutout centered at ``(y, x)`` of ``(100, 100)``
-and with a shape of ``(10, 10)`` (``(ny, nx)``)::
+and with a shape of ``(10, 10)`` (``(ny, nx)``):
+
+.. doctest-skip::
 
     >>> cutout = nddata_cutout2d(nddata, (100, 100), (10, 10))
     >>> cutout.data.shape

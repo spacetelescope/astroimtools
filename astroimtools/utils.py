@@ -10,7 +10,6 @@ from astropy.nddata import NDData, support_nddata
 from astropy.nddata.utils import overlap_slices
 from astropy.coordinates import SkyCoord
 from astropy.wcs.utils import skycoord_to_pixel
-from astropy.nddata.utils import Cutout2D
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
@@ -18,6 +17,8 @@ from astropy.utils.exceptions import AstropyUserWarning
 __all__ = ['radial_distance', 'listpixels', 'mask_databounds',
            'nddata_cutout2d']
 
+# requires Astropy >= 1.1
+__doctest_skip__ = ['nddata_cutout2d']
 
 warnings.filterwarnings('always', category=AstropyUserWarning)
 
@@ -311,6 +312,8 @@ def nddata_cutout2d(nddata, position, size, mode='trim', fill_value=np.nan):
     >>> cutout.unit
     Unit("electron / s")
     """
+
+	from astropy.nddata.utils import Cutout2D
 
     if not isinstance(nddata, NDData):
         raise ValueError('nddata input must be an NDData object')

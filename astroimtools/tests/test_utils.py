@@ -10,6 +10,12 @@ import astropy.units as u
 from ..utils import (radial_distance, listpixels, mask_databounds,
                      nddata_cutout2d)
 
+try:
+    from astropy.nddata.utils import Cutout2D
+    HAS_ASTROPY_GE_1P1 = True
+except ImportError:
+    HAS_ASTROPY_GE_1P1 = False
+
 
 class TestRadialDistance(object):
     def test_radial_distance(self):
@@ -64,6 +70,7 @@ class TestMaskDataBounds(object):
             mask_databounds(np.arange(5), lower_bound=10)
 
 
+@pytest.mark.skipif('not HAS_ASTROPY_GE_1P1')
 class TestNDDataCutout2D(object):
     def test_nddata_cutout2d(self):
         data = np.random.random((100, 100))
