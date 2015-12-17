@@ -11,6 +11,11 @@ from astropy.utils import lazyproperty
 from astropy.table import Table
 from astropy.nddata import NDData, support_nddata
 from .utils import mask_databounds
+import astropy
+
+majv, minv = astropy.__version__.split('.')[:2]
+minv = minv.split('rc')[0]
+ASTROPY_LT_1P1 = ([int(majv), int(minv)] < [1, 1])
 
 
 __all__ = ['minmax', 'NDDataStats', 'nddata_stats']
@@ -109,12 +114,14 @@ class NDDataStats(object):
         sigma_lower : float or `None`, optional
             The number of standard deviations to use as the lower bound
             for the clipping limit. If `None` then the value of
-            ``sigma`` is used. Defaults to `None`.
+            ``sigma`` is used. Defaults to `None`.  Requires Astropy >=
+            1.1.
 
         sigma_upper : float or `None`, optional
             The number of standard deviations to use as the upper bound
             for the clipping limit. If `None` then the value of
-            ``sigma`` is used. Defaults to `None`.
+            ``sigma`` is used. Defaults to `None`.  Requires Astropy >=
+            1.1.
 
         iters : int or `None`, optional
             The number of sigma clipping iterations to perform, or
@@ -193,9 +200,13 @@ class NDDataStats(object):
             data = nddata.data
 
         if sigma is not None:
-            data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
-                              sigma_upper=sigma_upper, cenfunc=cenfunc,
-                              stdfunc=stdfunc, iters=iters)
+            if ASTROPY_LT_1P1:
+                data = sigma_clip(data, sig=sigma, cenfunc=cenfunc,
+                                  varfunc=np.ma.var, iters=iters)
+            else:
+                data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
+                                  sigma_upper=sigma_upper, cenfunc=cenfunc,
+                                  stdfunc=stdfunc, iters=iters)
 
         if np.ma.is_masked(data):
             self.goodvals = data.data[~data.mask]
