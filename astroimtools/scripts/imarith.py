@@ -22,7 +22,7 @@ Example usage:
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
-from astropy.utils.compat import argparse
+import argparse
 from astropy.nddata import NDData
 from ..nddata_adapters import basic_fits_to_nddata, basic_nddata_to_fits
 from ..arithmetic import nddata_arith

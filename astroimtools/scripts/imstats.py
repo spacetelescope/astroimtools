@@ -61,7 +61,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
 from astropy.table import Column
-from astropy.utils.compat import argparse
+import argparse
 from ..stats import nddata_stats
 from ..nddata_adapters import basic_fits_to_nddata
 
