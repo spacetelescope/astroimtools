@@ -6,11 +6,11 @@ Astroimtools
     :alt: Latest release
 
 .. image:: https://readthedocs.org/projects/astroimtools/badge/?version=stable
-    :target: http://astroimtools.readthedocs.org/en/stable/
+    :target: http://astroimtools.readthedocs.io/en/stable/
     :alt: Stable Documentation Status
 
 .. image:: https://readthedocs.org/projects/astroimtools/badge/?version=latest
-    :target: http://astroimtools.readthedocs.org/en/latest/
+    :target: http://astroimtools.readthedocs.io/en/latest/
     :alt: Latest Documentation Status
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
