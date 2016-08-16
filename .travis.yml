@@ -30,6 +30,7 @@ env:
         - SETUP_CMD='test'
         - PIP_DEPENDENCIES=''
         - CONDA_DEPENDENCIES='scipy matplotlib'
+        - CONDA_CHANNELS='astropy-ci-extras'
     matrix:
         # Make sure that egg_info works without dependencies
         - SETUP_CMD='egg_info'
