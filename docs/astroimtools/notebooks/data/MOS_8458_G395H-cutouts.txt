@@ -1,0 +1,18 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: id, datatype: string}
+# - {name: ra, unit: deg, datatype: float64}
+# - {name: dec, unit: deg, datatype: float64}
+# - {name: cutout_x_size, unit: arcsec, datatype: float64}
+# - {name: cutout_y_size, unit: arcsec, datatype: float64}
+# - {name: cutout_pa, unit: deg, datatype: float64}
+# - {name: spatial_pixel_scale, unit: arcsec / pix, datatype: float64}
+# - {name: slit_pa, unit: deg, datatype: float64}
+# - {name: slit_width, unit: arcsec, datatype: float64}
+# - {name: slit_length, unit: arcsec, datatype: float64}
+id ra dec cutout_x_size cutout_y_size cutout_pa spatial_pixel_scale slit_pa slit_width slit_length
+MOS_1_010_133 359.996992846 0.00394170958794 10.0 10.0 90.0 0.1 65.0 0.2 3.3
+MOS_1_184_053 359.987301955 0.0113367126731 10.0 10.0 90.0 0.1 65.0 0.2 3.3
+MOS_1_359_097 359.996604815 0.0140789787731 10.0 10.0 90.0 0.1 65.0 0.2 3.3
+MOS_2_359_145 359.994599223 0.0197402256312 10.0 10.0 90.0 0.1 65.0 0.2 3.3
