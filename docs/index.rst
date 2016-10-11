@@ -28,6 +28,7 @@ Tools Documentation
     astroimtools/arithmetic.rst
     astroimtools/filtering.rst
     astroimtools/nddata_adapters.rst
+    astroimtools/cutouts.rst
     astroimtools/utils.rst
     astroimtools/scripts.rst
     astroimtools/high-level_API.rst

@@ -15,6 +15,8 @@ __pycache__
 htmlcov
 .coverage
 MANIFEST
+docs/astroimtools/notebooks/*.rst
+docs/astroimtools/notebooks/*/*.png
 
 # Sphinx
 docs/api

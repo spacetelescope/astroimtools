@@ -7,6 +7,9 @@ General
 New Features
 ^^^^^^^^^^^^
 
+- Added ``cutout_tools`` and ``lupton_rgb`` modules, including relevant
+  documentation and example Jupyter notebooks.
+
 API changes
 ^^^^^^^^^^^
 
