@@ -38,6 +38,10 @@ env:
         - SETUP_CMD='test'
 
 matrix:
+
+    # Don't wait for allowed failures
+    fast_finish: true
+
     include:
 
         # Do a coverage test in Python 2.
@@ -54,10 +58,10 @@ matrix:
           env: ASTROPY_VERSION=development
         - python: 3.5
           env: ASTROPY_VERSION=development
-        - python: 2.7
-          env: ASTROPY_VERSION=lts
-        - python: 3.5
-          env: ASTROPY_VERSION=lts
+        #- python: 2.7
+        #  env: ASTROPY_VERSION=lts
+        #- python: 3.5
+        #  env: ASTROPY_VERSION=lts
 
         # Python 2.6 and 3.3 doesn't have numpy 1.10 in conda, they can be put
         # back into the main matrix once the numpy build is available in the
@@ -81,6 +85,14 @@ matrix:
         # Try numpy pre-release
         - python: 3.5
           env: NUMPY_VERSION=prerelease
+
+    allow_failures:
+
+        # Check for sphinx doc build warnings.
+        # This is allowed to fail due to two inconsequential warnings from
+        # notebook rendering in cutouts.rst.
+        - python: 2.7
+          env: SETUP_CMD='build_sphinx -w' CONDA_DEPENDENCIES='scipy matplotlib nbconvert'
 
 before_install:
 

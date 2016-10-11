@@ -17,13 +17,13 @@ The three images must be aligned and have the same pixel scale and size.
 
 Examples
 --------
->>> import numpy as np
->>> from astroimtools import lupton_rgb
->>> imageR = np.random.random((100, 100))
->>> imageG = np.random.random((100, 100))
->>> imageB = np.random.random((100, 100))
->>> image = lupton_rgb.makeRGB(imageR, imageG, imageB, fileName='randoms.png')
->>> lupton_rgb.displayRGB(image)
+>>> import numpy as np  # doctest: +SKIP
+>>> from astroimtools import lupton_rgb  # doctest: +SKIP
+>>> imageR = np.random.random((100, 100))  # doctest: +SKIP
+>>> imageG = np.random.random((100, 100))  # doctest: +SKIP
+>>> imageB = np.random.random((100, 100))  # doctest: +SKIP
+>>> image = lupton_rgb.makeRGB(imageR, imageG, imageB, fileName='randoms.png') # doctest: +SKIP
+>>> lupton_rgb.displayRGB(image)  # doctest: +SKIP
 
 """
 import numpy as np
