@@ -3,11 +3,10 @@
 Cutout Helper Tools
 ===================
 
-Cutout helper tools are useful for multi-object spectrograph (MOS) datasets,
-where there is a need to generate smaller cutout images that are associated
-with given spectra from a much larger survey image. In addition, the tools also
-allow you to compose an RGB image from multiple cutouts of the same target
-but in different wavelength regimes.
+Cutout helper tools are useful for datasets from a large survey of multiple
+sources, where there is a need to generate smaller cutout images of interest.
+In addition, the tools also allow you to compose an RGB image from multiple
+cutouts of the same target or pointing but in different wavelength regimes.
 
 Below are `Jupyter (formerly IPython) notebooks <https://jupyter.org/>`_
 illustrating how to create cutout images of sources from a larger image.

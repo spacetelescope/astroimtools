@@ -17,6 +17,8 @@ htmlcov
 MANIFEST
 docs/astroimtools/notebooks/*.rst
 docs/astroimtools/notebooks/*/*.png
+docs/astroimtools/notebooks/awesome_object.png
+docs/astroimtools/notebooks/*cutouts/
 
 # Sphinx
 docs/api
@@ -45,6 +47,7 @@ develop-eggs
 distribute-*.tar.gz
 
 # Other
+.ipynb_checkpoints
 .cache
 .tox
 .*.sw[op]
