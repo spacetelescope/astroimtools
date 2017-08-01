@@ -132,7 +132,7 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
 
             try:
                 cutout_arr = reproject_interp(
-                    (data, wcs), cutout_hdr, shape_out=(y_pix, x_pix), order=2)
+                    (data, wcs), cutout_hdr, shape_out=(int(np.ceil(y_pix)), int(np.ceil(x_pix))), order=2)
             except Exception:
                 if verbose:
                     log.info('reproject failed: '
