@@ -19,9 +19,14 @@ that section, and options therein, determine the next step taken:  If it
 contains an option called ``auto_use`` with a value of ``True``, it will
 automatically call the main function of this module called
 `use_astropy_helpers` (see that function's docstring for full details).
-Otherwise no further action is taken (however,
-``ah_bootstrap.use_astropy_helpers`` may be called manually from within the
-setup.py script).
+Otherwise no further action is taken and by default the system-installed version
+of astropy-helpers will be used (however, ``ah_bootstrap.use_astropy_helpers``
+may be called manually from within the setup.py script).
+
+This behavior can also be controlled using the ``--auto-use`` and
+``--no-auto-use`` command-line flags. For clarity, an alias for
+``--no-auto-use`` is ``--use-system-astropy-helpers``, and we recommend using
+the latter if needed.
 
 Additional options in the ``[ah_boostrap]`` section of setup.cfg have the same
 names as the arguments to `use_astropy_helpers`, and can be used to configure
@@ -91,13 +96,24 @@ except:
     use_setuptools()
 
 
+# typing as a dependency for 1.6.1+ Sphinx causes issues when imported after
+# initializing submodule with ah_boostrap.py
+# See discussion and references in
+# https://github.com/astropy/astropy-helpers/issues/302
+
+try:
+    import typing   # noqa
+except ImportError:
+    pass
+
+
 # Note: The following import is required as a workaround to
 # https://github.com/astropy/astropy-helpers/issues/89; if we don't import this
 # module now, it will get cleaned up after `run_setup` is called, but that will
 # later cause the TemporaryDirectory class defined in it to stop working when
 # used later on by setuptools
 try:
-    import setuptools.py31compat
+    import setuptools.py31compat   # noqa
 except ImportError:
     pass
 
@@ -135,6 +151,11 @@ from distutils.debug import DEBUG
 # TODO: Maybe enable checking for a specific version of astropy_helpers?
 DIST_NAME = 'astropy-helpers'
 PACKAGE_NAME = 'astropy_helpers'
+
+if PY3:
+    UPPER_VERSION_EXCLUSIVE = None
+else:
+    UPPER_VERSION_EXCLUSIVE = '3'
 
 # Defaults for other options
 DOWNLOAD_IF_NEEDED = True
@@ -275,6 +296,18 @@ class _Bootstrapper(object):
         if '--offline' in argv:
             config['offline'] = True
             argv.remove('--offline')
+
+        if '--auto-use' in argv:
+            config['auto_use'] = True
+            argv.remove('--auto-use')
+
+        if '--no-auto-use' in argv:
+            config['auto_use'] = False
+            argv.remove('--no-auto-use')
+
+        if '--use-system-astropy-helpers' in argv:
+            config['auto_use'] = False
+            argv.remove('--use-system-astropy-helpers')
 
         return config
 
@@ -490,7 +523,10 @@ class _Bootstrapper(object):
         if version:
             req = '{0}=={1}'.format(DIST_NAME, version)
         else:
-            req = DIST_NAME
+            if UPPER_VERSION_EXCLUSIVE is None:
+                req = DIST_NAME
+            else:
+                req = '{0}<{1}'.format(DIST_NAME, UPPER_VERSION_EXCLUSIVE)
 
         attrs = {'setup_requires': [req]}
 
@@ -702,7 +738,7 @@ class _Bootstrapper(object):
             if self.offline:
                 cmd.append('--no-fetch')
         elif status == 'U':
-            raise _AHBoostrapSystemExit(
+            raise _AHBootstrapSystemExit(
                 'Error: Submodule {0} contains unresolved merge conflicts.  '
                 'Please complete or abandon any changes in the submodule so that '
                 'it is in a usable state, then try again.'.format(submodule))
@@ -763,7 +799,7 @@ def run_cmd(cmd):
             msg = 'Command not found: `{0}`'.format(' '.join(cmd))
             raise _CommandNotFound(msg, cmd)
         else:
-            raise _AHBoostrapSystemExit(
+            raise _AHBootstrapSystemExit(
                 'An unexpected error occurred when running the '
                 '`{0}` command:\n{1}'.format(' '.join(cmd), str(e)))
 
@@ -876,46 +912,6 @@ class _AHBootstrapSystemExit(SystemExit):
         msg += '\n' + _err_help_msg
 
         super(_AHBootstrapSystemExit, self).__init__(msg, *args[1:])
-
-
-if sys.version_info[:2] < (2, 7):
-    # In Python 2.6 the distutils log does not log warnings, errors, etc. to
-    # stderr so we have to wrap it to ensure consistency at least in this
-    # module
-    import distutils
-
-    class log(object):
-        def __getattr__(self, attr):
-            return getattr(distutils.log, attr)
-
-        def warn(self, msg, *args):
-            self._log_to_stderr(distutils.log.WARN, msg, *args)
-
-        def error(self, msg):
-            self._log_to_stderr(distutils.log.ERROR, msg, *args)
-
-        def fatal(self, msg):
-            self._log_to_stderr(distutils.log.FATAL, msg, *args)
-
-        def log(self, level, msg, *args):
-            if level in (distutils.log.WARN, distutils.log.ERROR,
-                         distutils.log.FATAL):
-                self._log_to_stderr(level, msg, *args)
-            else:
-                distutils.log.log(level, msg, *args)
-
-        def _log_to_stderr(self, level, msg, *args):
-            # This is the only truly 'public' way to get the current threshold
-            # of the log
-            current_threshold = distutils.log.set_threshold(distutils.log.WARN)
-            distutils.log.set_threshold(current_threshold)
-            if level >= current_threshold:
-                if args:
-                    msg = msg % args
-                sys.stderr.write('%s\n' % msg)
-                sys.stderr.flush()
-
-    log = log()
 
 
 BOOTSTRAPPER = _Bootstrapper.main()
