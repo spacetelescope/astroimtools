@@ -1,8 +1,0 @@
-setuptools>=18.0.0
-Cython>=0.23.4
-numpy
-matplotlib
-astropy-helpers
-#astropy
--e git+http://github.com/astropy/astropy.git#egg=astropy
-nbconvert
