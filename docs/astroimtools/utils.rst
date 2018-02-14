@@ -54,18 +54,20 @@ The :func:`~astroimtools.listpixels` function returns an Astropy `~astropy.table
     >>> np.random.seed(12345)
     >>> data = np.random.random((25, 25))
     >>> tbl = listpixels(data, (8, 11), (3, 3))
+    >>> for col in tbl.colnames:
+    ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> tbl.pprint(max_lines=-1)
-     x   y       value
-    --- --- ---------------
-     10   7  0.758572036918
-     11   7 0.0695296661543
-     12   7  0.705473438596
-     10   8  0.840662495709
-     11   8  0.469314693584
-     12   8  0.562643429012
-     10   9 0.0341315835241
-     11   9  0.230496547915
-     12   9  0.228353706465
+     x   y     value
+    --- --- -----------
+     10   7  0.75857204
+     11   7 0.069529666
+     12   7  0.70547344
+     10   8   0.8406625
+     11   8  0.46931469
+     12   8  0.56264343
+     10   9 0.034131584
+     11   9  0.23049655
+     12   9  0.22835371
 
 `~astroimtools.listpixels` also supports `~astropy.nddata.NDData`
 objects as input.
@@ -88,13 +90,13 @@ than 2, greater than 5, or equal to 3::
     >>> data
     array([0, 1, 2, 3, 4, 5, 6])
     >>> mask_databounds(data, lower_bound=2, upper_bound=5, value=3)
-    array([ True,  True, False,  True, False, False,  True], dtype=bool)
+    array([ True,  True, False,  True, False, False,  True]...)
 
 If ``mask`` is input, then it will be updated::
 
     >>> mask = [False, False, True, False, False, False, False]
     >>> mask_databounds(data, mask=mask, lower_bound=2, upper_bound=5, value=3)
-    array([ True,  True,  True,  True, False, False,  True], dtype=bool)
+    array([ True,  True,  True,  True, False, False,  True]...)
 
 Additionally, invalid data values (e.g., NaN and inf) are masked if
 ``mask_invalid`` is `True` (the default)::
@@ -104,7 +106,7 @@ Additionally, invalid data values (e.g., NaN and inf) are masked if
     >>> data
     array([  0.,   1.,  nan,   3.,   4.,   5.,   6.])
     >>> mask_databounds(data, upper_bound=5, mask_invalid=True)
-    array([False, False,  True, False, False, False,  True], dtype=bool)
+    array([False, False,  True, False, False, False,  True]...)
 
 
 nddata_cutout2d
