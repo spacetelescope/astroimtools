@@ -43,8 +43,8 @@ The operations can also be performed with a single
 `~astropy.nddata.NDData` object and a scalar value::
 
     >>> nd = nddata_arith(nd1, 2, '/')
-    >>> nd.data
-    array([ 0. ,  0.5,  1. ,  1.5,  2. ])
+    >>> nd.data  # doctest: +FLOAT_CMP
+    array([0. , 0.5, 1. , 1.5, 2. ])
 
 The ``'//'`` operator performs integer-truncated division::
 
@@ -81,7 +81,7 @@ and then add them::
     >>> nd.data
     array([0, 8, 7, 7, 0])
     >>> nd.mask
-    array([ True, False, False, False,  True], dtype=bool)
+    array([ True, False, False, False,  True]...)
 
 Note that the resulting `~astropy.nddata.NDData` object's mask is
 propagated from the input masks.  The data fill value for masked

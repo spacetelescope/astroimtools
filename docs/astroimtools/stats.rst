@@ -14,12 +14,12 @@ maximum values of an array (or along an array axis)::
     >>> from astroimtools import minmax
     >>> np.random.seed(12345)
     >>> data = np.random.random((3, 3))
-    >>> data
-    array([[ 0.92961609,  0.31637555,  0.18391881],
-           [ 0.20456028,  0.56772503,  0.5955447 ],
-           [ 0.96451452,  0.6531771 ,  0.74890664]])
-    >>> minmax(data)
-    (0.18391881167709445, 0.96451451973562163)
+    >>> data  # doctest: +FLOAT_CMP
+    array([[0.92961609, 0.31637555, 0.18391881],
+           [0.20456028, 0.56772503, 0.5955447 ],
+           [0.96451452, 0.6531771 , 0.74890664]])
+    >>> minmax(data)  # doctest: +FLOAT_CMP
+    (0.18391881167709445, 0.9645145197356216)
 
 :func:`~astroimtools.minmax` also accepts a mask array to ignore certain data values::
 
@@ -27,16 +27,16 @@ maximum values of an array (or along an array axis)::
     >>> mask
     array([[False, False,  True],
            [ True, False, False],
-           [False, False, False]], dtype=bool)
+           [False, False, False]]...)
 
-    >>> minmax(data, mask=mask)
-    (0.3163755545817859, 0.96451451973562163)
+    >>> minmax(data, mask=mask)  # doctest: +FLOAT_CMP
+    (0.3163755545817859, 0.9645145197356216)
 
 The minimum and maximum can also be determined along a particular axis::
 
-    >>> minmax(data, axis=1)
-    (array([ 0.18391881,  0.20456028,  0.6531771 ]),
-     array([ 0.92961609,  0.5955447 ,  0.96451452]))
+    >>> minmax(data, axis=1)  # doctest: +FLOAT_CMP
+    (array([0.18391881, 0.20456028, 0.6531771 ]),
+     array([0.92961609, 0.5955447 , 0.96451452]))
 
 
 nddata_stats
@@ -70,21 +70,25 @@ Here is a simple example::
     >>> nd1 = NDData(np.arange(10))
     >>> columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
     >>> tbl = nddata_stats(nd1, columns=columns)
+    >>> for col in tbl.colnames:
+    ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> print(tbl)
-    mean median mode      std         mad_std    min max
-    ---- ------ ---- ------------- ------------- --- ---
-     4.5    4.5  4.5 2.87228132327 3.70650554626   0   9
+    mean median mode    std     mad_std  min max
+    ---- ------ ---- --------- --------- --- ---
+     4.5    4.5  4.5 2.8722813 3.7065055   0   9
 
 Multiple `~astropy.nddata.NDData` objects can be input as a list,
 resulting in a multi-row output table::
 
     >>> nd2 = NDData(np.arange(20))
     >>> tbl = nddata_stats([nd1, nd2], columns=columns)
+    >>> for col in tbl.colnames:
+    ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> print(tbl)
-    mean median mode      std         mad_std    min max
-    ---- ------ ---- ------------- ------------- --- ---
-     4.5    4.5  4.5 2.87228132327 3.70650554626   0   9
-     9.5    9.5  9.5 5.76628129734 7.41301109253   0  19
+    mean median mode    std     mad_std  min max
+    ---- ------ ---- --------- --------- --- ---
+     4.5    4.5  4.5 2.8722813 3.7065055   0   9
+     9.5    9.5  9.5 5.7662813 7.4130111   0  19
 
 Sigma-clipped statistics can be calculated by specifying the
 ``sigma``, ``sigma_lower``, and/or ``sigma_upper`` keywords.  For this
@@ -99,11 +103,13 @@ example, let's sigma clip at 3 standard deviations::
     >>> nd2 = NDData(arr2)
     >>> columns = ['npixels', 'nrejected', 'mean', 'median', 'std']
     >>> tbl = nddata_stats([nd1, nd2], sigma=3, columns=columns)
+    >>> for col in tbl.colnames:
+    ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> print(tbl)
-    npixels nrejected      mean          median          std
-    ------- --------- -------------- -------------- --------------
-       9900       100 0.502487325973 0.502480088488 0.289861511955
-       9900       100 0.500908259706 0.502192339391 0.289830629258
+    npixels nrejected    mean      median      std
+    ------- --------- ---------- ---------- ----------
+       9900       100 0.50248733 0.50248009 0.28986151
+       9900       100 0.50090826 0.50219234 0.28983063
 
 
 Reference/API

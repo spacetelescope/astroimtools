@@ -63,16 +63,16 @@ def minmax(data, mask=None, axis=None):
     >>> from astroimtools import minmax
     >>> np.random.seed(12345)
     >>> data = np.random.random((3, 3))
-    >>> minmax(data)
-    (0.18391881167709445, 0.96451451973562163)
+    >>> minmax(data)  # doctest: +FLOAT_CMP
+    (0.18391881167709445, 0.9645145197356216)
 
     >>> mask = (data < 0.3)
-    >>> minmax(data, mask=mask)
-    (0.3163755545817859, 0.96451451973562163)
+    >>> minmax(data, mask=mask)  # doctest: +FLOAT_CMP
+    (0.3163755545817859, 0.9645145197356216)
 
-    >>> minmax(data, axis=1)
-    (array([ 0.18391881,  0.20456028,  0.6531771 ]),
-     array([ 0.92961609,  0.5955447 ,  0.96451452]))
+    >>> minmax(data, axis=1)  # doctest: +FLOAT_CMP
+    (array([0.18391881, 0.20456028, 0.6531771 ]),
+     array([0.92961609, 0.5955447 , 0.96451452]))
     """
 
     if mask is not None:
@@ -176,10 +176,10 @@ class NDDataStats(object):
         >>> stats = NDDataStats(nddata)
         >>> stats.mean
         4.5
-        >>> stats.std
+        >>> stats.std  # doctest: +FLOAT_CMP
         2.8722813232690143
-        >>> stats.mad_std
-        3.7065055462640051
+        >>> stats.mad_std  # doctest: +FLOAT_CMP
+        3.706505546264005
         """
 
         if not isinstance(nddata, NDData):
@@ -442,10 +442,12 @@ def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
     >>> nddata = NDData(np.arange(10))
     >>> columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
     >>> tbl = nddata_stats(nddata, columns=columns)
+    >>> for col in tbl.colnames:
+    ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> print(tbl)
-    mean median mode      std         mad_std    min max
-    ---- ------ ---- ------------- ------------- --- ---
-     4.5    4.5  4.5 2.87228132327 3.70650554626   0   9
+    mean median mode    std     mad_std  min max
+    ---- ------ ---- --------- --------- --- ---
+     4.5    4.5  4.5 2.8722813 3.7065055   0   9
     """
 
     stats = []

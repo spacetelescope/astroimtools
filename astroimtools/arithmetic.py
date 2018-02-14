@@ -71,8 +71,8 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     array([0, 1, 2, 3, 2])
 
     >>> nd = nddata_arith(nd1, 2, '/')
-    >>> nd.data
-    array([ 0. ,  0.5,  1. ,  1.5,  2. ])
+    >>> nd.data  # doctest: +SKIP
+    array([0., 0.5, 1., 1.5, 2. ])
 
     >>> nd = nddata_arith(nd1, 2, '//')
     >>> nd.data
@@ -94,7 +94,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     >>> nd.data
     array([0, 8, 7, 7, 0])
     >>> nd.mask
-    array([ True, False, False, False,  True], dtype=bool)
+    array([ True, False, False, False,  True]...)
     """
 
     allowed_operators = ['+', '-', '*', '/', '//', 'min', 'max']
