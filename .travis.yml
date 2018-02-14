@@ -73,7 +73,7 @@ matrix:
         # Do a PEP8/pyflakes test with flake8
         - env: MAIN_CMD="flake8 astroimtools --count $FLAKE8_OPT" SETUP_CMD=''
 
-        - env: SETUP_CMD='test --coverage'
+        #- env: SETUP_CMD='test --coverage'
 
         # Check for sphinx doc build warnings - we do this first because it
         # may run for a long time
@@ -146,6 +146,6 @@ script:
    - $MAIN_CMD $SETUP_CMD
 
 after_success:
-    - if [[ $SETUP_CMD == *--coverage* ]]; then
-          coveralls --rcfile='astroimutils/tests/coveragerc';
-      fi
+    #- if [[ $SETUP_CMD == *--coverage* ]]; then
+    #      coveralls --rcfile='astroimutils/tests/coveragerc';
+    #  fi
