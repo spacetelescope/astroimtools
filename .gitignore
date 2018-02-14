@@ -15,6 +15,7 @@ __pycache__
 htmlcov
 .coverage
 MANIFEST
+.ipynb_checkpoints
 docs/astroimtools/notebooks/*.rst
 docs/astroimtools/notebooks/*/*.png
 docs/astroimtools/notebooks/awesome_object.png
@@ -47,7 +48,6 @@ develop-eggs
 distribute-*.tar.gz
 
 # Other
-.ipynb_checkpoints
 .cache
 .tox
 .*.sw[op]
@@ -55,3 +55,6 @@ distribute-*.tar.gz
 
 # Mac OSX
 .DS_Store
+
+# Pytest
+.pytest_cache/
