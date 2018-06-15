@@ -1,0 +1,14 @@
+name: astroimtools
+
+channels:
+    - astropy
+
+dependencies:
+    - astropy
+    - jupyter
+    - matplotlib
+    - numpy
+    - scipy
+    - docutils
+    - Sphinx
+    - nbconvert

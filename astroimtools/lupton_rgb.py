@@ -120,7 +120,7 @@ class Mapping(object):
 
         try:
             len(minimum)
-        except:
+        except TypeError:
             minimum = 3*[minimum]
         assert len(minimum) == 3, "Please provide 1 or 3 values for minimum"
 
@@ -192,7 +192,7 @@ class Mapping(object):
         """
         return compute_intensity(imageR, imageG, imageB)
 
-    def mapIntensityToUint8(self, I):
+    def mapIntensityToUint8(self, img):
         """
         Return an array which, when multiplied by an image, returns that image
         mapped to the range of a uint8, [0, 255] (but not converted to uint8).
@@ -201,7 +201,7 @@ class Mapping(object):
         done per-band).
         """
         with np.errstate(invalid='ignore', divide='ignore'):  # n.b. np.where can't and doesn't short-circuit
-            return np.where(I <= 0, 0, np.where(I < self._uint8Max, I, self._uint8Max))
+            return np.where(img <= 0, 0, np.where(img < self._uint8Max, img, self._uint8Max))
 
     def _convertImagesToUint8(self, imageR, imageG, imageB):
         """Use the mapping to convert images imageR, imageG, and imageB to a triplet of uint8 images"""
@@ -269,10 +269,10 @@ class LinearMapping(Mapping):
             assert maximum - minimum != 0, "minimum and maximum values must not be equal"
             self._range = float(maximum - minimum)
 
-    def mapIntensityToUint8(self, I):
+    def mapIntensityToUint8(self, img):
         with np.errstate(invalid='ignore', divide='ignore'):  # n.b. np.where can't and doesn't short-circuit
-            return np.where(I <= 0, 0,
-                            np.where(I >= self._range, self._uint8Max/I, self._uint8Max/self._range))
+            return np.where(img <= 0, 0,
+                            np.where(img >= self._range, self._uint8Max/img, self._uint8Max/self._range))
 
 
 class ZScaleMapping(LinearMapping):
@@ -280,7 +280,7 @@ class ZScaleMapping(LinearMapping):
     A mapping for a linear stretch chosen by the zscale algorithm.
     (preserving colours independent of brightness)
 
-    x = (I - minimum)/range
+    x = (img - minimum)/range
     """
 
     def __init__(self, image, nSamples=1000, contrast=0.25):
@@ -304,7 +304,7 @@ class AsinhMapping(Mapping):
     """
     A mapping for an asinh stretch (preserving colours independent of brightness)
 
-    x = asinh(Q (I - minimum)/range)/Q
+    x = asinh(Q (img - minimum)/range)/Q
 
     This reduces to a linear stretch if Q == 0
 
@@ -314,7 +314,7 @@ class AsinhMapping(Mapping):
     def __init__(self, minimum, dataRange, Q=8):
         """
         asinh stretch from minimum to minimum + dataRange, scaled by Q, via:
-            x = asinh(Q (I - minimum)/dataRange)/Q
+            x = asinh(Q (img - minimum)/dataRange)/Q
 
         Parameters
         ----------
@@ -344,16 +344,16 @@ class AsinhMapping(Mapping):
 
         self._soften = Q/float(dataRange)
 
-    def mapIntensityToUint8(self, I):
+    def mapIntensityToUint8(self, img):
         with np.errstate(invalid='ignore', divide='ignore'):  # n.b. np.where can't and doesn't short-circuit
-            return np.where(I <= 0, 0, np.arcsinh(I*self._soften)*self._slope/I)
+            return np.where(img <= 0, 0, np.arcsinh(img*self._soften)*self._slope/img)
 
 
 class AsinhZScaleMapping(AsinhMapping):
     """
     A mapping for an asinh stretch, estimating the linear stretch by zscale.
 
-    x = asinh(Q (I - z1)/(z2 - z1))/Q
+    x = asinh(Q (img - z1)/(z2 - z1))/Q
 
     See AsinhMapping
     """

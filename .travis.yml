@@ -1,18 +1,19 @@
-language: python
+# We set the language to c because python isn't supported on the MacOS X nodes
+# on Travis. However, the language ends up being irrelevant anyway, since we
+# install Python ourselves using conda.
+language: c
 
-python:
-    - 2.7
-    - 3.4
-    - 3.5
+os:
+    - linux
+
+stage: Initial tests
 
 # Setting sudo to false opts in to Travis-CI container-based builds.
 sudo: false
 
-# The apt packages below are needed for sphinx builds. A full list of packages
-# that can be included can be found here:
-#
+# The apt packages below are needed for sphinx builds. A full list of
+# packages that can be included can be found here:
 # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
-
 addons:
     apt:
         packages:
@@ -25,112 +26,126 @@ env:
         # The following versions are the 'default' for tests, unless
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
+        - PYTHON_VERSION=3.6
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
+        - MAIN_CMD='python setup.py'
         - SETUP_CMD='test'
-        - PIP_DEPENDENCIES=''
+        - EVENT_TYPE='pull_request push'
         - CONDA_DEPENDENCIES='scipy matplotlib'
-        - CONDA_CHANNELS='astropy-ci-extras'
-    matrix:
-        # Make sure that egg_info works without dependencies
-        - SETUP_CMD='egg_info'
-        # Try all python versions with the latest numpy
-        - SETUP_CMD='test'
+        - CONDA_CHANNELS='astropy-ci-extras astropy'
+        - SETUP_XVFB=True
+        - ASTROPY_USE_SYSTEM_PYTEST=1
+
+        # PEP8 errors/warnings:
+        # E101 - mix of tabs and spaces
+        # W191 - use of tabs
+        # W291 - trailing whitespace
+        # W292 - no newline at end of file
+        # W293 - trailing whitespace
+        # W391 - blank line at end of file
+        # E111 - 4 spaces per indentation level
+        # E112 - 4 spaces per indentation level
+        # E113 - 4 spaces per indentation level
+        # E502 - the backslash is redundant between brackets
+        # E722 - do not use bare except
+        # E901 - SyntaxError or IndentationError
+        # E902 - IOError
+        - FLAKE8_OPT="--select=E101,W191,W291,W292,W293,W391,E111,E112,E113,E502,E722,E901,E902"
+
+stages:
+   - name: Initial tests
+   - name: Test docs, astropy dev, and without optional dependencies
+   - name: Tests with other Python/Numpy versions
+   - name: Cron tests
+     if: type = cron
 
 matrix:
-
     # Don't wait for allowed failures
     fast_finish: true
 
     include:
+        - env: PYTHON_VERSION=2.7 SETUP_CMD='egg_info'
+        - env: PYTHON_VERSION=3.4 SETUP_CMD='egg_info'
+        - env: PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
+        - env: PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
 
-        # Do a coverage test in Python 2.
-        - python: 2.7
-          env: SETUP_CMD='test --coverage'
+        # Do a PEP8/pyflakes test with flake8
+        - env: MAIN_CMD="flake8 astroimtools --count $FLAKE8_OPT" SETUP_CMD=''
+
+        - env: SETUP_CMD='test --coverage'
 
         # Check for sphinx doc build warnings - we do this first because it
         # may run for a long time
-        - python: 2.7
-          env: SETUP_CMD='build_sphinx -w' CONDA_DEPENDENCIES='scipy matplotlib nbconvert'
+        - stage: Test docs, astropy dev, and without optional dependencies
+          env: PYTHON_VERSION=2.7 SETUP_CMD='build_docs -w'
+               CONDA_DEPENDENCIES='scipy matplotlib jupyter'
 
-        # Try Astropy development version
-        - python: 2.7
+        - stage: Test docs, astropy dev, and without optional dependencies
+          env: SETUP_CMD='build_docs -w'
+               CONDA_DEPENDENCIES='scipy matplotlib jupyter'
+               EVENT_TYPE='pull_request push cron'
+
+        # Now try Astropy dev and LTS versions with the latest Python.
+        # We disable LTS testing until astropy 3.0 is out, as the current
+        # stable is also the LTS
+        - stage: Test docs, astropy dev, and without optional dependencies
           env: ASTROPY_VERSION=development
-        - python: 3.5
-          env: ASTROPY_VERSION=development
-        #- python: 2.7
-        #  env: ASTROPY_VERSION=lts
-        #- python: 3.5
-        #  env: ASTROPY_VERSION=lts
+               EVENT_TYPE='pull_request push cron'
 
-        # Python 2.6 and 3.3 doesn't have numpy 1.10 in conda, they can be put
-        # back into the main matrix once the numpy build is available in the
-        # astropy-ci-extras channel (or in the one provided in the
-        # CONDA_CHANNELS environmental variable).
-        - python: 3.3
-          env: SETUP_CMD='egg_info'
-        - python: 3.3
-          env: SETUP_CMD='test' NUMPY_VERSION=1.9
+        #- stage: Test docs, astropy dev, and without optional dependencies
+        #  os: linux
+        #  env: PYTHON_VERSION=3.5 ASTROPY_VERSION=lts
 
-        # Try older numpy versions
-        - python: 2.7
-          env: NUMPY_VERSION=1.10
-        - python: 2.7
-          env: NUMPY_VERSION=1.9
-        - python: 2.7
-          env: NUMPY_VERSION=1.8
-        - python: 2.7
-          env: NUMPY_VERSION=1.7
+        # Try with optional dependencies disabled
+        - stage: Test docs, astropy dev, and without optional dependencies
+          env: PYTHON_VERSION=2.7
+
+        - stage: Test docs, astropy dev, and without optional dependencies
+          env: PYTHON_VERSION=3.6
+
+        # Try older python and numpy versions. Since we can assume
+        # that the Numpy developers have taken care of testing Numpy
+        # with different versions of Python, we can vary Python and
+        # Numpy versions at the same time.
+        - stage: Tests with other Python/Numpy versions
+          env: PYTHON_VERSION=3.4 NUMPY_VERSION=1.9
+               PIP_DEPENDENCIES='pytest>=3.1'
+
+        - stage: Tests with other Python/Numpy versions
+          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.10
+
+        - stage: Tests with other Python/Numpy versions
+          env: NUMPY_VERSION=1.11
+
+        - stage: Tests with other Python/Numpy versions
+          env: NUMPY_VERSION=1.12
+
+        - stage: Tests with other Python/Numpy versions
+          env: NUMPY_VERSION=1.13
 
         # Try numpy pre-release
-        - python: 3.5
+        - stage: Tests with other Python/Numpy versions
           env: NUMPY_VERSION=prerelease
+               EVENT_TYPE='pull_request push cron'
+
+        # Try MacOS X
+        - stage: Cron tests
+          os: osx
+          env: SETUP_CMD='test' EVENT_TYPE='cron'
 
     allow_failures:
-
-        # Check for sphinx doc build warnings.
-        # This is allowed to fail due to two inconsequential warnings from
-        # notebook rendering in cutouts.rst.
-        - python: 2.7
-          env: SETUP_CMD='build_sphinx -w' CONDA_DEPENDENCIES='scipy matplotlib nbconvert'
-
-before_install:
-
-    # If there are matplotlib tests, comment these out to
-    # Make sure that interactive matplotlib backends work
-    - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
+        - env: NUMPY_VERSION=prerelease
+               EVENT_TYPE='pull_request push cron'
 
 install:
-
-    # We now use the ci-helpers package to set up our testing environment.
-    # This is done by using Miniconda and then using conda and pip to install
-    # dependencies. Which dependencies are installed using conda and pip is
-    # determined by the CONDA_DEPDENDENCIES and PIP_DEPENDENCIES variables,
-    # which should be space-delimited lists of package names. See the README
-    # in https://github.com/astropy/ci-helpers for information about the full
-    # list of environment variables that can be used to customize your
-    # environment. In some cases, ci-helpers may not offer enough flexibility
-    # in how to install a package, in which case you can have additional
-    # commands in the install: section below.
-
     - git clone git://github.com/astropy/ci-helpers.git
-    - source ci-helpers/travis/setup_conda_$TRAVIS_OS_NAME.sh
-
-    # As described above, using ci-helpers, you should be able to set up an
-    # environment with dependencies installed using conda and pip, but in some
-    # cases this may not provide enough flexibility in how to install a
-    # specific dependency (and it will not be able to install non-Python
-    # dependencies). Therefore, you can also include commands below (as
-    # well as at the start of the install section or in the before_install
-    # section if they are needed before setting up conda) to install any
-    # other dependencies.
+    - source ci-helpers/travis/setup_conda.sh
 
 script:
-   - python setup.py $SETUP_CMD
+   - $MAIN_CMD $SETUP_CMD
 
 after_success:
-    # If coveralls.io is set up for this package, uncomment the line
-    # below and replace "packagename" with the name of your package.
-    # The coveragerc file may be customized as needed for your package.
-    - if [[ $SETUP_CMD == 'test --coverage' ]]; then coveralls --rcfile='astroimtools/tests/coveragerc'; fi
+    - if [[ $SETUP_CMD == *--coverage* ]]; then
+          coveralls --rcfile='astroimtools/tests/coveragerc';
+      fi

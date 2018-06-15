@@ -5,12 +5,13 @@ Misc utility functions.
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
+import warnings
+
 from astropy.table import Table
 from astropy.nddata import NDData, support_nddata
 from astropy.nddata.utils import overlap_slices
 from astropy.coordinates import SkyCoord
 from astropy.wcs.utils import skycoord_to_pixel
-import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 
 
@@ -46,10 +47,10 @@ def radial_distance(position, shape):
     Examples
     --------
     >>> from astroimtools import radial_distance
-    >>> radial_distance((1, 1), (3, 3))
-    array([[ 1.41421356,  1.        ,  1.41421356],
-           [ 1.        ,  0.        ,  1.        ],
-           [ 1.41421356,  1.        ,  1.41421356]])
+    >>> radial_distance((1, 1), (3, 3))  # doctest: +FLOAT_CMP
+    array([[1.41421356, 1.        , 1.41421356],
+           [1.        , 0.        , 1.        ],
+           [1.41421356, 1.        , 1.41421356]])
     """
 
     if len(position) != 2:
@@ -116,18 +117,20 @@ def listpixels(data, position, shape, subarray_indices=False, wcs=None):
     >>> np.random.seed(12345)
     >>> data = np.random.random((25, 25))
     >>> tbl = listpixels(data, (8, 11), (3, 3))
+    >>> for col in tbl.colnames:
+    ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> tbl.pprint(max_lines=-1)
-     x   y       value
-    --- --- ---------------
-     10   7  0.758572036918
-     11   7 0.0695296661543
-     12   7  0.705473438596
-     10   8  0.840662495709
-     11   8  0.469314693584
-     12   8  0.562643429012
-     10   9 0.0341315835241
-     11   9  0.230496547915
-     12   9  0.228353706465
+     x   y     value
+    --- --- -----------
+     10   7  0.75857204
+     11   7 0.069529666
+     12   7  0.70547344
+     10   8   0.8406625
+     11   8  0.46931469
+     12   8  0.56264343
+     10   9 0.034131584
+     11   9  0.23049655
+     12   9  0.22835371
     """
 
     if isinstance(position, SkyCoord):
@@ -198,7 +201,7 @@ def mask_databounds(data, mask=None, lower_bound=None, upper_bound=None,
     >>> print(data)
     [0 1 2 3 4 5 6]
     >>> mask_databounds(data, lower_bound=2, upper_bound=5, value=3)
-    array([ True,  True, False,  True, False, False,  True], dtype=bool)
+    array([ True,  True, False,  True, False, False,  True]...)
     """
 
     if mask is None:
