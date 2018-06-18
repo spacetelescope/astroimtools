@@ -6,6 +6,7 @@ from __future__ import (absolute_import, division, print_function,
 # STDLIB
 import os
 from functools import partial
+import math
 
 # THIRD-PARTY
 import numpy as np
@@ -132,7 +133,8 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
 
             try:
                 cutout_arr = reproject_interp(
-                    (data, wcs), cutout_hdr, shape_out=(y_pix, x_pix), order=2)
+                    (data, wcs), cutout_hdr, shape_out=(math.floor(y_pix + math.copysign(0.5, y_pix)),
+                        math.floor(x_pix + math.copysign(0.5, x_pix))), order=2)
             except Exception:
                 if verbose:
                     log.info('reproject failed: '
