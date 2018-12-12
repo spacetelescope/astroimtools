@@ -13,6 +13,12 @@ Astroimtools
     :target: http://astroimtools.readthedocs.io/en/latest/
     :alt: Latest Documentation Status
 
+.. image:: https://travis-ci.org/spacetelescope/astroimtools.svg?branch=master
+    :target: https://travis-ci.org/spacetelescope/astroimtools
+
+.. image:: https://coveralls.io/repos/spacetelescope/astroimtools/badge.svg?branch=master&service=github
+     :target: https://coveralls.io/github/spacetelescope/astroimtools?branch=master
+
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org/
 
@@ -23,8 +29,3 @@ tools for working with astronomical images.
 This work is driven by the JWST Data Analysis Development Forum at the
 `Space Telescope Science Institute <http://www.stsci.edu/>`_.
 
-.. image:: https://travis-ci.org/spacetelescope/astroimtools.svg?branch=master
-    :target: https://travis-ci.org/spacetelescope/astroimtools
-
-.. image:: https://coveralls.io/repos/spacetelescope/astroimtools/badge.svg?branch=master&service=github
-     :target: https://coveralls.io/github/spacetelescope/astroimtools?branch=master
