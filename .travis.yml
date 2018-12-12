@@ -26,7 +26,7 @@ env:
         # The following versions are the 'default' for tests, unless
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
-        - PYTHON_VERSION=3.6
+        - PYTHON_VERSION=3.7
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
         - MAIN_CMD='python setup.py'
@@ -66,9 +66,8 @@ matrix:
 
     include:
         - env: PYTHON_VERSION=2.7 SETUP_CMD='egg_info'
-        - env: PYTHON_VERSION=3.4 SETUP_CMD='egg_info'
-        - env: PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
         - env: PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
+        - env: PYTHON_VERSION=3.7 SETUP_CMD='egg_info'
 
         # Do a PEP8/pyflakes test with flake8
         - env: MAIN_CMD="flake8 astroimtools --count $FLAKE8_OPT" SETUP_CMD=''
@@ -77,10 +76,6 @@ matrix:
 
         # Check for sphinx doc build warnings - we do this first because it
         # may run for a long time
-        - stage: Test docs, astropy dev, and without optional dependencies
-          env: PYTHON_VERSION=2.7 SETUP_CMD='build_docs -w'
-               CONDA_DEPENDENCIES='scipy matplotlib jupyter'
-
         - stage: Test docs, astropy dev, and without optional dependencies
           env: SETUP_CMD='build_docs -w'
                CONDA_DEPENDENCIES='scipy matplotlib jupyter'
@@ -109,17 +104,7 @@ matrix:
         # with different versions of Python, we can vary Python and
         # Numpy versions at the same time.
         - stage: Tests with other Python/Numpy versions
-          env: PYTHON_VERSION=3.4 NUMPY_VERSION=1.9
-               PIP_DEPENDENCIES='pytest>=3.1'
-
-        - stage: Tests with other Python/Numpy versions
-          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.10
-
-        - stage: Tests with other Python/Numpy versions
-          env: NUMPY_VERSION=1.11
-
-        - stage: Tests with other Python/Numpy versions
-          env: NUMPY_VERSION=1.12
+          env: NUMPY_VERSION=1.14
 
         - stage: Tests with other Python/Numpy versions
           env: NUMPY_VERSION=1.13
