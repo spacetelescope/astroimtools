@@ -11,5 +11,5 @@ dependencies:
     - numpy
     - scipy
     - docutils
-    - Sphinx
+    - sphinx-astropy
     - nbconvert
