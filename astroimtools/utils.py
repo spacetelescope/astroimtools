@@ -16,9 +16,6 @@ from astropy.wcs.utils import skycoord_to_pixel
 __all__ = ['radial_distance', 'listpixels', 'mask_databounds',
            'nddata_cutout2d']
 
-# requires Astropy >= 1.1
-__doctest_skip__ = ['nddata_cutout2d']
-
 warnings.filterwarnings('always', category=AstropyUserWarning)
 
 

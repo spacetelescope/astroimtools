@@ -11,7 +11,7 @@ Astroimtools has the following strict requirements:
 
 * `Numpy <http://www.numpy.org/>`_ 1.6 or later
 
-* `Astropy`_ 1.1 or later
+* `Astropy`_ 3.1 or later
 
 Some functionality is available only if the following optional
 dependencies are installed:
