@@ -1,10 +1,10 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 import numpy as np
 from numpy.testing import assert_allclose
+import pytest
 
 from astropy.coordinates import SkyCoord
 from astropy.nddata import NDData
-from astropy.tests.helper import pytest
 import astropy.units as u
 
 from ..utils import (radial_distance, listpixels, mask_databounds,
