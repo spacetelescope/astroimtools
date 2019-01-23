@@ -2,6 +2,7 @@
 """
 Image filtering utilities.
 """
+
 import numpy as np
 from astropy.modeling.models import Ellipse2D
 

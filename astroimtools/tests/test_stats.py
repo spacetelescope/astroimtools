@@ -2,7 +2,8 @@
 import numpy as np
 from numpy.testing import assert_allclose
 from astropy.nddata import NDData
-from ..stats import (minmax, NDDataStats, nddata_stats)
+
+from ..stats import minmax, NDDataStats, nddata_stats
 
 
 class TestMinMax(object):

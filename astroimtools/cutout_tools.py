@@ -10,13 +10,14 @@ import math
 import numpy as np
 
 # ASTROPY
-import astropy.units as u
 from astropy import log
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
 from astropy.nddata.utils import (Cutout2D, NoOverlapError)
 from astropy.table import QTable
+import astropy.units as u
 from astropy.wcs import WCS, NoConvergence
+
 
 __all__ = ['make_cutouts', 'show_cutout_with_slit']
 

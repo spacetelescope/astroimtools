@@ -2,14 +2,16 @@
 """
 Statistics tools.
 """
+
 import numpy as np
+import astropy
+from astropy.nddata import NDData, support_nddata
 from astropy.stats import (sigma_clip, biweight_location,
                            biweight_midvariance, mad_std)
-from astropy.utils import lazyproperty
 from astropy.table import Table
-from astropy.nddata import NDData, support_nddata
+from astropy.utils import lazyproperty
+
 from .utils import mask_databounds
-import astropy
 
 majv, minv = astropy.__version__.split('.')[:2]
 minv = minv.split('rc')[0]

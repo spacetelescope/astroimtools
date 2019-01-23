@@ -3,7 +3,7 @@
 # Affiliated packages may add whatever they like to this file, but
 # should keep this content at the top.
 # ----------------------------------------------------------------------------
-from ._astropy_init import *
+from ._astropy_init import *  # noqa
 # ----------------------------------------------------------------------------
 
 # Enforce Python version check during package import.
@@ -26,10 +26,10 @@ if (sys.version_info <
 
 if not _ASTROPY_SETUP_:
     # For egg_info test builds to pass, put package imports here.
-    from .arithmetic import *
-    from .cutout_tools import *
-    from .filtering import *
-    from .nddata_adapters import *
-    from .scripts import imarith, imstats
-    from .stats import *
-    from .utils import *
+    from .arithmetic import *  # noqa
+    from .cutout_tools import *  # noqa
+    from .filtering import *  # noqa
+    from .nddata_adapters import *  # noqa
+    from .scripts import imarith, imstats  # noqa
+    from .stats import *  # noqa
+    from .utils import *  # noqa

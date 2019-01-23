@@ -5,12 +5,12 @@ Misc utility functions.
 import numpy as np
 import warnings
 
-from astropy.table import Table
+from astropy.coordinates import SkyCoord
 from astropy.nddata import NDData, support_nddata
 from astropy.nddata.utils import overlap_slices
-from astropy.coordinates import SkyCoord
-from astropy.wcs.utils import skycoord_to_pixel
+from astropy.table import Table
 from astropy.utils.exceptions import AstropyUserWarning
+from astropy.wcs.utils import skycoord_to_pixel
 
 
 __all__ = ['radial_distance', 'listpixels', 'mask_databounds',
