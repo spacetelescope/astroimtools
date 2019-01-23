@@ -17,7 +17,7 @@ except ImportError:
     HAS_ASTROPY_GE_1P1 = False
 
 
-class TestRadialDistance(object):
+class TestRadialDistance:
     def test_radial_distance(self):
         result = radial_distance((1, 1), (3, 3))
         x = np.sqrt(2)
@@ -33,7 +33,7 @@ class TestRadialDistance(object):
             radial_distance((2, 2), (1, 1, 1))
 
 
-class TestListPixels(object):
+class TestListPixels:
     def setup_class(self):
         self.data = np.arange(100).reshape(10, 10)
 
@@ -54,7 +54,7 @@ class TestListPixels(object):
         assert_allclose(tbl['value'].data, [44, 45, 54, 55])
 
 
-class TestMaskDataBounds(object):
+class TestMaskDataBounds:
     def test_mask_databounds(self):
         data = np.arange(7)
         ref = np.array([True, True, False, True, False, False, True])
@@ -71,7 +71,7 @@ class TestMaskDataBounds(object):
 
 
 @pytest.mark.skipif('not HAS_ASTROPY_GE_1P1')
-class TestNDDataCutout2D(object):
+class TestNDDataCutout2D:
     def test_nddata_cutout2d(self):
         data = np.random.random((100, 100))
         unit = u.electron / u.s

@@ -84,7 +84,7 @@ def minmax(data, mask=None, axis=None):
     return funcs[0](data, axis=axis), funcs[1](data, axis=axis)
 
 
-class NDDataStats(object):
+class NDDataStats:
     """
     Class to calculate (sigma-clipped) image statistics on NDData
     objects.

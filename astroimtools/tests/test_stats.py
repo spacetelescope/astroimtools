@@ -6,7 +6,7 @@ from astropy.nddata import NDData
 from ..stats import minmax, NDDataStats, nddata_stats
 
 
-class TestMinMax(object):
+class TestMinMax:
     def setup_class(self):
         np.random.seed(12345)
         self.data = np.random.random((3, 3))

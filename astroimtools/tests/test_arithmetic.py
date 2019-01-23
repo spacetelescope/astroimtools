@@ -8,7 +8,7 @@ from astropy.nddata import NDData
 from ..arithmetic import nddata_arith
 
 
-class TestNDDataArith(object):
+class TestNDDataArith:
     def setup_class(self):
         self.nd1 = NDData([0, 1, 2, 3, 4])
         self.nd2 = NDData([1, 7, 5, 4, 2])
