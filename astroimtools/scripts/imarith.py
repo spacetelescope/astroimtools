@@ -19,11 +19,12 @@ Example usage:
     $ imarith filename1.fits filename2.fits '+' -e1 1 -e2 3 -k 'exptime' -o 'result.fits'
 """
 
-import numpy as np
 import argparse
+import numpy as np
 from astropy.nddata import NDData
-from ..nddata_adapters import basic_fits_to_nddata, basic_nddata_to_fits
+
 from ..arithmetic import nddata_arith
+from ..nddata_adapters import basic_fits_to_nddata, basic_nddata_to_fits
 
 
 def main(args=None):
