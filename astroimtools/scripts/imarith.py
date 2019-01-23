@@ -19,8 +19,6 @@ Example usage:
     $ imarith filename1.fits filename2.fits '+' -e1 1 -e2 3 -k 'exptime' -o 'result.fits'
 """
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 import numpy as np
 import argparse
 from astropy.nddata import NDData

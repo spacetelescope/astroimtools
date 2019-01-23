@@ -2,8 +2,6 @@
 """
 NDData tools for interfacing with FITS files.
 """
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 import numpy as np
 import astropy.io.fits as fits
 from astropy.nddata import NDData

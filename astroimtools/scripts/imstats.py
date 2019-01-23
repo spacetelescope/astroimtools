@@ -57,8 +57,6 @@ Example usage:
      filename.fits 1020413 0.425871 0.5742 -39.2302 55.2304
 """
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 import numpy as np
 from astropy.table import Column
 import argparse
