@@ -70,6 +70,6 @@ def main(args=None):
         keywords = args.keywords.replace(' ', '').split(',')
 
     nddata = nddata_arith(nddata1, nddata2, args.operator,
-                     fill_value=args.fill_value, keywords=keywords)
+                          fill_value=args.fill_value, keywords=keywords)
 
     basic_nddata_to_fits(nddata, args.outfilename, clobber=args.clobber)

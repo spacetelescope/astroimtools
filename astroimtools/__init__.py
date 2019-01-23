@@ -24,7 +24,7 @@ if (sys.version_info <
                                  .format(__minimum_python_version__))
 
 
-if not _ASTROPY_SETUP_:
+if not _ASTROPY_SETUP_:  # noqa
     # For egg_info test builds to pass, put package imports here.
     from .arithmetic import *  # noqa
     from .cutout_tools import *  # noqa
