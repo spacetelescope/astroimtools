@@ -72,7 +72,7 @@ matrix:
 
         # Check for sphinx doc build warnings
           env: SETUP_CMD='build_docs -w'
-               CONDA_DEPENDENCIES='scipy matplotlib sphinx-astropy'
+               CONDA_DEPENDENCIES='scipy matplotlib sphinx-astropy jupyter'
                EVENT_TYPE='pull_request push cron'
 
         # Test with optional dependencies disabled
@@ -92,17 +92,15 @@ matrix:
                PIP_DEPENDENCIES='pytest<3.10'
 
         - stage: Comprehensive tests
-          env: NUMPY_VERSION=1.12 ASTROPY_VERSION=lts
+          env: PYTHON_VERSION=3.6
+               NUMPY_VERSION=1.12 ASTROPY_VERSION=lts
                PIP_DEPENDENCIES='pytest<3.10'
 
         - stage: Comprehensive tests
-          env: NUMPY_VERSION=1.13 ASTROPY_VERSION=lts
+          env: PYTHON_VERSION=3.6
+               NUMPY_VERSION=1.13 ASTROPY_VERSION=lts
                PIP_DEPENDENCIES='pytest<3.10'
                EVENT_TYPE='pull_request push cron'
-
-        # Test with other Python and numpy versions
-        - stage: Comprehensive tests
-          env: PYTHON_VERSION=3.7
 
         # Test with numpy pre-release version
         - stage: Comprehensive tests
