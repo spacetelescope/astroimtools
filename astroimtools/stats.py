@@ -2,20 +2,15 @@
 """
 Statistics tools.
 """
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+
 import numpy as np
+from astropy.nddata import NDData, support_nddata
 from astropy.stats import (sigma_clip, biweight_location,
                            biweight_midvariance, mad_std)
-from astropy.utils import lazyproperty
 from astropy.table import Table
-from astropy.nddata import NDData, support_nddata
-from .utils import mask_databounds
-import astropy
+from astropy.utils import lazyproperty
 
-majv, minv = astropy.__version__.split('.')[:2]
-minv = minv.split('rc')[0]
-ASTROPY_LT_1P1 = ([int(majv), int(minv)] < [1, 1])
+from .utils import mask_databounds
 
 
 __all__ = ['minmax', 'NDDataStats', 'nddata_stats']
@@ -84,7 +79,7 @@ def minmax(data, mask=None, axis=None):
     return funcs[0](data, axis=axis), funcs[1](data, axis=axis)
 
 
-class NDDataStats(object):
+class NDDataStats:
     """
     Class to calculate (sigma-clipped) image statistics on NDData
     objects.
@@ -200,13 +195,9 @@ class NDDataStats(object):
             data = nddata.data
 
         if sigma is not None:
-            if ASTROPY_LT_1P1:
-                data = sigma_clip(data, sig=sigma, cenfunc=cenfunc,
-                                  varfunc=np.ma.var, iters=iters)
-            else:
-                data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
-                                  sigma_upper=sigma_upper, cenfunc=cenfunc,
-                                  stdfunc=stdfunc, iters=iters)
+            data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
+                              sigma_upper=sigma_upper, cenfunc=cenfunc,
+                              stdfunc=stdfunc, iters=iters)
 
         if np.ma.is_masked(data):
             self.goodvals = data.data[~data.mask]
@@ -288,7 +279,7 @@ class NDDataStats(object):
 
     @lazyproperty
     def mad_std(self):
-        """
+        r"""
         A robust standard deviation using the `median absolute deviation
         (MAD)
         <http://en.wikipedia.org/wiki/Median_absolute_deviation>`_.
@@ -298,8 +289,8 @@ class NDDataStats(object):
 
         .. math::
 
-            \\sigma \\approx \\frac{\\textrm{MAD}}{\Phi^{-1}(3/4)}
-            \\approx 1.4826 \ \\textrm{MAD}
+            \sigma \approx \frac{\textrm{MAD}}{\Phi^{-1}(3/4)}
+            \approx 1.4826 \ \textrm{MAD}
 
         where :math:`\Phi^{-1}(P)` is the normal inverse cumulative
         distribution function evaluated at probability :math:`P = 3/4`.

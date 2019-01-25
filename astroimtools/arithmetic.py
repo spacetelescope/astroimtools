@@ -2,13 +2,13 @@
 """
 Image utilities.
 """
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-import numpy as np
+
 import copy
-from astropy.nddata import NDData
-from astropy import log
 import warnings
+
+import numpy as np
+from astropy import log
+from astropy.nddata import NDData
 from astropy.utils.exceptions import AstropyUserWarning
 
 

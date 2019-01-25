@@ -1,14 +1,14 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 import numpy as np
 from numpy.testing import assert_allclose
-from astropy.tests.helper import pytest
+import pytest
+
 from astropy.nddata import NDData
+
 from ..arithmetic import nddata_arith
 
 
-class TestNDDataArith(object):
+class TestNDDataArith:
     def setup_class(self):
         self.nd1 = NDData([0, 1, 2, 3, 4])
         self.nd2 = NDData([1, 7, 5, 4, 2])

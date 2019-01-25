@@ -69,8 +69,13 @@ exclude_patterns.append('_templates')
 
 # This is added to the end of RST files - a good place to put substitutions to
 # be used globally.
+import astroimtools
+
 rst_epilog += """
-"""
+.. |minimum_python_version| replace:: {0}
+.. |minimum_numpy_version| replace:: {1}
+""".format(astroimtools.__minimum_python_version__,
+           astroimtools.__minimum_numpy_version__)
 
 # -- Project information ------------------------------------------------------
 

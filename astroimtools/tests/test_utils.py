@@ -1,23 +1,17 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 import numpy as np
 from numpy.testing import assert_allclose
-from astropy.tests.helper import pytest
+import pytest
+
 from astropy.coordinates import SkyCoord
 from astropy.nddata import NDData
 import astropy.units as u
+
 from ..utils import (radial_distance, listpixels, mask_databounds,
                      nddata_cutout2d)
 
-try:
-    from astropy.nddata.utils import Cutout2D
-    HAS_ASTROPY_GE_1P1 = True
-except ImportError:
-    HAS_ASTROPY_GE_1P1 = False
 
-
-class TestRadialDistance(object):
+class TestRadialDistance:
     def test_radial_distance(self):
         result = radial_distance((1, 1), (3, 3))
         x = np.sqrt(2)
@@ -33,7 +27,7 @@ class TestRadialDistance(object):
             radial_distance((2, 2), (1, 1, 1))
 
 
-class TestListPixels(object):
+class TestListPixels:
     def setup_class(self):
         self.data = np.arange(100).reshape(10, 10)
 
@@ -54,7 +48,7 @@ class TestListPixels(object):
         assert_allclose(tbl['value'].data, [44, 45, 54, 55])
 
 
-class TestMaskDataBounds(object):
+class TestMaskDataBounds:
     def test_mask_databounds(self):
         data = np.arange(7)
         ref = np.array([True, True, False, True, False, False, True])
@@ -70,8 +64,7 @@ class TestMaskDataBounds(object):
             mask_databounds(np.arange(5), lower_bound=10)
 
 
-@pytest.mark.skipif('not HAS_ASTROPY_GE_1P1')
-class TestNDDataCutout2D(object):
+class TestNDDataCutout2D:
     def test_nddata_cutout2d(self):
         data = np.random.random((100, 100))
         unit = u.electron / u.s

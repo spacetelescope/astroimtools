@@ -1,7 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 """Utility functions for cutout images."""
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 
 # STDLIB
 import os
@@ -12,13 +10,14 @@ import math
 import numpy as np
 
 # ASTROPY
-import astropy.units as u
 from astropy import log
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
 from astropy.nddata.utils import (Cutout2D, NoOverlapError)
 from astropy.table import QTable
+import astropy.units as u
 from astropy.wcs import WCS, NoConvergence
+
 
 __all__ = ['make_cutouts', 'show_cutout_with_slit']
 
@@ -133,8 +132,10 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
 
             try:
                 cutout_arr = reproject_interp(
-                    (data, wcs), cutout_hdr, shape_out=(math.floor(y_pix + math.copysign(0.5, y_pix)),
-                        math.floor(x_pix + math.copysign(0.5, x_pix))), order=2)
+                    (data, wcs), cutout_hdr,
+                    shape_out=(math.floor(y_pix + math.copysign(0.5, y_pix)),
+                               math.floor(x_pix + math.copysign(0.5, x_pix))),
+                    order=2)
             except Exception:
                 if verbose:
                     log.info('reproject failed: '

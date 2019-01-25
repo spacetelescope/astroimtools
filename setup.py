@@ -4,38 +4,54 @@
 import glob
 import os
 import sys
-
-import ah_bootstrap
-from setuptools import setup
-
-# A dirty hack to get around some early import/configurations ambiguities
-if sys.version_info[0] >= 3:
-    import builtins
-else:
-    import __builtin__ as builtins
-builtins._ASTROPY_SETUP_ = True
-
-from astropy_helpers.setup_helpers import (register_commands, get_debug_option,
-                                           get_package_info)
-from astropy_helpers.git_helpers import get_git_devstr
-from astropy_helpers.version_helpers import generate_version_py
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
 
 # Get some values from the setup.cfg
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
-
 conf = ConfigParser()
 conf.read(['setup.cfg'])
 metadata = dict(conf.items('metadata'))
 
-PACKAGENAME = metadata.get('package_name', 'packagename')
-DESCRIPTION = metadata.get('description', 'Astropy affiliated package')
+PACKAGENAME = metadata.get('package_name', '')
+DESCRIPTION = metadata.get('description', '')
 AUTHOR = metadata.get('author', '')
 AUTHOR_EMAIL = metadata.get('author_email', '')
 LICENSE = metadata.get('license', 'unknown')
-URL = metadata.get('url', 'http://astropy.org')
+URL = metadata.get('url', '')
+
+try:
+    __minimum_python_version__ = metadata['minimum_python_version']
+except KeyError:
+    raise KeyError('minimum_python_version must be defined in setup.cfg')
+try:
+    __minimum_numpy_version__ = metadata['minimum_numpy_version']
+except KeyError:
+    raise KeyError('minimum_numpy_version must be defined in setup.cfg')
+
+# Enforce Python version check - this is the same check as in __init__.py but
+# this one has to happen before importing ah_bootstrap.
+if (sys.version_info <
+        tuple((int(val) for val in __minimum_python_version__.split('.')))):
+    sys.stderr.write("ERROR: Photutils requires Python {} or later\n"
+                     .format(__minimum_python_version__))
+    sys.exit(1)
+
+# Import ah_bootstrap after the python version validation
+import ah_bootstrap  # noqa
+from setuptools import setup
+
+import builtins
+builtins._ASTROPY_SETUP_ = True
+
+from astropy_helpers.setup_helpers import (register_commands,
+                                           get_debug_option,
+                                           get_package_info)
+from astropy_helpers.distutils_helpers import is_distutils_display_option
+from astropy_helpers.git_helpers import get_git_devstr
+from astropy_helpers.version_helpers import generate_version_py
+
 
 # order of priority for long_description:
 #   (1) set in setup.cfg,
@@ -122,19 +138,33 @@ package_info['package_data'][PACKAGENAME].extend(c_files)
 # ``setup``, since these are now deprecated. See this link for more details:
 # https://groups.google.com/forum/#!topic/astropy-dev/urYO8ckB2uM
 
+setup_requires = []
+
+install_requires = [s.strip() for s in metadata.get(
+    'install_requires', 'astropy').split(',')]
+
 setup(name=PACKAGENAME,
       version=VERSION,
       description=DESCRIPTION,
       scripts=scripts,
-      install_requires=[s.strip() for s in metadata.get('install_requires', 'astropy').split(',')],
+      install_requires=install_requires,
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
       license=LICENSE,
       url=URL,
       long_description=LONG_DESCRIPTION,
+      keywords=['astronomy', 'astrophysics'],
+      classifiers=[
+          'Intended Audience :: Science/Research',
+          'License :: OSI Approved :: BSD License',
+          'Operating System :: OS Independent',
+          'Programming Language :: C',
+          'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: Implementation :: CPython',
+          'Topic :: Scientific/Engineering :: Astronomy'],
       cmdclass=cmdclassd,
       zip_safe=False,
       use_2to3=False,
       entry_points=entry_points,
-      **package_info
-)
+      python_requires='>={}'.format(__minimum_python_version__),
+      **package_info)

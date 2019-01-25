@@ -57,13 +57,12 @@ Example usage:
      filename.fits 1020413 0.425871 0.5742 -39.2302 55.2304
 """
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+import argparse
 import numpy as np
 from astropy.table import Column
-import argparse
-from ..stats import nddata_stats
+
 from ..nddata_adapters import basic_fits_to_nddata
+from ..stats import nddata_stats
 
 
 def main(args=None):
