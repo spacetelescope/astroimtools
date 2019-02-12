@@ -30,16 +30,10 @@ import os
 import sys
 
 try:
-    import astropy_helpers
+    from sphinx_astropy.conf.v1 import *  # noqa
 except ImportError:
-    # Building from inside the docs/ directory?
-    if os.path.basename(os.getcwd()) == 'docs':
-        a_h_path = os.path.abspath(os.path.join('..', 'astropy_helpers'))
-        if os.path.isdir(a_h_path):
-            sys.path.insert(1, a_h_path)
-
-# Load all of the global Astropy configuration
-from astropy_helpers.sphinx.conf import *
+    print('ERROR: the documentation requires the sphinx-astropy package to be installed')
+    sys.exit(1)
 
 # Get configuration information from setup.cfg
 try:
@@ -54,7 +48,7 @@ setup_cfg = dict(conf.items('metadata'))
 # -- General configuration ----------------------------------------------------
 
 # By default, highlight as Python 3.
-#highlight_language = 'python3'
+highlight_language = 'python3'
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.2'
@@ -117,13 +111,12 @@ release = package.__version__
 # name of a builtin theme or the name of a custom theme in html_theme_path.
 #html_theme = None
 
-# Please update these texts to match the name of your package.
-html_theme_options = {
-    'logotext1': 'astro',    # white, semi-bold
-    'logotext2': 'imtools',  # orange, light
-    'logotext3': ''          # white, light
-}
 
+html_theme_options = {
+    'logotext1': 'astro',  # white,  semi-bold
+    'logotext2': 'imtools',  # orange, light
+    'logotext3': ''   # white,  light
+    }
 
 
 # Custom sidebar templates, maps document names to template names.
@@ -169,7 +162,7 @@ man_pages = [('index', project.lower(), project + u' Documentation',
 # -- Options for the edit_on_github extension ---------------------------------
 
 if eval(setup_cfg.get('edit_on_github')):
-    extensions += ['astropy_helpers.sphinx.ext.edit_on_github']
+    extensions += ['sphinx_astropy.ext.edit_on_github']
 
     versionmod = __import__(setup_cfg['package_name'] + '.version')
     edit_on_github_project = setup_cfg['github_project']
@@ -184,44 +177,28 @@ if eval(setup_cfg.get('edit_on_github')):
 # -- Resolving issue number to links in changelog -----------------------------
 github_issues_url = 'https://github.com/{0}/issues/'.format(setup_cfg['github_project'])
 
-
-# a simple/non-configurable extension that generates the rst files for ipython
-# notebooks
-def notebooks_to_rst(app):
-    from glob import glob
-
-    try:
-        # post "big-split", nbconvert is a separate namespace
-        from nbconvert.nbconvertapp import NbConvertApp
-        from nbconvert.writers import FilesWriter
-    except ImportError:
-        from IPython.nbconvert.nbconvertapp import NbConvertApp
-        from IPython.nbconvert.writers import FilesWriter
-
-    class OrphanizerWriter(FilesWriter):
-        def write(self, output, resources, **kwargs):
-            output = ':orphan:\n\n' + output
-            FilesWriter.write(self, output, resources, **kwargs)
-
-    olddir = os.path.abspath(os.curdir)
-    try:
-        srcdir = os.path.abspath(os.path.split(__file__)[0])
-        os.chdir(os.path.join(srcdir, 'astroimtools', 'notebooks'))
-        nbs = glob('*.ipynb')
-
-        app = NbConvertApp()
-        app.initialize(argv=[])
-        app.writer = OrphanizerWriter()
-
-        app.export_format = 'rst'
-        app.notebooks = nbs
-
-        app.start()
-    except:
-        pass
-    finally:
-        os.chdir(olddir)
-
-
-def setup(app):
-    app.connect('builder-inited', notebooks_to_rst)
+# -- Turn on nitpicky mode for sphinx (to warn about references not found) ----
+#
+# nitpicky = True
+# nitpick_ignore = []
+#
+# Some warnings are impossible to suppress, and you can list specific references
+# that should be ignored in a nitpick-exceptions file which should be inside
+# the docs/ directory. The format of the file should be:
+#
+# <type> <class>
+#
+# for example:
+#
+# py:class astropy.io.votable.tree.Element
+# py:class astropy.io.votable.tree.SimpleElement
+# py:class astropy.io.votable.tree.SimpleElementWithContent
+#
+# Uncomment the following lines to enable the exceptions:
+#
+# for line in open('nitpick-exceptions'):
+#     if line.strip() == "" or line.startswith("#"):
+#         continue
+#     dtype, target = line.split(None, 1)
+#     target = target.strip()
+#     nitpick_ignore.append((dtype, six.u(target)))
