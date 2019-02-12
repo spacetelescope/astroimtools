@@ -5,6 +5,8 @@
 extracted from two FITS files.  The arithmetic is performed for the data
 in only a single FITS extension in both FITS file.
 
+.. highlight:: none
+
 Example usage:
 
 1.  Add the array in extension 1 of the first FITS file with extension 3
@@ -17,6 +19,8 @@ Example usage:
     "result.fits"::
 
     $ imarith filename1.fits filename2.fits '+' -e1 1 -e2 3 -k 'exptime' -o 'result.fits'
+
+.. highlight:: python3
 """
 
 import argparse

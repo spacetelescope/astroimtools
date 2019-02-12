@@ -5,6 +5,8 @@
 array from a single extension of a FITS file.  Sigma-clipped statistics
 can be calculated by specifying the ``sigma`` option.
 
+.. highlight:: none
+
 The currently available statistics are:
 
   * ``'mean'``
@@ -55,6 +57,8 @@ Example usage:
        filename    npixels   mean    std     min      max
      ------------- ------- -------- ------ -------- -------
      filename.fits 1020413 0.425871 0.5742 -39.2302 55.2304
+
+.. highlight:: python3
 """
 
 import argparse
