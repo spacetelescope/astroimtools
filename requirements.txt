@@ -5,4 +5,4 @@ astropy
 photutils
 Sphinx
 sphinx-astropy
-nbcovert
+nbconvert
