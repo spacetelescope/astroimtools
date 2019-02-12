@@ -9,6 +9,8 @@ from astropy.stats import (sigma_clip, biweight_location,
                            biweight_midvariance, mad_std)
 from astropy.table import Table
 from astropy.utils import lazyproperty
+from astropy.utils.decorators import deprecated_renamed_argument
+from astropy.version import version as astropy_version
 
 from .utils import mask_databounds
 
@@ -87,8 +89,9 @@ class NDDataStats:
     Set the ``sigma`` keyword to perform sigma clipping.
     """
 
+    @deprecated_renamed_argument('iters', 'maxiters', '0.2')
     def __init__(self, nddata, sigma=None, sigma_lower=None, sigma_upper=None,
-                 iters=1, cenfunc=np.ma.median, stdfunc=np.std,
+                 maxiters=5, cenfunc='median', stdfunc='std',
                  lower_bound=None, upper_bound=None, mask_value=None,
                  mask_invalid=True):
         """
@@ -118,10 +121,12 @@ class NDDataStats:
             ``sigma`` is used. Defaults to `None`.  Requires Astropy >=
             1.1.
 
-        iters : int or `None`, optional
-            The number of sigma clipping iterations to perform, or
-            `None` to clip until convergence is achieved (i.e. continue
-            until the last iteration clips nothing).
+        maxiters : int or `None`, optional
+            The maximum number of sigma-clipping iterations to perform
+            or `None` to clip until convergence is achieved (i.e.,
+            iterate until the last iteration clips nothing).  If
+            convergence is achieved prior to ``maxiters`` iterations,
+            the clipping iterations will stop.  The default is 5.
 
         cenfunc : callable, optional
             The function used to compute the center for the clipping.
@@ -195,9 +200,20 @@ class NDDataStats:
             data = nddata.data
 
         if sigma is not None:
-            data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
-                              sigma_upper=sigma_upper, cenfunc=cenfunc,
-                              stdfunc=stdfunc, iters=iters)
+            if astropy_version < '3.1':
+                if cenfunc == 'median':
+                    cenfunc = np.ma.median
+                if cenfunc == 'mean':
+                    cenfunc = np.ma.mean
+                if stdfunc == 'std':
+                    stdfunc = np.std
+                data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
+                                  sigma_upper=sigma_upper, cenfunc=cenfunc,
+                                  stdfunc=stdfunc, maxiters=maxiters)
+            else:
+                data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
+                                  sigma_upper=sigma_upper, cenfunc=cenfunc,
+                                  stdfunc=stdfunc, maxiters=maxiters)
 
         if np.ma.is_masked(data):
             self.goodvals = data.data[~data.mask]
