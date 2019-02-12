@@ -5,10 +5,10 @@ Statistics tools.
 
 import numpy as np
 from astropy.nddata import NDData, support_nddata
-from astropy.stats import (sigma_clip, biweight_location,
-                           biweight_midvariance, mad_std)
+from astropy.stats import biweight_location, biweight_midvariance, mad_std
 from astropy.table import Table
 from astropy.utils import lazyproperty
+from astropy.utils.decorators import deprecated_renamed_argument
 
 from .utils import mask_databounds
 
@@ -87,10 +87,9 @@ class NDDataStats:
     Set the ``sigma`` keyword to perform sigma clipping.
     """
 
-    def __init__(self, nddata, sigma=None, sigma_lower=None, sigma_upper=None,
-                 iters=1, cenfunc=np.ma.median, stdfunc=np.std,
-                 lower_bound=None, upper_bound=None, mask_value=None,
-                 mask_invalid=True):
+    @deprecated_renamed_argument('sigma', 'sigma_clip', '0.2')
+    def __init__(self, nddata, sigma_clip=None, lower_bound=None,
+                 upper_bound=None, mask_value=None, mask_invalid=True):
         """
         Parameters
         ----------
@@ -99,50 +98,10 @@ class NDDataStats:
             mask) on which to calculate statistics.  Masked pixels are
             excluded when computing the image statistics.
 
-        sigma : `None` or float, optional
-            The number of standard deviations to use for both the lower
-            and upper clipping limit. These limits are overridden by
-            ``sigma_lower`` and ``sigma_upper``, if input. Defaults to
-            `None`, which means that sigma clipping will not be
-            performed.
-
-        sigma_lower : float or `None`, optional
-            The number of standard deviations to use as the lower bound
-            for the clipping limit. If `None` then the value of
-            ``sigma`` is used. Defaults to `None`.  Requires Astropy >=
-            1.1.
-
-        sigma_upper : float or `None`, optional
-            The number of standard deviations to use as the upper bound
-            for the clipping limit. If `None` then the value of
-            ``sigma`` is used. Defaults to `None`.  Requires Astropy >=
-            1.1.
-
-        iters : int or `None`, optional
-            The number of sigma clipping iterations to perform, or
-            `None` to clip until convergence is achieved (i.e. continue
-            until the last iteration clips nothing).
-
-        cenfunc : callable, optional
-            The function used to compute the center for the clipping.
-            Must be a callable that takes in a masked array and outputs
-            the central value. Defaults to the median
-            (`numpy.ma.median`).
-
-        stdfunc : callable, optional
-            The function used to compute the standard deviation about
-            the center. Must be a callable that takes in a masked array
-            and outputs a width estimator. Masked (rejected) pixels are
-            those where::
-
-                deviation < (-sigma_lower * stdfunc(deviation))
-                deviation > (sigma_upper * stdfunc(deviation))
-
-            where::
-
-                deviation = data - cenfunc(data [,axis=int])
-
-            Defaults to the standard deviation (`numpy.std`).
+        sigma_clip : `astropy.stats.SigmaClip` instance, optional
+            A `~astropy.stats.SigmaClip` object that defines the sigma
+            clipping parameters.  If `None` then no sigma clipping will
+            be performed (default).
 
         lower_bound : float, optional
             The minimum data value to include in the statistics.  All
@@ -167,14 +126,25 @@ class NDDataStats:
         >>> import numpy as np
         >>> from astropy.nddata import NDData
         >>> from astroimtools import NDDataStats
-        >>> nddata = NDData(np.arange(10))
+        >>> data = np.arange(10)
+        >>> data[0] = 100.
+        >>> nddata = NDData(data)
         >>> stats = NDDataStats(nddata)
         >>> stats.mean
-        4.5
+        14.5
         >>> stats.std  # doctest: +FLOAT_CMP
-        2.8722813232690143
+        28.605069480775605
         >>> stats.mad_std  # doctest: +FLOAT_CMP
         3.706505546264005
+        >>> from astropy.stats import SigmaClip
+        >>> sigclip = SigmaClip(sigma=2.5)
+        >>> stats = NDDataStats(nddata, sigma_clip=sigclip)
+        >>> stats.mean
+        5.0
+        >>> stats.std  # doctest: +FLOAT_CMP
+        2.581988897471611
+        >>> stats.mad_std  # doctest: +FLOAT_CMP
+        2.965204437011204
         """
 
         if not isinstance(nddata, NDData):
@@ -194,10 +164,8 @@ class NDDataStats:
         else:
             data = nddata.data
 
-        if sigma is not None:
-            data = sigma_clip(data, sigma=sigma, sigma_lower=sigma_lower,
-                              sigma_upper=sigma_upper, cenfunc=cenfunc,
-                              stdfunc=stdfunc, iters=iters)
+        if sigma_clip is not None:
+            data = sigma_clip(data)
 
         if np.ma.is_masked(data):
             self.goodvals = data.data[~data.mask]
@@ -333,10 +301,9 @@ class NDDataStats:
         return kurtosis(self.goodvals)
 
 
-def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
-                 iters=5, cenfunc=np.ma.median, stdfunc=np.std, columns=None,
-                 lower_bound=None, upper_bound=None, mask_value=None,
-                 mask_invalid=True):
+@deprecated_renamed_argument('sigma', 'sigma_clip', '0.2')
+def nddata_stats(nddata, sigma_clip=None, columns=None, lower_bound=None,
+                 upper_bound=None, mask_value=None, mask_invalid=True):
     """
     Calculate various statistics on the input data.
 
@@ -349,46 +316,10 @@ def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
         optional mask on which to calculate statistics.  Masked pixels
         are excluded when computing the image statistics.
 
-    sigma : `None` or float, optional
-        The number of standard deviations to use for both the lower and
-        upper clipping limit. These limits are overridden by
-        ``sigma_lower`` and ``sigma_upper``, if input. Defaults to
-        `None`, which means that sigma clipping will not be performed.
-
-    sigma_lower : float or `None`, optional
-        The number of standard deviations to use as the lower bound for
-        the clipping limit. If `None` then the value of ``sigma`` is
-        used. Defaults to `None`.
-
-    sigma_upper : float or `None`, optional
-        The number of standard deviations to use as the upper bound for
-        the clipping limit. If `None` then the value of ``sigma`` is
-        used. Defaults to `None`.
-
-    iters : int or `None`, optional
-        The number of sigma clipping iterations to perform, or `None` to
-        clip until convergence is achieved (i.e. continue until the last
-        iteration clips nothing).
-
-    cenfunc : callable, optional
-        The function used to compute the center for the clipping. Must
-        be a callable that takes in a masked array and outputs the
-        central value. Defaults to the median (`numpy.ma.median`).
-
-    stdfunc : callable, optional
-        The function used to compute the standard deviation about the
-        center. Must be a callable that takes in a masked array and
-        outputs a width estimator. Masked (rejected) pixels are those
-        where::
-
-             deviation < (-sigma_lower * stdfunc(deviation))
-             deviation > (sigma_upper * stdfunc(deviation))
-
-        where::
-
-            deviation = data - cenfunc(data [,axis=int])
-
-        Defaults to the standard deviation (`numpy.std`).
+    sigma_clip : `astropy.stats.SigmaClip` instance, optional
+        A `~astropy.stats.SigmaClip` object that defines the sigma
+        clipping parameters.  If `None` then no sigma clipping will be
+        performed (default).
 
     columns : str or list of str, optional
         The names of columns, in order, to include in the output
@@ -430,15 +361,26 @@ def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
     >>> import numpy as np
     >>> from astropy.nddata import NDData
     >>> from astroimtools import nddata_stats
-    >>> nddata = NDData(np.arange(10))
+    >>> data = np.arange(10)
+    >>> data[0] = 100.
+    >>> nddata = NDData(data)
     >>> columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
     >>> tbl = nddata_stats(nddata, columns=columns)
     >>> for col in tbl.colnames:
     ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> print(tbl)
+    mean median  mode    std     mad_std  min max
+    ---- ------ ----- --------- --------- --- ---
+    14.5    5.5 -12.5 28.605069 3.7065055   1 100
+    >>> from astropy.stats import SigmaClip
+    >>> sigclip = SigmaClip(sigma=2.5)
+    >>> tbl = nddata_stats(nddata, sigma_clip=sigclip, columns=columns)
+    >>> for col in tbl.colnames:
+    ...     tbl[col].info.format = '%.8g'  # for consistent table output
+    >>> print(tbl)
     mean median mode    std     mad_std  min max
     ---- ------ ---- --------- --------- --- ---
-     4.5    4.5  4.5 2.8722813 3.7065055   0   9
+       5      5    5 2.5819889 2.9652044   1   9
     """
 
     stats = []
@@ -447,10 +389,9 @@ def nddata_stats(nddata, sigma=None, sigma_lower=None, sigma_upper=None,
 
     for nddata_obj in nddata:
         stats.append(NDDataStats(
-            nddata_obj, sigma=sigma, sigma_lower=sigma_lower,
-            sigma_upper=sigma_upper, iters=iters, cenfunc=cenfunc,
-            stdfunc=stdfunc, lower_bound=lower_bound, upper_bound=upper_bound,
-            mask_value=mask_value, mask_invalid=mask_invalid))
+            nddata_obj, sigma_clip=sigma_clip, lower_bound=lower_bound,
+            upper_bound=upper_bound, mask_value=mask_value,
+            mask_invalid=mask_invalid))
 
     output_columns = None
     default_columns = ['npixels', 'mean', 'std', 'min', 'max']

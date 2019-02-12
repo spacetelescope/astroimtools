@@ -63,7 +63,9 @@ Example usage:
 
 import argparse
 import numpy as np
+from astropy.stats import SigmaClip
 from astropy.table import Column
+from astropy.version import version as astropy_version
 
 from ..nddata_adapters import basic_fits_to_nddata
 from ..stats import nddata_stats
@@ -80,7 +82,8 @@ def main(args=None):
                         default=3., help='The number of standard '
                         'deviations to use as the clipping limit')
     parser.add_argument('-i', '--iters', metavar='iters', type=int,
-                        default=1, help='')
+                        default=1, help='The maximum number of '
+                        'sigma-clipping iterations.')
     parser.add_argument('-c', '--columns', metavar='columns', type=str,
                         default='npixels, mean, std, min, max',
                         help='')
@@ -98,8 +101,15 @@ def main(args=None):
         nddata.append(basic_fits_to_nddata(fits_fn, exten=args.exten))
 
     columns = args.columns.replace(' ', '').split(',')
-    tbl = nddata_stats(nddata, sigma=args.sigma, iters=args.iters,
-                       cenfunc=np.ma.median, varfunc=np.var, columns=columns,
+
+    if astropy_version < '3.1':
+        sigma_clip = SigmaClip(sigma=args.sigma, cenfunc=np.ma.median,
+                               stdfunc=np.std, iters=args.iters)
+    else:
+        sigma_clip = SigmaClip(sigma=args.sigma, cenfunc='median',
+                               stdfunc='std', maxiters=args.iters)
+
+    tbl = nddata_stats(nddata, sigma_clip=sigma_clip, columns=columns,
                        lower_bound=args.lower, upper_bound=args.upper,
                        mask_value=args.mask_value)
 

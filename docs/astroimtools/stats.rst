@@ -44,9 +44,9 @@ nddata_stats
 
 The :func:`~astroimtools.nddata_stats` function calculates various
 statistics on `~astropy.nddata.NDData` objects.  Sigma-clipped
-statistics can be calculated by specifying the ``sigma``,
-``sigma_lower``, and/or ``sigma_upper`` keywords.  The currently
-available statistics are:
+statistics can be calculated by inputting a `~astropy.stats.SigmaClip`
+instance to the ``sigma_clip`` keyword.  The currently available
+statistics are:
 
   * ``'mean'``
   * ``'median'``
@@ -67,19 +67,22 @@ Here is a simple example::
     >>> import numpy as np
     >>> from astropy.nddata import NDData
     >>> from astroimtools import nddata_stats
-    >>> nd1 = NDData(np.arange(10))
+    >>> data = np.arange(10)
+    >>> data[0] = 100.
+    >>> nddata = NDData(data)
     >>> columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
-    >>> tbl = nddata_stats(nd1, columns=columns)
+    >>> tbl = nddata_stats(nddata, columns=columns)
     >>> for col in tbl.colnames:
     ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> print(tbl)
-    mean median mode    std     mad_std  min max
-    ---- ------ ---- --------- --------- --- ---
-     4.5    4.5  4.5 2.8722813 3.7065055   0   9
+    mean median  mode    std     mad_std  min max
+    ---- ------ ----- --------- --------- --- ---
+    14.5    5.5 -12.5 28.605069 3.7065055   1 100
 
 Multiple `~astropy.nddata.NDData` objects can be input as a list,
 resulting in a multi-row output table::
 
+    >>> nd1 = NDData(np.arange(10))
     >>> nd2 = NDData(np.arange(20))
     >>> tbl = nddata_stats([nd1, nd2], columns=columns)
     >>> for col in tbl.colnames:
@@ -91,8 +94,8 @@ resulting in a multi-row output table::
      9.5    9.5  9.5 5.7662813 7.4130111   0  19
 
 Sigma-clipped statistics can be calculated by specifying the
-``sigma``, ``sigma_lower``, and/or ``sigma_upper`` keywords.  For this
-example, let's sigma clip at 3 standard deviations::
+``sigma_clip`` keyword.  For this example, let's sigma clip at 2.5
+standard deviations::
 
     >>> np.random.seed(12345)
     >>> arr1 = np.random.random((100, 100))
@@ -101,8 +104,10 @@ example, let's sigma clip at 3 standard deviations::
     >>> arr2[40:50, 40:50] = 500
     >>> nd1 = NDData(arr1)
     >>> nd2 = NDData(arr2)
+    >>> from astropy.stats import SigmaClip
+    >>> sigclip = SigmaClip(sigma=3.)
     >>> columns = ['npixels', 'nrejected', 'mean', 'median', 'std']
-    >>> tbl = nddata_stats([nd1, nd2], sigma=3, columns=columns)
+    >>> tbl = nddata_stats([nd1, nd2], sigma_clip=sigclip, columns=columns)
     >>> for col in tbl.colnames:
     ...     tbl[col].info.format = '%.8g'  # for consistent table output
     >>> print(tbl)
