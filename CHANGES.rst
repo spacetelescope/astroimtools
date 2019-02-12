@@ -8,10 +8,14 @@ New Features
 ^^^^^^^^^^^^
 
 - Added ``cutout_tools`` module, including relevant documentation and
-  example Jupyter notebooks.
+  example Jupyter notebooks. [#31]
 
 API changes
 ^^^^^^^^^^^
+
+- ``nddata_stats`` and ``NDDataStats`` sigma-clipping parameters are
+  now specified by passing a ``astropy.stats.SigmaClip`` instance to the
+  ``sigma_clip`` keyword. [#66]
 
 Bug Fixes
 ^^^^^^^^^
