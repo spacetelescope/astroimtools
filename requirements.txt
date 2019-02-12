@@ -1,0 +1,7 @@
+numpy
+scipy
+matplotlib
+astropy
+photutils
+Sphinx
+sphinx-astropy
