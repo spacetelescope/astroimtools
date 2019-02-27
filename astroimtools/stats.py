@@ -159,22 +159,15 @@ class NDDataStats:
 
         if np.all(mask):
             raise ValueError('All data values are masked')
-        if mask is not None:
-            data = np.ma.MaskedArray(nddata.data, mask)
-        else:
-            data = nddata.data
+
+        # remove masked values
+        data = nddata.data[~mask]
 
         if sigma_clip is not None:
-            data = sigma_clip(data)
+            data = sigma_clip(data, masked=False, axis=None)  # 1D ndarray
 
-        if np.ma.is_masked(data):
-            self.goodvals = data.data[~data.mask]
-            self._npixels = np.ma.count(data)
-            self._nrejected = np.ma.count_masked(data)
-        else:
-            self.goodvals = data
-            self._npixels = data.size
-            self._nrejected = 0
+        self.goodvals = data.ravel()  # 1D array
+        self._original_npixels = nddata.data.size
 
     def __getitem__(self, key):
         return getattr(self, key, None)
@@ -182,18 +175,18 @@ class NDDataStats:
     @lazyproperty
     def npixels(self):
         """
-        The number of unclipped pixels.
+        The number of good (unmasked/unclipped) pixels.
         """
 
-        return self._npixels
+        return len(self.goodvals)
 
     @lazyproperty
     def nrejected(self):
         """
-        The number of rejected (clipped) pixels.
+        The number of rejected (masked/clipped) pixels.
         """
 
-        return self._nrejected
+        return self._original_npixels - self.npixels
 
     @lazyproperty
     def mean(self):
