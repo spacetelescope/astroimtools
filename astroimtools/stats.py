@@ -5,7 +5,8 @@ Statistics tools.
 
 import numpy as np
 from astropy.nddata import NDData, support_nddata
-from astropy.stats import biweight_location, biweight_midvariance, mad_std
+from astropy.stats import (biweight_location, biweight_midvariance, mad_std,
+                           SigmaClip)
 from astropy.table import Table
 from astropy.utils import lazyproperty
 from astropy.utils.decorators import deprecated_renamed_argument
@@ -84,72 +85,71 @@ class NDDataStats:
     Class to calculate (sigma-clipped) image statistics on NDData
     objects.
 
-    Set the ``sigma`` keyword to perform sigma clipping.
+    Set the ``sigma_clip`` keyword to perform sigma clipping.
+
+    Parameters
+    ----------
+    nddata : `~astropy.nddata.NDData`
+        NDData object containing the data array (and an optional mask)
+        on which to calculate statistics.  Masked pixels are excluded
+        when computing the image statistics.
+
+    sigma_clip : `astropy.stats.SigmaClip` instance, optional
+        A `~astropy.stats.SigmaClip` object that defines the sigma
+        clipping parameters.  If `None` then no sigma clipping will be
+        performed (default).
+
+    lower_bound : float, optional
+        The minimum data value to include in the statistics.  All pixel
+        values less than ``lower_bound`` will be ignored.  `None` means
+        that no lower bound is applied (default).
+
+    upper_bound : float, optional
+        The maximum data value to include in the statistics.  All pixel
+        values greater than ``upper_bound`` will be ignored.  `None`
+        means that no upper bound is applied (default).
+
+    mask_value : float, optional
+        A data value (e.g., ``0.0``) to be masked.  ``mask_value`` will
+        be masked in addition to any input ``mask``.
+
+    mask_invalid : bool, optional
+        If `True` (the default), then any unmasked invalid values (e.g.
+        NaN, inf) will be masked.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from astropy.nddata import NDData
+    >>> from astroimtools import NDDataStats
+    >>> data = np.arange(10)
+    >>> data[0] = 100.
+    >>> nddata = NDData(data)
+    >>> stats = NDDataStats(nddata)
+    >>> stats.mean
+    14.5
+    >>> stats.std  # doctest: +FLOAT_CMP
+    28.605069480775605
+    >>> stats.mad_std  # doctest: +FLOAT_CMP
+    3.706505546264005
+    >>> from astropy.stats import SigmaClip
+    >>> sigclip = SigmaClip(sigma=2.5)
+    >>> stats = NDDataStats(nddata, sigma_clip=sigclip)
+    >>> stats.mean
+    5.0
+    >>> stats.std  # doctest: +FLOAT_CMP
+    2.581988897471611
+    >>> stats.mad_std  # doctest: +FLOAT_CMP
+    2.965204437011204
     """
 
     @deprecated_renamed_argument('sigma', 'sigma_clip', '0.2')
     def __init__(self, nddata, sigma_clip=None, lower_bound=None,
                  upper_bound=None, mask_value=None, mask_invalid=True):
-        """
-        Parameters
-        ----------
-        nddata : `~astropy.nddata.NDData`
-            NDData object containing the data array (and an optional
-            mask) on which to calculate statistics.  Masked pixels are
-            excluded when computing the image statistics.
-
-        sigma_clip : `astropy.stats.SigmaClip` instance, optional
-            A `~astropy.stats.SigmaClip` object that defines the sigma
-            clipping parameters.  If `None` then no sigma clipping will
-            be performed (default).
-
-        lower_bound : float, optional
-            The minimum data value to include in the statistics.  All
-            pixel values less than ``lower_bound`` will be ignored.
-            `None` means that no lower bound is applied (default).
-
-        upper_bound : float, optional
-            The maximum data value to include in the statistics.  All
-            pixel values greater than ``upper_bound`` will be ignored.
-            `None` means that no upper bound is applied (default).
-
-        mask_value : float, optional
-            A data value (e.g., ``0.0``) to be masked.  ``mask_value``
-            will be masked in addition to any input ``mask``.
-
-        mask_invalid : bool, optional
-            If `True` (the default), then any unmasked invalid values
-            (e.g.  NaN, inf) will be masked.
-
-        Examples
-        --------
-        >>> import numpy as np
-        >>> from astropy.nddata import NDData
-        >>> from astroimtools import NDDataStats
-        >>> data = np.arange(10)
-        >>> data[0] = 100.
-        >>> nddata = NDData(data)
-        >>> stats = NDDataStats(nddata)
-        >>> stats.mean
-        14.5
-        >>> stats.std  # doctest: +FLOAT_CMP
-        28.605069480775605
-        >>> stats.mad_std  # doctest: +FLOAT_CMP
-        3.706505546264005
-        >>> from astropy.stats import SigmaClip
-        >>> sigclip = SigmaClip(sigma=2.5)
-        >>> stats = NDDataStats(nddata, sigma_clip=sigclip)
-        >>> stats.mean
-        5.0
-        >>> stats.std  # doctest: +FLOAT_CMP
-        2.581988897471611
-        >>> stats.mad_std  # doctest: +FLOAT_CMP
-        2.965204437011204
-        """
 
         if not isinstance(nddata, NDData):
-            raise ValueError('nddata input must be an astropy.nddata.NDData '
-                             'object')
+            raise TypeError('nddata input must be an astropy.nddata.NDData '
+                            'instance')
 
         # update the mask
         mask = mask_databounds(nddata.data, mask=nddata.mask,
@@ -159,22 +159,19 @@ class NDDataStats:
 
         if np.all(mask):
             raise ValueError('All data values are masked')
-        if mask is not None:
-            data = np.ma.MaskedArray(nddata.data, mask)
-        else:
-            data = nddata.data
+
+        # remove masked values
+        data = nddata.data[~mask]
 
         if sigma_clip is not None:
-            data = sigma_clip(data)
+            if not isinstance(sigma_clip, SigmaClip):
+                raise TypeError('sigma_clip must be an '
+                                'astropy.stats.SigmaClip instance')
 
-        if np.ma.is_masked(data):
-            self.goodvals = data.data[~data.mask]
-            self._npixels = np.ma.count(data)
-            self._nrejected = np.ma.count_masked(data)
-        else:
-            self.goodvals = data
-            self._npixels = data.size
-            self._nrejected = 0
+            data = sigma_clip(data, masked=False, axis=None)  # 1D ndarray
+
+        self.goodvals = data.ravel()  # 1D array
+        self._original_npixels = nddata.data.size
 
     def __getitem__(self, key):
         return getattr(self, key, None)
@@ -182,18 +179,18 @@ class NDDataStats:
     @lazyproperty
     def npixels(self):
         """
-        The number of unclipped pixels.
+        The number of good (unmasked/unclipped) pixels.
         """
 
-        return self._npixels
+        return len(self.goodvals)
 
     @lazyproperty
     def nrejected(self):
         """
-        The number of rejected (clipped) pixels.
+        The number of rejected (masked/clipped) pixels.
         """
 
-        return self._nrejected
+        return self._original_npixels - self.npixels
 
     @lazyproperty
     def mean(self):
@@ -307,7 +304,7 @@ def nddata_stats(nddata, sigma_clip=None, columns=None, lower_bound=None,
     """
     Calculate various statistics on the input data.
 
-    Set the ``sigma`` keyword to perform sigma clipping.
+    Set the ``sigma_clip`` keyword to perform sigma clipping.
 
     Parameters
     ----------

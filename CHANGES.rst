@@ -4,6 +4,10 @@
 General
 ^^^^^^^
 
+- Astroimtools requires Python version 3.5 or later.
+- Astroimtools requires Numpy version 1.11 or later.
+- Astroimtools requires Astropy version 3.1 or later. [#67]
+
 New Features
 ^^^^^^^^^^^^
 
@@ -16,9 +20,6 @@ API changes
 - ``nddata_stats`` and ``NDDataStats`` sigma-clipping parameters are
   now specified by passing a ``astropy.stats.SigmaClip`` instance to the
   ``sigma_clip`` keyword. [#66]
-
-Bug Fixes
-^^^^^^^^^
 
 Other Changes and Additions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

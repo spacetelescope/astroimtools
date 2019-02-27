@@ -11,7 +11,7 @@ Astroimtools has the following strict requirements:
 
 * `Numpy <http://www.numpy.org/>`_ |minimum_numpy_version| or later
 
-* `Astropy`_ 2.0 or later
+* `Astropy`_ 3.1 or later
 
 Astroimtools also depends on `pytest-astropy
 <https://github.com/astropy/pytest-astropy>`_ (0.4 or later) to run
