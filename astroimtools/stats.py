@@ -5,7 +5,8 @@ Statistics tools.
 
 import numpy as np
 from astropy.nddata import NDData, support_nddata
-from astropy.stats import biweight_location, biweight_midvariance, mad_std
+from astropy.stats import (biweight_location, biweight_midvariance, mad_std,
+                           SigmaClip)
 from astropy.table import Table
 from astropy.utils import lazyproperty
 from astropy.utils.decorators import deprecated_renamed_argument
@@ -147,8 +148,8 @@ class NDDataStats:
                  upper_bound=None, mask_value=None, mask_invalid=True):
 
         if not isinstance(nddata, NDData):
-            raise ValueError('nddata input must be an astropy.nddata.NDData '
-                             'object')
+            raise TypeError('nddata input must be an astropy.nddata.NDData '
+                            'instance')
 
         # update the mask
         mask = mask_databounds(nddata.data, mask=nddata.mask,
@@ -163,6 +164,10 @@ class NDDataStats:
         data = nddata.data[~mask]
 
         if sigma_clip is not None:
+            if not isinstance(sigma_clip, SigmaClip):
+                raise TypeError('sigma_clip must be an '
+                                'astropy.stats.SigmaClip instance')
+
             data = sigma_clip(data, masked=False, axis=None)  # 1D ndarray
 
         self.goodvals = data.ravel()  # 1D array
