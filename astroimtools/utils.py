@@ -314,7 +314,7 @@ def nddata_cutout2d(nddata, position, size, mode='trim', fill_value=np.nan):
     from astropy.nddata.utils import Cutout2D
 
     if not isinstance(nddata, NDData):
-        raise ValueError('nddata input must be an NDData object')
+        raise TypeError('nddata input must be an NDData object')
 
     if isinstance(position, SkyCoord):
         if nddata.wcs is None:

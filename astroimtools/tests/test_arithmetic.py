@@ -71,13 +71,13 @@ class TestNDDataArith:
         assert_allclose(nd.mask, ref_mask)
 
     def test_invalid_scalar_inputs(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             nddata_arith(4, 4, '+')
 
     def test_invalid_array_inputs(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             nddata_arith(np.arange(3), self.nd1, '+')
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             nddata_arith(self.nd2, np.arange(3), '+')
 
     def test_invalid_nddata_shapes(self):

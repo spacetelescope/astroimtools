@@ -78,7 +78,7 @@ class TestNDDataCutout2D:
         assert cutout.unit == unit
 
     def test_not_nddata(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             nddata_cutout2d(np.ones((10, 10)), (5, 5), (2, 2))
 
     def test_skycoord_no_wcs(self):

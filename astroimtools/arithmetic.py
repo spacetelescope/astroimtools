@@ -103,23 +103,23 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
         raise ValueError('operator "{0}" is not allowed'.format(operator))
 
     if not isinstance(nddata1, NDData) and not isinstance(nddata2, NDData):
-        raise ValueError('nddata1 or nddata2 input must be an '
-                         'astropy.nddata.NDData object.')
+        raise TypeError('nddata1 or nddata2 input must be an '
+                        'astropy.nddata.NDData instance.')
 
     # if nddata1 is a scalar, then make it a NDData object
     if not isinstance(nddata1, NDData):
         nddata1 = np.asanyarray(nddata1)
         if nddata1.size != 1:
-            raise ValueError('nddata1 input must be an astropy.nddata.NDData '
-                             'object or a scalar.')
+            raise TypeError('nddata1 input must be an astropy.nddata.NDData '
+                            'instance or a scalar.')
         nddata1 = NDData(np.zeros_like(nddata2.data) + nddata1)
 
     # if nddata2 is a scalar, then make it a NDData object
     if not isinstance(nddata2, NDData):
         nddata2 = np.asanyarray(nddata2)
         if nddata2.size != 1:
-            raise ValueError('nddata2 input must be an astropy.nddata.NDData '
-                             'object or a scalar.')
+            raise TypeError('nddata2 input must be an astropy.nddata.NDData '
+                            'instance or a scalar.')
         nddata2 = NDData(np.zeros_like(nddata1.data) + nddata2)
 
     if nddata1.data.shape != nddata2.data.shape:
