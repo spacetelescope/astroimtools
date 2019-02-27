@@ -54,7 +54,7 @@ statistics are:
   * ``'std'``
   * ``'mad_std'``
   * ``'npixels'``
-  * ``'nrejected'`` (number of pixels rejected by sigma clipping)
+  * ``'nrejected'`` (number of pixels rejected by masking or sigma clipping)
   * ``'min'``
   * ``'max'``
   * ``'biweight_location'``
