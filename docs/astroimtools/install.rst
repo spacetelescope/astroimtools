@@ -22,23 +22,30 @@ optional dependencies are installed:
 
 * `Scipy`_ 0.16 or later
 
-.. _Scipy: http://www.scipy.org/
-.. _pip: https://pip.pypa.io/en/latest/
-.. _conda: http://conda.pydata.org/docs/
+
+Installing the latest released version
+======================================
+
+The latest released (stable) version of Astroimtools can be installed
+either with `conda`_ or `pip`_.
 
 
-Installing Astroimtools Using pip
-=================================
+Using conda
+-----------
 
-To install the latest Astroimtools **stable** version with `pip`_,
+Astroimtools can be installed with `conda`_ using the `Astroconda Anaconda
+channel <https://astroconda.readthedocs.io/en/latest/>`_::
+
+    conda install astroimtools -c http://ssb.stsci.edu/astroconda
+
+
+Using pip
+---------
+
+To install the latest released version of Astroimtools with `pip`_,
 simply run::
 
     pip install --no-deps astroimtools
-
-To install the current Astroimtools **development** version using
-`pip`_::
-
-    pip install --no-deps git+https://github.com/spacetelescope/astroimtools.git
 
 .. note::
 
@@ -56,27 +63,8 @@ To install the current Astroimtools **development** version using
     You can read more about how to do this in the `pip documentation
     <http://www.pip-installer.org/en/1.2.1/other-tools.html#using-pip-with-the-user-scheme>`_.
 
-    Do **not** install Astroimtools or other third-party packages
-    using ``sudo`` unless you are fully aware of the risks.
-
-
-Obtaining the Source Package
-============================
-
-Stable Version
---------------
-
-The latest stable source package for Astroimtools can be `downloaded
-here <https://pypi.python.org/pypi/astroimtools>`_.
-
-
-Development Version
--------------------
-
-The latest development version of Astroimtools can be cloned from
-github using this command::
-
-   git clone https://github.com/spacetelescope/astroimtools.git
+    Do **not** install Astroimtools or other third-party packages using
+    ``sudo`` unless you are fully aware of the risks.
 
 
 Testing an Installed Astroimtools
@@ -98,3 +86,8 @@ to the `Astroimtools issue tracker
 
     This way of running the tests may not work if you do it in the
     Astroimtools source distribution directory.
+
+
+.. _Scipy: http://www.scipy.org/
+.. _pip: https://pip.pypa.io/en/latest/
+.. _conda: http://conda.pydata.org/docs/
