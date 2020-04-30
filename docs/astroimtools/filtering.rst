@@ -96,16 +96,16 @@ size of 10 pixels or less::
     >>> fp = circular_annulus_footprint(10, 12)
 
 We can now use this footprint with the
-:func:`~scipy.ndimage.filters.median_filter` function from `Scipy
-<http://www.scipy.org/>`_:
+:func:`~scipy.ndimage.median_filter` function from `Scipy
+<https://www.scipy.org/>`_:
 
 .. doctest-skip::
 
     >>> from scipy.ndimage import median_filter
     >>> result = median_filter(data, footprint=fp)
 
-Several additional filters are available in `scipy.ndimage.filters`
-that accept ``footprint`` inputs.
+Several additional filters are available in `scipy.ndimage` that
+accept ``footprint`` inputs.
 
 
 Reference/API
