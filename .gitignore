@@ -16,10 +16,6 @@ htmlcov
 .coverage
 MANIFEST
 .ipynb_checkpoints
-docs/astroimtools/notebooks/*.rst
-docs/astroimtools/notebooks/*/*.png
-docs/astroimtools/notebooks/awesome_object.png
-docs/astroimtools/notebooks/*cutouts/
 
 # Sphinx
 docs/api
@@ -33,12 +29,17 @@ docs/_build
 # Pycharm editor project files
 .idea
 
+# Floobits project files
+.floo
+.flooignore
+
 # Packages/installer info
 *.egg
 *.egg-info
 dist
 build
 eggs
+.eggs
 parts
 bin
 var
@@ -52,9 +53,10 @@ distribute-*.tar.gz
 .tox
 .*.sw[op]
 *~
+.project
+.pydevproject
+.settings
+pip-wheel-metadata/
 
 # Mac OSX
 .DS_Store
-
-# Pytest
-.pytest_cache/

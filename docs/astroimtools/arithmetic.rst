@@ -49,7 +49,7 @@ The operations can also be performed with a single
 The ``'//'`` operator performs integer-truncated division::
 
     >>> nd = nddata_arith(nd1, 2, '//')
-    >>> nd.data
+    >>> nd.data  # doctest: +FLOAT_CMP
     array([0, 0, 1, 1, 2])
 
 The operand can also be applied to one or more NDData meta keywords.
