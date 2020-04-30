@@ -1,37 +1,28 @@
-Astroimtools
+============
+astroimtools
 ============
 
-.. image:: http://img.shields.io/pypi/v/astroimtools.svg?text=version
-    :target: https://pypi.python.org/pypi/astroimtools/
-    :alt: Latest release
+|PyPI Version| |Travis Status| |Codecov Status| |Stable RTD Status| |Astropy|
 
-.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
-    :target: http://www.astropy.org/
+Astroimtools is a Python package that provides convenience tools for
+working with astronomical images.
 
-Astroimtools is an open-source Python package to provide convenience
-tools for working with astronomical images.
+.. |PyPI Version| image::  https://img.shields.io/pypi/v/astroimtools.svg?logo=pypi&logoColor=white&label=PyPI
+    :target: https://pypi.org/project/astroimtools/
+    :alt: PyPI Latest Release
 
-This project is driven by the JWST Data Analysis Development Forum at
-the `Space Telescope Science Institute <http://www.stsci.edu/>`_.
+.. |Astropy| image:: https://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
+    :target: https://www.astropy.org/
+    :alt: Powered by Astropy
 
-
-Project Status
---------------
-
-Documentation:
-
-.. image:: https://readthedocs.org/projects/astroimtools/badge/?version=stable
-    :target: http://astroimtools.readthedocs.io/en/stable/
-    :alt: Stable Documentation Status
-
-.. image:: https://readthedocs.org/projects/astroimtools/badge/?version=latest
-    :target: http://astroimtools.readthedocs.io/en/latest/
-    :alt: Latest Documentation Status
-
-Tests:
-
-.. image:: https://travis-ci.org/spacetelescope/astroimtools.svg?branch=master
+.. |Travis Status| image:: https://img.shields.io/travis/spacetelescope/astroimtools/master?logo=travis%20ci&logoColor=white&label=Travis%20CI
     :target: https://travis-ci.org/spacetelescope/astroimtools
+    :alt: Travis CI Status
 
-.. image:: https://coveralls.io/repos/spacetelescope/astroimtools/badge.svg?branch=master&service=github
-     :target: https://coveralls.io/github/spacetelescope/astroimtools?branch=master
+.. |Codecov Status| image:: https://img.shields.io/codecov/c/github/spacetelescope/astroimtools?logo=codecov
+    :target: https://codecov.io/gh/spacetelescope/astroimtools
+    :alt: Codecov Status
+
+.. |Stable RTD Status| image:: https://img.shields.io/readthedocs/astroimtools/latest.svg?logo=read%20the%20docs&logoColor=white&label=Docs&version=stable
+    :target: https://astroimtools.readthedocs.io/en/stable/
+    :alt: Stable Documentation Status
