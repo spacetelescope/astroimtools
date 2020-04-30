@@ -39,7 +39,7 @@ Reporting Issues
 
 If you have found a bug in Astroimtools please report it by creating a
 new issue on the `Astroimtools GitHub issue tracker
-<http://github.com/spacetelescope/astroimtools/issues>`_.
+<https://github.com/spacetelescope/astroimtools/issues>`_.
 
 Please include an example that demonstrates the issue that will allow
 the developers to reproduce and fix the problem. You may be asked to
@@ -55,18 +55,17 @@ Like the `Astropy`_ project, Astroimtools is made both by and for its
 users.  We accept contributions at all levels, spanning the gamut from
 fixing a typo in the documentation to developing a major new feature.
 We welcome contributors who will abide by the `Python Software
-Foundation Code of Conduct
-<https://www.python.org/psf/codeofconduct/>`_.
+Foundation Code of Conduct <https://python.org/psf/conduct/>`_.
 
 Astroimtools follows the same workflow and coding guidelines as
 `Astropy`_.  The following pages will help you get started with
 contributing fixes, code, or documentation (no git or GitHub
 experience necessary):
 
-* `How to make a code contribution <http://astropy.readthedocs.io/en/stable/development/workflow/development_workflow.html>`_
+* `How to make a code contribution <https://astropy.readthedocs.io/en/stable/development/workflow/development_workflow.html>`_
 
-* `Coding Guidelines <http://docs.astropy.org/en/latest/development/codeguide.html>`_
+* `Coding Guidelines <https://docs.astropy.org/en/latest/development/codeguide.html>`_
 
-* `Try the development version <http://astropy.readthedocs.io/en/stable/development/workflow/get_devel_version.html>`_
+* `Try the development version <https://astropy.readthedocs.io/en/stable/development/workflow/get_devel_version.html>`_
 
-* `Developer Documentation <http://docs.astropy.org/en/latest/#developer-documentation>`_
+* `Developer Documentation <https://docs.astropy.org/en/latest/#developer-documentation>`_
