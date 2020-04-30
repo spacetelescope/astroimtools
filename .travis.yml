@@ -11,10 +11,12 @@ os:
 # that can be included can be found here:
 #
 # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
+# pandoc is needed by nbsphinx to convert the make_cutouts.ipynb notebook
 addons:
     apt:
         packages:
             - graphviz
+            - pandoc
 
 stages:
    # Do the style check and a single test job, don't proceed if it fails
