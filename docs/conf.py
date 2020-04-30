@@ -25,9 +25,10 @@
 # Thus, any C-extensions that are needed to build the documentation will *not*
 # be accessible, and the documentation will not build correctly.
 
-import datetime
 import os
 import sys
+import datetime
+from importlib import import_module
 
 try:
     from sphinx_astropy.conf.v1 import *  # noqa
@@ -36,10 +37,7 @@ except ImportError:
     sys.exit(1)
 
 # Get configuration information from setup.cfg
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
+from configparser import ConfigParser
 conf = ConfigParser()
 
 conf.read([os.path.join(os.path.dirname(__file__), '..', 'setup.cfg')])
@@ -63,18 +61,13 @@ exclude_patterns.append('_templates')
 
 # This is added to the end of RST files - a good place to put substitutions to
 # be used globally.
-import astroimtools
-
 rst_epilog += """
-.. |minimum_python_version| replace:: {0}
-.. |minimum_numpy_version| replace:: {1}
-""".format(astroimtools.__minimum_python_version__,
-           astroimtools.__minimum_numpy_version__)
+"""
 
 # -- Project information ------------------------------------------------------
 
 # This does not *have* to match the package name, but typically does
-project = setup_cfg['package_name']
+project = setup_cfg['name']
 author = setup_cfg['author']
 copyright = '{0}, {1}'.format(
     datetime.datetime.now().year, setup_cfg['author'])
@@ -83,8 +76,8 @@ copyright = '{0}, {1}'.format(
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-__import__(setup_cfg['package_name'])
-package = sys.modules[setup_cfg['package_name']]
+import_module(setup_cfg['name'])
+package = sys.modules[setup_cfg['name']]
 
 # The short X.Y version.
 version = package.__version__.split('-', 1)[0]
@@ -115,7 +108,7 @@ release = package.__version__
 html_theme_options = {
     'logotext1': 'astro',  # white,  semi-bold
     'logotext2': 'imtools',  # orange, light
-    'logotext3': ''   # white,  light
+    'logotext3': ':docs'   # white,  light
     }
 
 
@@ -160,16 +153,11 @@ man_pages = [('index', project.lower(), project + u' Documentation',
 
 
 # -- Options for the edit_on_github extension ---------------------------------
-
-if eval(setup_cfg.get('edit_on_github')):
+if setup_cfg.get('edit_on_github').lower() == 'true':
     extensions += ['sphinx_astropy.ext.edit_on_github']
 
-    versionmod = __import__(setup_cfg['package_name'] + '.version')
     edit_on_github_project = setup_cfg['github_project']
-    if versionmod.version.release:
-        edit_on_github_branch = "v" + versionmod.version.version
-    else:
-        edit_on_github_branch = "master"
+    edit_on_github_branch = "master"
 
     edit_on_github_source_root = ""
     edit_on_github_doc_root = "docs"
@@ -178,10 +166,9 @@ if eval(setup_cfg.get('edit_on_github')):
 github_issues_url = 'https://github.com/{0}/issues/'.format(setup_cfg['github_project'])
 
 # -- Turn on nitpicky mode for sphinx (to warn about references not found) ----
-#
-# nitpicky = True
-# nitpick_ignore = []
-#
+nitpicky = True
+nitpick_ignore = []
+
 # Some warnings are impossible to suppress, and you can list specific references
 # that should be ignored in a nitpick-exceptions file which should be inside
 # the docs/ directory. The format of the file should be:
@@ -204,43 +191,6 @@ github_issues_url = 'https://github.com/{0}/issues/'.format(setup_cfg['github_pr
 #     nitpick_ignore.append((dtype, six.u(target)))
 
 
-# a simple/non-configurable extension that generates the rst files for ipython
-# notebooks
-def notebooks_to_rst(app):
-    from glob import glob
-
-    try:
-        # post "big-split", nbconvert is a separate namespace
-        from nbconvert.nbconvertapp import NbConvertApp
-        from nbconvert.writers import FilesWriter
-    except ImportError:
-        from IPython.nbconvert.nbconvertapp import NbConvertApp
-        from IPython.nbconvert.writers import FilesWriter
-
-    class OrphanizerWriter(FilesWriter):
-        def write(self, output, resources, **kwargs):
-            output = ':orphan:\n\n' + output
-            FilesWriter.write(self, output, resources, **kwargs)
-
-    olddir = os.path.abspath(os.curdir)
-    try:
-        srcdir = os.path.abspath(os.path.split(__file__)[0])
-        os.chdir(os.path.join(srcdir, 'astroimtools', 'notebooks'))
-        nbs = glob('*.ipynb')
-
-        app = NbConvertApp()
-        app.initialize(argv=[])
-        app.writer = OrphanizerWriter()
-
-        app.export_format = 'rst'
-        app.notebooks = nbs
-
-        app.start()
-    except:
-        pass
-    finally:
-        os.chdir(olddir)
-
-
-def setup(app):
-    app.connect('builder-inited', notebooks_to_rst)
+# -- Generate rst files for Jupyter notebooks --------------------------------
+extensions += ['nbsphinx']
+# nbsphinx_prompt_width = 0  # to remove input/output cell prompts
