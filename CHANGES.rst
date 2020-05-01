@@ -1,6 +1,18 @@
 0.3 (unreleased)
 ----------------
 
+General
+^^^^^^^
+
+- The minimum required Python version is 3.6. [#70]
+
+- The minimum required Numpy version is 1.16. [#70]
+
+- The minimum required Astropy version is 3.2. [#70]
+
+API changes
+^^^^^^^^^^^
+
 - The ``mask_databounds`` function no longer raises a warning if the
   ``mask_invalid`` keyword is set to ``True``. [#72]
 
