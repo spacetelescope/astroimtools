@@ -61,7 +61,7 @@ install astroimtools using the `Astroconda Anaconda channel
 Testing an Installed Astroimtools
 =================================
 
-The easiest way to test your installed version of Astroimtools is
+The easiest way to test your installed version of astroimtools is
 running correctly is to use the :func:`astroimtools.test()` function:
 
 .. doctest-skip::
@@ -73,7 +73,7 @@ Note that this may not work if you start Python from within the
 astroimtools source distribution directory.
 
 The tests should run and print out any failures, which you can report
-to the `Astroimtools issue tracker
+to the `astroimtools issue tracker
 <https://github.com/spacetelescope/astroimtools/issues>`_.
 
 .. _pip: https://pip.pypa.io/en/latest/

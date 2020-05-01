@@ -1,6 +1,5 @@
-==========================================
-Spacetelescope Open Source Code of Conduct
-==========================================
+Space Telescope Open Source Code of Conduct
+===========================================
 
 We expect all "spacetelescope" organization projects to adopt a code
 of conduct that ensures a productive, respectful environment for all
