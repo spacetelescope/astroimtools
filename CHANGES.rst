@@ -1,7 +1,8 @@
 0.3 (unreleased)
 ----------------
 
-- No changes yet
+- The ``mask_databounds`` function no longer raises a warning if the
+  ``mask_invalid`` keyword is set to ``True``. [#72]
 
 
 0.2 (2019-03-01)
@@ -11,7 +12,9 @@ General
 ^^^^^^^
 
 - Astroimtools requires Python version 3.5 or later.
+
 - Astroimtools requires Numpy version 1.11 or later.
+
 - Astroimtools requires Astropy version 3.1 or later. [#67]
 
 New Features
@@ -39,4 +42,4 @@ Other Changes and Additions
 0.1 (2015-12-17)
 ----------------
 
-Astroimtools requires Astropy version 1.1 or later.
+- Astroimtools requires Astropy version 1.1 or later.
