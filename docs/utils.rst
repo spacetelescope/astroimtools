@@ -7,10 +7,11 @@ Getting Started
 radial_distance
 ^^^^^^^^^^^^^^^
 
-The :func:`~astroimtools.radial_distance` function returns an array
-where each value is the Euclidean distance from a given position.  In
-this simple example we set the origin position at ``(40, 30)``  (``(y,
-x)``) and get an array of shape ``(100, 100)`` (``(ny, nx)``)::
+The :func:`~astroimtools.utils.radial_distance` function returns an
+array where each value is the Euclidean distance from a given
+position.  In this simple example we set the origin position at ``(40,
+30)``  (``(y, x)``) and get an array of shape ``(100, 100)`` (``(ny,
+nx)``)::
 
     >>> from astroimtools import radial_distance
     >>> data = radial_distance((40, 30), (100, 100))
@@ -47,7 +48,9 @@ Here's a cut along ``y=40`` of the ``data`` array:
 listpixels
 ^^^^^^^^^^
 
-The :func:`~astroimtools.listpixels` function returns an Astropy `~astropy.table.Table` listing the ``(y, x)`` positions and ``data`` values for a subarray (or the entire array)::
+The :func:`~astroimtools.utils.listpixels` function returns an Astropy
+`~astropy.table.Table` listing the ``(y, x)`` positions and ``data``
+values for a subarray (or the entire array)::
 
     >>> import numpy as np
     >>> from astroimtools import listpixels
@@ -69,17 +72,17 @@ The :func:`~astroimtools.listpixels` function returns an Astropy `~astropy.table
      11   9  0.23049655
      12   9  0.22835371
 
-`~astroimtools.listpixels` also supports `~astropy.nddata.NDData`
-objects as input.
+`~astroimtools.utils.listpixels` also supports
+`~astropy.nddata.NDData` objects as input.
 
 
 mask_databounds
 ^^^^^^^^^^^^^^^
 
-The :func:`~astroimtools.mask_databounds` function creates or updates
-a mask by masking data values that are below a lower bound, above an
-upper bound, equal to particular value, or are invalid (e.g. np.nan or
-np.inf).
+The :func:`~astroimtools.utils.mask_databounds` function creates or
+updates a mask by masking data values that are below a lower bound,
+above an upper bound, equal to particular value, or are invalid (e.g.
+np.nan or np.inf).
 
 Here is a simple example of creating a mask array where data is less
 than 2, greater than 5, or equal to 3::
@@ -112,11 +115,11 @@ Additionally, invalid data values (e.g., NaN and inf) are masked if
 nddata_cutout2d
 ^^^^^^^^^^^^^^^
 
-The :func:`~astroimtools.nddata_cutout2d` function creates a 2D cutout
-of a 2D `~astropy.nddata.NDData` object.  Specifically, cutouts will
-made for the ``nddata.data`` and ``nddata.mask`` (if present) arrays.
-If ``nddata.wcs`` exists, then it will also be updated.  Note that
-cutouts will not be made for ``nddata.uncertainty`` (if present)
+The :func:`~astroimtools.utils.nddata_cutout2d` function creates a 2D
+cutout of a 2D `~astropy.nddata.NDData` object.  Specifically, cutouts
+will made for the ``nddata.data`` and ``nddata.mask`` (if present)
+arrays.  If ``nddata.wcs`` exists, then it will also be updated.  Note
+that cutouts will not be made for ``nddata.uncertainty`` (if present)
 because they are general (unstandardized) objects and not arrays.
 
 Let's start by creating a simple `~astropy.nddata.NDData` object with

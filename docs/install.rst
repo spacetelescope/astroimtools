@@ -62,7 +62,7 @@ Testing an Installed Astroimtools
 =================================
 
 The easiest way to test your installed version of astroimtools is
-running correctly is to use the :func:`astroimtools.test()` function:
+running correctly is to use the ``test()`` function:
 
 .. doctest-skip::
 

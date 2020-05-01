@@ -10,8 +10,8 @@ Getting Started
 basic_nddata_to_fits
 ^^^^^^^^^^^^^^^^^^^^
 
-The :func:`~astroimtools.basic_nddata_to_fits` function writes a
-`~astropy.nddata.NDData` object to a FITS file.
+The :func:`~astroimtools.nddata_adapters.basic_nddata_to_fits`
+function writes a `~astropy.nddata.NDData` object to a FITS file.
 
 The `~astropy.nddata.NDData` data values will be saved in an FITS
 extension called 'SCI'.  This simple writer will also attempt to save
@@ -40,9 +40,10 @@ Set the ``clobber`` keyword to `True` to overwrite any existing files:
 basic_fits_to_nddata
 ^^^^^^^^^^^^^^^^^^^^
 
-The :func:`~astroimtools.basic_fits_to_nddata` function reads a single
-FITS extension into a `~astropy.nddata.NDData` object.  The extension
-to read is set via the ``exten`` keyword, which defaults to 0.
+The :func:`~astroimtools.nddata_adapters.basic_fits_to_nddata`
+function reads a single FITS extension into a `~astropy.nddata.NDData`
+object.  The extension to read is set via the ``exten`` keyword, which
+defaults to 0.
 
 Here's a simple example:
 
