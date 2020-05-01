@@ -38,4 +38,3 @@ User Documentation
     cutouts.rst
     utils.rst
     scripts.rst
-    high-level_API.rst
