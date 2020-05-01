@@ -2,16 +2,15 @@
 """
 Misc utility functions.
 """
-import numpy as np
 import warnings
 
+import numpy as np
 from astropy.coordinates import SkyCoord
 from astropy.nddata import NDData, support_nddata
-from astropy.nddata.utils import overlap_slices
+from astropy.nddata.utils import overlap_slices, Cutout2D
 from astropy.table import Table
 from astropy.utils.exceptions import AstropyUserWarning
 from astropy.wcs.utils import skycoord_to_pixel
-
 
 __all__ = ['radial_distance', 'listpixels', 'mask_databounds',
            'nddata_cutout2d']
@@ -215,12 +214,7 @@ def mask_databounds(data, mask=None, lower_bound=None, upper_bound=None,
         data = np.ma.masked_values(data, value)
 
     if mask_invalid:
-        nmasked = data.count()
         data = np.ma.masked_invalid(data)    # mask np.nan, np.inf
-        if data.count() != nmasked:
-            warnings.warn('The data array contains unmasked invalid '
-                          'values (NaN or inf), which are now masked.',
-                          AstropyUserWarning)
 
     if np.all(data.mask):
         raise ValueError('All data values are masked')
@@ -310,8 +304,6 @@ def nddata_cutout2d(nddata, position, size, mode='trim', fill_value=np.nan):
     >>> cutout.unit
     Unit("electron / s")
     """
-
-    from astropy.nddata.utils import Cutout2D
 
     if not isinstance(nddata, NDData):
         raise TypeError('nddata input must be an NDData object')
