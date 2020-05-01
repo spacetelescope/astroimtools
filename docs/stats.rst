@@ -7,8 +7,8 @@ Getting Started
 minmax
 ^^^^^^
 
-The :func:`~astroimtools.minmax` function returns the minimum and
-maximum values of an array (or along an array axis)::
+The :func:`~astroimtools.stats.minmax` function returns the minimum
+and maximum values of an array (or along an array axis)::
 
     >>> import numpy as np
     >>> from astroimtools import minmax
@@ -21,7 +21,8 @@ maximum values of an array (or along an array axis)::
     >>> minmax(data)  # doctest: +FLOAT_CMP
     (0.18391881167709445, 0.9645145197356216)
 
-:func:`~astroimtools.minmax` also accepts a mask array to ignore certain data values::
+:func:`~astroimtools.stats.minmax` also accepts a mask array to ignore
+certain data values::
 
     >>> mask = (data < 0.3)
     >>> mask
@@ -42,8 +43,8 @@ The minimum and maximum can also be determined along a particular axis::
 nddata_stats
 ^^^^^^^^^^^^
 
-The :func:`~astroimtools.nddata_stats` function calculates various
-statistics on `~astropy.nddata.NDData` objects.  Sigma-clipped
+The :func:`~astroimtools.stats.nddata_stats` function calculates
+various statistics on `~astropy.nddata.NDData` objects.  Sigma-clipped
 statistics can be calculated by inputting a `~astropy.stats.SigmaClip`
 instance to the ``sigma_clip`` keyword.  The currently available
 statistics are:

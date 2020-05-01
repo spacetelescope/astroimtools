@@ -247,7 +247,7 @@ class NDDataStats:
         r"""
         A robust standard deviation using the `median absolute deviation
         (MAD)
-        <http://en.wikipedia.org/wiki/Median_absolute_deviation>`_.
+        <https://en.wikipedia.org/wiki/Median_absolute_deviation>`_.
         The MAD is defined as ``median(abs(a - median(a)))``.
 
         The standard deviation estimator is given by:

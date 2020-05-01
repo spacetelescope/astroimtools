@@ -7,10 +7,10 @@ Getting Started
 nddata_arith
 ^^^^^^^^^^^^
 
-The :func:`~astroimtools.nddata_arith` function can be used to perform
-basic arithmetic on two `~astropy.nddata.NDData` objects, returning a
-new `~astropy.nddata.NDData` object.  The operations that can be
-performed include:
+The :func:`~astroimtools.arithmetic.nddata_arith` function can be used
+to perform basic arithmetic on two `~astropy.nddata.NDData` objects,
+returning a new `~astropy.nddata.NDData` object.  The operations that
+can be performed include:
 
   * ``'+'``:  addition
   * ``'-'``:  subtraction

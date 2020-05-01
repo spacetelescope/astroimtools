@@ -5,10 +5,10 @@ Astroimtools provides functions for generating circular and elliptical
 (or annulus versions of each) footprint arrays, which can be used to
 perform specialized image filtering.  The functions are:
 
-  * `~astroimtools.circular_footprint`
-  * `~astroimtools.circular_annulus_footprint`
-  * `~astroimtools.elliptical_footprint`
-  * `~astroimtools.elliptical_annulus_footprint`
+  * `~astroimtools.filtering.circular_footprint`
+  * `~astroimtools.filtering.circular_annulus_footprint`
+  * `~astroimtools.filtering.elliptical_footprint`
+  * `~astroimtools.filtering.elliptical_annulus_footprint`
 
 A pixel is considered to be entirely in or out of a particular
 footprint depending on whether its center is in or out of the
@@ -81,12 +81,12 @@ the top such that the array appears vertically flipped)::
 Ring Median Filter
 ------------------
 
-The :func:`~astroimtools.circular_annulus_footprint` function can be
-used to generate a ring-shaped footprint to implement a ring median
-filter.  The effect of the ring filter is to remove objects from an
-image which have a size less than the inner radius and replace them
-with an estimate of the local background value (determined by the
-median image values within the footprint).
+The :func:`~astroimtools.filtering.circular_annulus_footprint`
+function can be used to generate a ring-shaped footprint to implement
+a ring median filter.  The effect of the ring filter is to remove
+objects from an image which have a size less than the inner radius and
+replace them with an estimate of the local background value
+(determined by the median image values within the footprint).
 
 First, let's create a ring filter with an inner radius of 10 pixels
 and and outer radius of 12 pixels.  This will filter objects with a
