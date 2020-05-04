@@ -61,4 +61,4 @@ Parts of this code of conduct have been adapted from the Astropy and
 Numfocus codes of conduct:
 
 - https://www.astropy.org/code_of_conduct.html
-- https://www.numfocus.org/code-of-conduct
+- https://numfocus.org/code-of-conduct
