@@ -194,3 +194,11 @@ nitpick_ignore = []
 # -- Generate rst files for Jupyter notebooks --------------------------------
 extensions += ['nbsphinx']
 # nbsphinx_prompt_width = 0  # to remove input/output cell prompts
+
+
+# -- Options for linkcheck output -------------------------------------------
+linkcheck_retry = 5
+linkcheck_ignore = ['http://data.astropy.org',
+                    r'https://github\.com/spacetelescope/astroimtools/(?:issues|pull)/\d+']
+linkcheck_timeout = 180
+linkcheck_anchors = False
