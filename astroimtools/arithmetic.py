@@ -134,7 +134,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
 
     if operator in allowed_operators[:5]:
         data_expr = 'mdata1 {0} mdata2'.format(operator)
-        mdata = eval(data_expr)
+        mdata = eval(data_expr)  # nosec
     elif operator == 'min':
         mdata = np.minimum(mdata1, mdata2)
     elif operator == 'max':
@@ -146,10 +146,14 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
         for key in keywords:
             value1 = nddata1.meta.get(key, None)
             value2 = nddata2.meta.get(key, None)
+            if not isinstance(value1, (int, float)):
+                raise TypeError(f'{key} in nddata1 is not a number')
+            if not isinstance(value2, (int, float)):
+                raise TypeError(f'{key} in nddata2 is not a number')
             if value1 is not None and value2 is not None:
                 if operator in allowed_operators[:5]:
                     hdr_expr = 'value1 {0} value2'.format(operator)
-                    value = eval(hdr_expr)
+                    value = eval(hdr_expr)  # nosec
                 elif operator == 'min':
                     value = min(value1, value2)
                 elif operator == 'max':
