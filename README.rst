@@ -2,7 +2,7 @@
 astroimtools
 ============
 
-|PyPI Version| |Travis Status| |Codecov Status| |Stable RTD Status| |Astropy|
+|PyPI Version| |CI Status| |Codecov Status| |Stable RTD Status| |Astropy|
 
 Astroimtools is a Python package that provides convenience tools for
 working with astronomical images.
@@ -15,9 +15,9 @@ working with astronomical images.
     :target: https://www.astropy.org/
     :alt: Powered by Astropy
 
-.. |Travis Status| image:: https://img.shields.io/travis/spacetelescope/astroimtools/master?logo=travis%20ci&logoColor=white&label=Travis%20CI
-    :target: https://travis-ci.org/spacetelescope/astroimtools
-    :alt: Travis CI Status
+.. |CI Status| image:: https://github.com/spacetelescope/astroimtools/workflows/CI%20Tests/badge.svg#
+    :target: https://github.com/spacetelescope/astroimtools/actions
+    :alt: CI Status
 
 .. |Codecov Status| image:: https://img.shields.io/codecov/c/github/spacetelescope/astroimtools?logo=codecov
     :target: https://codecov.io/gh/spacetelescope/astroimtools
