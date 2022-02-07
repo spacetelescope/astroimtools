@@ -7,13 +7,13 @@ Requirements
 
 Astroimtools has the following strict requirements:
 
-* `Python <https://www.python.org/>`_ 3.6 or later
+* `Python <https://www.python.org/>`_ 3.8 or later
 
-* `Numpy <https://numpy.org/>`_ 1.16 or later
+* `Numpy <https://numpy.org/>`_ 1.18 or later
 
-* `Astropy`_ 3.2 or later
+* `Astropy`_ 5.0 or later
 
-* `Scipy <https://www.scipy.org/>`_ 1.1 or later
+* `Scipy <https://www.scipy.org/>`_ 1.6.0 or later
 
 `pytest-astropy <https://github.com/astropy/pytest-astropy>`_ is
 required to run the test suite.
@@ -21,10 +21,10 @@ required to run the test suite.
 Some functionality is available only if the following optional
 dependencies are installed:
 
-* `Photutils <https://photutils.readthedocs.io/en/latest/>`_ 0.7.2 or
+* `Photutils <https://photutils.readthedocs.io/en/latest/>`_ 1.0.0 or
   later:  Used in cutout tools.
 
-* `Matplotlib <https://matplotlib.org/>`_ 2.2 or later:  Used in
+* `Matplotlib <https://matplotlib.org/>`_ 3.1 or later:  Used in
   cutout tools.
 
 
