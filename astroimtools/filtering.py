@@ -6,12 +6,11 @@ Image filtering utilities.
 import numpy as np
 from astropy.modeling.models import Ellipse2D
 
-
 __all__ = ['circular_footprint', 'circular_annulus_footprint',
            'elliptical_footprint', 'elliptical_annulus_footprint']
 
 
-def circular_footprint(radius, dtype=np.int):
+def circular_footprint(radius, dtype=int):
     """
     Create a circular footprint.
 
@@ -50,7 +49,7 @@ def circular_footprint(radius, dtype=np.int):
     return np.array((xx**2 + yy**2) <= radius**2, dtype=dtype)
 
 
-def circular_annulus_footprint(radius_inner, radius_outer, dtype=np.int):
+def circular_annulus_footprint(radius_inner, radius_outer, dtype=int):
     """
     Create a circular annulus footprint.
 
@@ -99,7 +98,7 @@ def circular_annulus_footprint(radius_inner, radius_outer, dtype=np.int):
     return np.asarray(circle_outer - circle_inner, dtype=dtype)
 
 
-def elliptical_footprint(a, b, theta=0, dtype=np.int):
+def elliptical_footprint(a, b, theta=0, dtype=int):
     """
     Create an elliptical footprint.
 
@@ -155,7 +154,7 @@ def elliptical_footprint(a, b, theta=0, dtype=np.int):
 
 
 def elliptical_annulus_footprint(a_inner, a_outer, b_inner, theta=0,
-                                 dtype=np.int):
+                                 dtype=int):
     """
     Create an elliptical annulus footprint.
 
