@@ -132,12 +132,16 @@ def elliptical_footprint(a, b, theta=0, dtype=int):
     --------
     >>> import numpy as np
     >>> from astroimtools import elliptical_footprint
-    >>> elliptical_footprint(3, 1, theta=np.pi/4.)
-    array([[1, 1, 0, 0, 0],
-           [1, 1, 1, 0, 0],
+    >>> elliptical_footprint(4, 2, theta=np.pi/2.)
+    array([[0, 0, 1, 0, 0],
            [0, 1, 1, 1, 0],
-           [0, 0, 1, 1, 1],
-           [0, 0, 0, 1, 1]])
+           [0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 0],
+           [1, 1, 1, 1, 1],
+           [0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 0],
+           [0, 0, 1, 0, 0]])
     """
 
     if b > a:
@@ -145,7 +149,7 @@ def elliptical_footprint(a, b, theta=0, dtype=int):
 
     size = (a * 2) + 1
     y, x = np.mgrid[0:size, 0:size]
-    ellipse = Ellipse2D(1, a, a, a, b, theta=theta)(x, y)
+    ellipse = Ellipse2D(1.0, a, a, a, b, theta=theta)(x, y)
 
     # crop to minimal bounding box
     yi, xi = ellipse.nonzero()
@@ -196,14 +200,16 @@ def elliptical_annulus_footprint(a_inner, a_outer, b_inner, theta=0,
     --------
     >>> import numpy as np
     >>> from astroimtools import elliptical_annulus_footprint
-    >>> elliptical_annulus_footprint(2, 4, 1, theta=np.pi/4.)
-    array([[0, 1, 1, 0, 0, 0, 0],
-           [1, 1, 1, 1, 0, 0, 0],
-           [1, 1, 0, 0, 1, 0, 0],
-           [0, 1, 0, 0, 0, 1, 0],
-           [0, 0, 1, 0, 0, 1, 1],
-           [0, 0, 0, 1, 1, 1, 1],
-           [0, 0, 0, 0, 1, 1, 0]])
+    >>> elliptical_annulus_footprint(2, 4, 1, theta=np.pi/2.)
+    array([[0, 0, 1, 0, 0],
+           [0, 1, 1, 1, 0],
+           [0, 1, 0, 1, 0],
+           [0, 1, 0, 1, 0],
+           [1, 0, 0, 0, 1],
+           [0, 1, 0, 1, 0],
+           [0, 1, 0, 1, 0],
+           [0, 1, 1, 1, 0],
+           [0, 0, 1, 0, 0]])
     """
 
     if a_inner > a_outer:

@@ -27,22 +27,28 @@ def test_circular_annulus_footprint():
 
 
 def test_elliptical_footprint():
-    result = elliptical_footprint(3, 1, theta=np.pi/4.)
-    ref = np.array([[1, 1, 0, 0, 0],
-                    [1, 1, 1, 0, 0],
+    result = elliptical_footprint(4, 2, theta=np.pi/2.)
+    ref = np.array([[0, 0, 1, 0, 0],
                     [0, 1, 1, 1, 0],
-                    [0, 0, 1, 1, 1],
-                    [0, 0, 0, 1, 1]])
+                    [0, 1, 1, 1, 0],
+                    [0, 1, 1, 1, 0],
+                    [1, 1, 1, 1, 1],
+                    [0, 1, 1, 1, 0],
+                    [0, 1, 1, 1, 0],
+                    [0, 1, 1, 1, 0],
+                    [0, 0, 1, 0, 0]])
     assert_allclose(result, ref)
 
 
 def test_elliptical_annulus_footprint():
-    result = elliptical_annulus_footprint(2, 4, 1, theta=np.pi/4.)
-    ref = np.array([[0, 1, 1, 0, 0, 0, 0],
-                    [1, 1, 1, 1, 0, 0, 0],
-                    [1, 1, 0, 0, 1, 0, 0],
-                    [0, 1, 0, 0, 0, 1, 0],
-                    [0, 0, 1, 0, 0, 1, 1],
-                    [0, 0, 0, 1, 1, 1, 1],
-                    [0, 0, 0, 0, 1, 1, 0]])
+    result = elliptical_annulus_footprint(2, 4, 1, theta=np.pi/2.)
+    ref = np.array([[0, 0, 1, 0, 0],
+                    [0, 1, 1, 1, 0],
+                    [0, 1, 0, 1, 0],
+                    [0, 1, 0, 1, 0],
+                    [1, 0, 0, 0, 1],
+                    [0, 1, 0, 1, 0],
+                    [0, 1, 0, 1, 0],
+                    [0, 1, 1, 1, 0],
+                    [0, 0, 1, 0, 0]])
     assert_allclose(result, ref)

@@ -45,37 +45,42 @@ and an outer radius of 2 pixels::
            [0, 1, 0, 1, 0],
            [0, 0, 1, 0, 0]])
 
-Here's an elliptical footprint with a semimajor axis of 3 and a
-semiminor axis of 1 where the semimajor axis is rotated 45 degrees
+Here's an elliptical footprint with a semimajor axis of 4 and a
+semiminor axis of 2 where the semimajor axis is rotated 90 degrees
 counterclockwise from the positive x axis (note that the data values
 are printed with y=0 at the top such that the array appears vertically
 flipped)::
 
     >>> import numpy as np
     >>> from astroimtools import elliptical_footprint
-    >>> elliptical_footprint(3, 1, theta=np.pi/4.)
-    array([[1, 1, 0, 0, 0],
-           [1, 1, 1, 0, 0],
+    >>> elliptical_footprint(4, 2, theta=np.pi/2.)
+    array([[0, 0, 1, 0, 0],
            [0, 1, 1, 1, 0],
-           [0, 0, 1, 1, 1],
-           [0, 0, 0, 1, 1]])
+           [0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 0],
+           [1, 1, 1, 1, 1],
+           [0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 0],
+           [0, 0, 1, 0, 0]])
 
 Here's an elliptical annulus footprint with an inner semimajor axis of
 2, an outer semimajor axis of 4, and an inner semiminor axis of 1
-where the semimajor axis is rotated 45 degrees counterclockwise from
-the positive x axis (note that the data values are printed with y=0 at
-the top such that the array appears vertically flipped)::
+where the semimajor axis is rotated 90 degrees counterclockwise from
+the positive x axis::
 
     >>> import numpy as np
     >>> from astroimtools import elliptical_annulus_footprint
-    >>> elliptical_annulus_footprint(2, 4, 1, theta=np.pi/4.)
-    array([[0, 1, 1, 0, 0, 0, 0],
-           [1, 1, 1, 1, 0, 0, 0],
-           [1, 1, 0, 0, 1, 0, 0],
-           [0, 1, 0, 0, 0, 1, 0],
-           [0, 0, 1, 0, 0, 1, 1],
-           [0, 0, 0, 1, 1, 1, 1],
-           [0, 0, 0, 0, 1, 1, 0]])
+    >>> elliptical_annulus_footprint(2, 4, 1, theta=np.pi/2.)
+    array([[0, 0, 1, 0, 0],
+           [0, 1, 1, 1, 0],
+           [0, 1, 0, 1, 0],
+           [0, 1, 0, 1, 0],
+           [1, 0, 0, 0, 1],
+           [0, 1, 0, 1, 0],
+           [0, 1, 0, 1, 0],
+           [0, 1, 1, 1, 0],
+           [0, 0, 1, 0, 0]])
 
 
 Ring Median Filter
