@@ -3,11 +3,9 @@
 NDData tools for interfacing with FITS files.
 """
 
-import numpy as np
 from astropy import log
 import astropy.io.fits as fits
 from astropy.nddata import NDData
-
 
 __all__ = ['basic_fits_to_nddata', 'basic_nddata_to_fits']
 
@@ -86,7 +84,7 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
         hdus[-1].header['EXTNAME'] = 'ERROR'
 
     if nddata.mask is not None:
-        hdus.append(fits.ImageHDU(data=nddata.mask.astype(np.int)))
+        hdus.append(fits.ImageHDU(data=nddata.mask.astype(int)))
         hdus[-1].header['EXTNAME'] = 'MASK'
 
     hdulist = fits.HDUList(hdus)

@@ -24,7 +24,6 @@ Example usage:
 """
 
 import argparse
-import numpy as np
 from astropy.nddata import NDData
 
 from ..arithmetic import nddata_arith
@@ -56,12 +55,12 @@ def main(args=None):
 
     # TODO: we need better FITS to NDData and NDData to FITS adapters
     try:
-        nddata1 = np.float(args.fits_filename[0])
+        nddata1 = float(args.fits_filename[0])
     except ValueError:
         nddata1 = basic_fits_to_nddata(args.fits_filename[0],
                                        exten=args.exten1)
     try:
-        nddata2 = np.float(args.fits_filename[1])
+        nddata2 = float(args.fits_filename[1])
     except ValueError:
         nddata2 = basic_fits_to_nddata(args.fits_filename[1],
                                        exten=args.exten2)
