@@ -39,9 +39,6 @@ jobs:
             tox_env: 'codestyle'
           - os: ubuntu-latest
             python: '3.9'
-            tox_env: 'build_docs'
-          - os: ubuntu-latest
-            python: '3.9'
             tox_env: 'linkcheck'
           - os: ubuntu-latest
             python: '3.9'
