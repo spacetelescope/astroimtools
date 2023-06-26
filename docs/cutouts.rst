@@ -11,7 +11,7 @@ Below is a `Jupyter notebook <https://jupyter.org/>`_ illustrating how
 to create cutout images of sources from a larger image.  You can also
 download the notebook for your own use from the `astroimtools github
 repository
-<https://github.com/spacetelescope/astroimtools/tree/master/docs/notebooks>`_:
+<https://github.com/spacetelescope/astroimtools/tree/main/docs/notebooks>`_:
 
 .. toctree::
     :maxdepth: 1
