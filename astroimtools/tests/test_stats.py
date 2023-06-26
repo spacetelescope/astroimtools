@@ -51,16 +51,20 @@ def test_nddata_stats_func():
     columns = ['biweight_location', 'biweight_midvariance', 'kurtosis',
                'mad_std', 'max', 'mean', 'median', 'min', 'mode', 'npixels',
                'nrejected', 'skew', 'std']
-    tbl = nddata_stats(nddata, columns=columns)
-    assert len(tbl) == 1
-    assert tbl.colnames == columns
-    row = tbl[0]
-    assert_allclose(row['mean'], 4.5)
-    assert_allclose(row['median'], 4.5)
-    assert_allclose(row['std'], 2.8722813232690143)
-    assert_allclose(row['mad_std'], 3.7065055462640051)
-    assert_allclose(row['min'], 0.)
-    assert_allclose(row['max'], 9.)
+
+    # Numpy 1.25 deprecation warning coming from
+    # scipy/stats/_stats_py.py:1069
+    with pytest.warns(DeprecationWarning):
+        tbl = nddata_stats(nddata, columns=columns)
+        assert len(tbl) == 1
+        assert tbl.colnames == columns
+        row = tbl[0]
+        assert_allclose(row['mean'], 4.5)
+        assert_allclose(row['median'], 4.5)
+        assert_allclose(row['std'], 2.8722813232690143)
+        assert_allclose(row['mad_std'], 3.7065055462640051)
+        assert_allclose(row['min'], 0.)
+        assert_allclose(row['max'], 9.)
 
 
 def test_nddata_stats_func_2rows():
