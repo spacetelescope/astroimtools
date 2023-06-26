@@ -4,6 +4,7 @@ from numpy.testing import assert_allclose
 import pytest
 
 from astropy.nddata import NDData
+from astropy.utils import minversion
 
 from ..stats import minmax, NDDataStats, nddata_stats
 
@@ -44,6 +45,7 @@ def test_nddata_stats_class():
 
 
 @pytest.mark.skipif('not HAS_SCIPY')
+@pytest.mark.skipif(minversion(np, '1.25.0'), reason='numpy 1.25 deprecation')
 def test_nddata_stats_func():
     nddata = NDData(np.arange(10))
     columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
@@ -54,17 +56,16 @@ def test_nddata_stats_func():
 
     # Numpy 1.25 deprecation warning coming from
     # scipy/stats/_stats_py.py:1069
-    with pytest.warns(DeprecationWarning):
-        tbl = nddata_stats(nddata, columns=columns)
-        assert len(tbl) == 1
-        assert tbl.colnames == columns
-        row = tbl[0]
-        assert_allclose(row['mean'], 4.5)
-        assert_allclose(row['median'], 4.5)
-        assert_allclose(row['std'], 2.8722813232690143)
-        assert_allclose(row['mad_std'], 3.7065055462640051)
-        assert_allclose(row['min'], 0.)
-        assert_allclose(row['max'], 9.)
+    tbl = nddata_stats(nddata, columns=columns)
+    assert len(tbl) == 1
+    assert tbl.colnames == columns
+    row = tbl[0]
+    assert_allclose(row['mean'], 4.5)
+    assert_allclose(row['median'], 4.5)
+    assert_allclose(row['std'], 2.8722813232690143)
+    assert_allclose(row['mad_std'], 3.7065055462640051)
+    assert_allclose(row['min'], 0.)
+    assert_allclose(row['max'], 9.)
 
 
 def test_nddata_stats_func_2rows():
