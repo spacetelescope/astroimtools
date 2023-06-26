@@ -13,7 +13,7 @@ Astroimtools has the following strict requirements:
 
 * `Astropy`_ 5.0 or later
 
-* `Scipy <https://www.scipy.org/>`_ 1.6.0 or later
+* `Scipy <https://scipy.org/>`_ 1.6.0 or later
 
 `pytest-astropy <https://github.com/astropy/pytest-astropy>`_ is
 required to run the test suite.
@@ -50,7 +50,7 @@ Using conda
 -----------
 
 astroimtools can be installed with `conda`_ if you have installed
-`Anaconda <https://www.anaconda.com/products/individual>`_ or
+`Anaconda <https://www.anaconda.com/download>`_ or
 `Miniconda <https://docs.conda.io/en/latest/miniconda.html>`_.  To
 install astroimtools using the `Astroconda Anaconda channel
 <https://astroconda.readthedocs.io/en/latest/>`_, run::

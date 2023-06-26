@@ -102,7 +102,7 @@ size of 10 pixels or less::
 
 We can now use this footprint with the
 :func:`~scipy.ndimage.median_filter` function from `Scipy
-<https://www.scipy.org/>`_:
+<https://scipy.org/>`_:
 
 .. doctest-skip::
 
