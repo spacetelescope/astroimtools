@@ -176,7 +176,7 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
         hdu.header['OBJ_RA'] = (position.ra.deg, 'Cutout object RA in deg')
         hdu.header['OBJ_DEC'] = (position.dec.deg, 'Cutout object DEC in deg')
 
-        hdu.writeto(fname, clobber=clobber)
+        hdu.writeto(fname, overwrite=clobber)
 
         if verbose:
             log.info('Wrote {0}'.format(fname))
