@@ -24,52 +24,91 @@ permissions:
   contents: read
 
 jobs:
-  ci-tests:
-    name: ${{ matrix.os }}, ${{ matrix.tox_env }}
+  tests:
+    name: ${{ matrix.prefix }} ${{ matrix.os }}, ${{ matrix.tox_env }}
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.allow_failure }}
     strategy:
       matrix:
         include:
           - os: ubuntu-latest
             python: '3.8'
             tox_env: 'py38-test-alldeps'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.9'
             tox_env: 'py39-test-alldeps'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.10'
             tox_env: 'py310-test-alldeps'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.11'
             tox_env: 'py311-test-alldeps-cov'
             toxposargs: --remote-data=any
+            allow_failure: false
+            prefix: ''
+
           - os: macos-latest
             python: '3.11'
             tox_env: 'py311-test-alldeps'
+            allow_failure: false
+            prefix: ''
+
           - os: windows-latest
             python: '3.11'
             tox_env: 'py311-test-alldeps'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.11'
             tox_env: 'py311-test'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.11'
             tox_env: 'codestyle'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.11'
             tox_env: 'linkcheck'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.11'
             tox_env: 'pep517'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.11'
             tox_env: 'bandit'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.8'
             tox_env: 'py38-test-alldeps-astropylts-numpy118'
+            allow_failure: false
+            prefix: ''
+
           - os: ubuntu-latest
             python: '3.11'
             tox_env: 'py311-test-alldeps-devdeps'
+            allow_failure: true
+            prefix: '(Allowed failure)'
 
     steps:
     - name: Check out repository
@@ -99,5 +138,5 @@ jobs:
       if: ${{ contains(matrix.tox_env, '-cov') }}
       uses: codecov/codecov-action@v3
       with:
-        file: ./coverage.xml
+        files: ./coverage.xml
         verbose: true
