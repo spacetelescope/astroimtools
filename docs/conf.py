@@ -59,7 +59,8 @@ plot_formats = ['png', 'hires.png', 'pdf', 'svg']
 
 # This is added to the end of RST files - a good place to put
 # substitutions to be used globally.
-rst_epilog += """  # noqa: F405
+rst_epilog = """
+.. _Astropy: https://www.astropy.org/
 """
 
 # Turn off table of contents entries for functions and classes
