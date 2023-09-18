@@ -4,17 +4,23 @@
 General
 ^^^^^^^
 
-- The minimum required Python version is 3.8. [#82]
+- The minimum required Python version is 3.9. [#92]
 
-- The minimum required Numpy version is 1.18. [#82]
+- The minimum required Numpy version is 1.22. [#92]
 
 - The minimum required Astropy version is 5.0. [#82]
 
-- The minimum required Scipy version is 1.6.0. [#82]
+- The minimum required Scipy version is 1.7.2. [#92]
 
-- The minimum required matplotlib version is 3.1. [#82]
+- The minimum required matplotlib version is 3.5. [#92]
 
-- The minimum required photutils version is 1.0.0. [#82]
+- The minimum required photutils version is 1.5. [#92]
+
+Bug Fixes
+^^^^^^^^^
+
+- Fixed ``make_cutouts`` to use the ``overwrite`` keyword instead of the
+  removed ``clobber`` keyword when writing FITS files. [#91]
 
 
 0.3 (2020-08-03)
