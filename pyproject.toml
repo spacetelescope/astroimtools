@@ -35,6 +35,10 @@ dependencies = [
 homepage = 'https://github.com/spacetelescope/astroimtools'
 documentation = 'https://astroimtools.readthedocs.io/en/stable/'
 
+[project.scripts]
+imarith = "astroimtools.scripts.imarith:main"
+imstats = "astroimtools.scripts.imstats:main"
+
 [project.optional-dependencies]
 all = [
     'matplotlib>=3.5',
