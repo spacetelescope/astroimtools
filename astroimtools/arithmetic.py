@@ -11,7 +11,6 @@ from astropy import log
 from astropy.nddata import NDData
 from astropy.utils.exceptions import AstropyUserWarning
 
-
 __all__ = ['nddata_arith']
 
 
@@ -100,7 +99,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     allowed_operators = ['+', '-', '*', '/', '//', 'min', 'max']
     operator = operator.strip()
     if operator not in allowed_operators:
-        raise ValueError('operator "{0}" is not allowed'.format(operator))
+        raise ValueError(f'operator "{operator}" is not allowed')
 
     if not isinstance(nddata1, NDData) and not isinstance(nddata2, NDData):
         raise TypeError('nddata1 or nddata2 input must be an '
@@ -133,7 +132,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     mdata2 = np.ma.masked_array(nddata2.data, mask=nddata2.mask)
 
     if operator in allowed_operators[:5]:
-        data_expr = 'mdata1 {0} mdata2'.format(operator)
+        data_expr = f'mdata1 {operator} mdata2'
         mdata = eval(data_expr)  # nosec
     elif operator == 'min':
         mdata = np.minimum(mdata1, mdata2)
@@ -152,7 +151,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
                 raise TypeError(f'{key} in nddata2 is not a number')
             if value1 is not None and value2 is not None:
                 if operator in allowed_operators[:5]:
-                    hdr_expr = 'value1 {0} value2'.format(operator)
+                    hdr_expr = f'value1 {operator} value2'
                     value = eval(hdr_expr)  # nosec
                 elif operator == 'min':
                     value = min(value1, value2)
@@ -163,13 +162,13 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     # propagate errors
     if nddata1.uncertainty is not None and nddata2.uncertainty is not None:
         if operator in ['+', '-']:
-            error_out = np.sqrt(nddata1.uncertainty.array**2 +
-                                nddata2.uncertainty.array**2)
+            error_out = np.sqrt(nddata1.uncertainty.array**2
+                                + nddata2.uncertainty.array**2)
         elif operator in ['*', '/']:
-            error_out = mdata * np.sqrt((nddata1.uncertainty.array /
-                                         mdata1)**2 +
-                                        (nddata2.uncertainty.array /
-                                         mdata2)**2)
+            error_out = mdata * np.sqrt((nddata1.uncertainty.array
+                                         / mdata1)**2
+                                        + (nddata2.uncertainty.array
+                                           / mdata2)**2)
         else:
             log.info("Error propagation is not performed for the '//', "
                      "'min', and 'max' operators.")

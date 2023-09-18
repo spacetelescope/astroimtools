@@ -1,15 +1,14 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 import numpy as np
-from numpy.testing import assert_allclose
 import pytest
-
 from astropy.nddata import NDData
 from astropy.utils import minversion
+from numpy.testing import assert_allclose
 
-from ..stats import minmax, NDDataStats, nddata_stats
+from ..stats import NDDataStats, minmax, nddata_stats
 
 try:
-    import scipy    # noqa
+    import scipy  # noqa: F401
     HAS_SCIPY = True
 except ImportError:
     HAS_SCIPY = False

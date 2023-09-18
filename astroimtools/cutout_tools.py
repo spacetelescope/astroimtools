@@ -1,23 +1,18 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 """Utility functions for cutout images."""
 
-# STDLIB
+import math
 import os
 from functools import partial
-import math
 
-# THIRD-PARTY
+import astropy.units as u
 import numpy as np
-
-# ASTROPY
 from astropy import log
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
-from astropy.nddata.utils import (Cutout2D, NoOverlapError)
+from astropy.nddata.utils import Cutout2D, NoOverlapError
 from astropy.table import QTable
-import astropy.units as u
 from astropy.wcs import WCS, NoConvergence
-
 
 __all__ = ['make_cutouts', 'show_cutout_with_slit']
 
@@ -105,7 +100,7 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
         apply_rotation = False
 
     # Sub-directory, relative to working directory.
-    path = '{0}_cutouts'.format(image_label)
+    path = f'{image_label}_cutouts'
     if not os.path.exists(path):
         os.mkdir(path)
 
@@ -139,7 +134,7 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
             except Exception:
                 if verbose:
                     log.info('reproject failed: '
-                             'Skipping {0}'.format(row['id']))
+                             f'Skipping {row["id"]}')
                 continue
 
             cutout_arr = cutout_arr[0]  # Ignore footprint
@@ -151,12 +146,12 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
             except NoConvergence:
                 if verbose:
                     log.info('WCS solution did not converge: '
-                             'Skipping {0}'.format(row['id']))
+                             f'Skipping {row["id"]}')
                 continue
             except NoOverlapError:
                 if verbose:
                     log.info('Cutout is not on image: '
-                             'Skipping {0}'.format(row['id']))
+                             f'Skipping {row["id"]}')
                 continue
             else:
                 cutout_hdr = cutout.wcs.to_header()
@@ -164,11 +159,10 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
 
         if np.array_equiv(cutout_arr, 0):
             if verbose:
-                log.info('No data in cutout: Skipping {0}'.format(row['id']))
+                log.info(f'No data in cutout: Skipping {row["id"]}')
             continue
 
-        fname = os.path.join(
-            path, '{0}_{1}_cutout.fits'.format(row['id'], image_label))
+        fname = os.path.join(path, f'{row["id"]}_{image_label}_cutout.fits')
 
         # Construct FITS HDU.
         hdu = fits.PrimaryHDU(cutout_arr)
@@ -179,7 +173,7 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
         hdu.writeto(fname, overwrite=clobber)
 
         if verbose:
-            log.info('Wrote {0}'.format(fname))
+            log.info(f'Wrote {fname}')
 
 
 def show_cutout_with_slit(hdr, data=None, slit_ra=None, slit_dec=None,
