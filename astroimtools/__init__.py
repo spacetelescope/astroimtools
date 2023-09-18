@@ -3,13 +3,13 @@
 # Packages may add whatever they like to this file, but
 # should keep this content at the top.
 # ----------------------------------------------------------------------------
-from ._astropy_init import *   # noqa
+from ._astropy_init import *   # noqa: F401, F403
 # ----------------------------------------------------------------------------
 
-from .arithmetic import *  # noqa
-from .cutout_tools import *  # noqa
-from .filtering import *  # noqa
-from .nddata_adapters import *  # noqa
-from .scripts import imarith, imstats  # noqa
-from .stats import *  # noqa
-from .utils import *  # noqa
+from .arithmetic import *  # noqa: F401, F403
+from .cutout_tools import *  # noqa: F401, F403
+from .filtering import *  # noqa: F401, F403
+from .nddata_adapters import *  # noqa: F401, F403
+from .scripts import imarith, imstats  # noqa: F401
+from .stats import *  # noqa: F401, F403
+from .utils import *  # noqa: F401, F403

@@ -8,7 +8,7 @@ from numpy.testing import assert_allclose
 from ..stats import NDDataStats, minmax, nddata_stats
 
 try:
-    import scipy  # noqa
+    import scipy  # noqa: F401
     HAS_SCIPY = True
 except ImportError:
     HAS_SCIPY = False
