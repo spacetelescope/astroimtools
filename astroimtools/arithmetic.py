@@ -99,7 +99,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     allowed_operators = ['+', '-', '*', '/', '//', 'min', 'max']
     operator = operator.strip()
     if operator not in allowed_operators:
-        raise ValueError('operator "{0}" is not allowed'.format(operator))
+        raise ValueError(f'operator "{operator}" is not allowed')
 
     if not isinstance(nddata1, NDData) and not isinstance(nddata2, NDData):
         raise TypeError('nddata1 or nddata2 input must be an '
@@ -132,7 +132,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     mdata2 = np.ma.masked_array(nddata2.data, mask=nddata2.mask)
 
     if operator in allowed_operators[:5]:
-        data_expr = 'mdata1 {0} mdata2'.format(operator)
+        data_expr = f'mdata1 {operator} mdata2'
         mdata = eval(data_expr)  # nosec
     elif operator == 'min':
         mdata = np.minimum(mdata1, mdata2)
@@ -151,7 +151,7 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
                 raise TypeError(f'{key} in nddata2 is not a number')
             if value1 is not None and value2 is not None:
                 if operator in allowed_operators[:5]:
-                    hdr_expr = 'value1 {0} value2'.format(operator)
+                    hdr_expr = f'value1 {operator} value2'
                     value = eval(hdr_expr)  # nosec
                 elif operator == 'min':
                     value = min(value1, value2)

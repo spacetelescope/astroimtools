@@ -89,6 +89,6 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
 
     hdulist = fits.HDUList(hdus)
     hdulist.writeto(filename, clobber=clobber)
-    log.info('Wrote {0}'.format(filename))
+    log.info(f'Wrote {filename}')
 
     return
