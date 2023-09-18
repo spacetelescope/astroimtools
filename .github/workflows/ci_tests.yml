@@ -8,8 +8,8 @@ on:
       - '*'
   pull_request:
   schedule:
-    # run every Monday at 6am UTC
-    - cron: '0 6 * * 1'
+    # run every Monday at 5am UTC
+    - cron: '0 5 * * 1'
   workflow_dispatch:
 
 concurrency:
@@ -17,7 +17,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SETUP_XVFB: True  # avoid issues if mpl tries to open a GUI window
   TOXARGS: '-v'
 
 permissions:
@@ -31,12 +30,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
-            python: '3.8'
-            tox_env: 'py38-test-alldeps'
-            allow_failure: false
-            prefix: ''
-
           - os: ubuntu-latest
             python: '3.9'
             tox_env: 'py39-test-alldeps'
@@ -82,12 +75,6 @@ jobs:
 
           - os: ubuntu-latest
             python: '3.11'
-            tox_env: 'linkcheck'
-            allow_failure: false
-            prefix: ''
-
-          - os: ubuntu-latest
-            python: '3.11'
             tox_env: 'pep517'
             allow_failure: false
             prefix: ''
@@ -99,20 +86,21 @@ jobs:
             prefix: ''
 
           - os: ubuntu-latest
-            python: '3.8'
-            tox_env: 'py38-test-alldeps-astropylts-numpy118'
+            python: '3.9'
+            tox_env: 'py39-test-alldeps-astropy50-numpy122'
             allow_failure: false
             prefix: ''
 
           - os: ubuntu-latest
             python: '3.11'
-            tox_env: 'py311-test-alldeps-devdeps'
+            tox_env: 'py311-test-devdeps'
+            toxposargs: --remote-data=any
             allow_failure: true
             prefix: '(Allowed failure)'
 
     steps:
     - name: Check out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Set up Python ${{ matrix.python }}
