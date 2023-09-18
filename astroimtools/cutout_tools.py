@@ -1,23 +1,18 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 """Utility functions for cutout images."""
 
-# STDLIB
+import math
 import os
 from functools import partial
-import math
 
-# THIRD-PARTY
+import astropy.units as u
 import numpy as np
-
-# ASTROPY
 from astropy import log
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
-from astropy.nddata.utils import (Cutout2D, NoOverlapError)
+from astropy.nddata.utils import Cutout2D, NoOverlapError
 from astropy.table import QTable
-import astropy.units as u
 from astropy.wcs import WCS, NoConvergence
-
 
 __all__ = ['make_cutouts', 'show_cutout_with_slit']
 

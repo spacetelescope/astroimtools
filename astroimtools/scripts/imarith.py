@@ -24,6 +24,7 @@ Example usage:
 """
 
 import argparse
+
 from astropy.nddata import NDData
 
 from ..arithmetic import nddata_arith

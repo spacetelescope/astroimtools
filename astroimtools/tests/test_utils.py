@@ -1,14 +1,13 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
+import astropy.units as u
 import numpy as np
-from numpy.testing import assert_allclose
 import pytest
-
 from astropy.coordinates import SkyCoord
 from astropy.nddata import NDData
-import astropy.units as u
+from numpy.testing import assert_allclose
 
-from ..utils import (radial_distance, listpixels, mask_databounds,
-                     nddata_cutout2d)
+from ..utils import (listpixels, mask_databounds, nddata_cutout2d,
+                     radial_distance)
 
 
 class TestRadialDistance:

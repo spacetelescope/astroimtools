@@ -3,8 +3,8 @@
 NDData tools for interfacing with FITS files.
 """
 
-from astropy import log
 import astropy.io.fits as fits
+from astropy import log
 from astropy.nddata import NDData
 
 __all__ = ['basic_fits_to_nddata', 'basic_nddata_to_fits']

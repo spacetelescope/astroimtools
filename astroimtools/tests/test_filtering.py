@@ -2,8 +2,8 @@
 import numpy as np
 from numpy.testing import assert_allclose
 
-from ..filtering import (circular_footprint, circular_annulus_footprint,
-                         elliptical_footprint, elliptical_annulus_footprint)
+from ..filtering import (circular_annulus_footprint, circular_footprint,
+                         elliptical_annulus_footprint, elliptical_footprint)
 
 
 def test_circular_footprint():

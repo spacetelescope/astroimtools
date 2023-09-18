@@ -5,14 +5,13 @@ Statistics tools.
 
 import numpy as np
 from astropy.nddata import NDData, support_nddata
-from astropy.stats import (biweight_location, biweight_midvariance, mad_std,
-                           SigmaClip)
+from astropy.stats import (SigmaClip, biweight_location, biweight_midvariance,
+                           mad_std)
 from astropy.table import Table
 from astropy.utils import lazyproperty
 from astropy.utils.decorators import deprecated_renamed_argument
 
 from .utils import mask_databounds
-
 
 __all__ = ['minmax', 'NDDataStats', 'nddata_stats']
 

@@ -62,6 +62,7 @@ Example usage:
 """
 
 import argparse
+
 from astropy.stats import SigmaClip
 from astropy.table import Column
 

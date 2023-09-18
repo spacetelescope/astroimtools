@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 from astropy.coordinates import SkyCoord
 from astropy.nddata import NDData, support_nddata
-from astropy.nddata.utils import overlap_slices, Cutout2D
+from astropy.nddata.utils import Cutout2D, overlap_slices
 from astropy.table import Table
 from astropy.utils.exceptions import AstropyUserWarning
 from astropy.wcs.utils import skycoord_to_pixel

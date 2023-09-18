@@ -11,7 +11,6 @@ from astropy import log
 from astropy.nddata import NDData
 from astropy.utils.exceptions import AstropyUserWarning
 
-
 __all__ = ['nddata_arith']
 
 
