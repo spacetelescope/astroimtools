@@ -84,6 +84,7 @@ norecursedirs = [
     'docs/_build',
     'extern',
 ]
+astropy_header = true
 doctest_plus = 'enabled'
 text_file_format = 'rst'
 addopts = '--color=yes --doctest-rst'
