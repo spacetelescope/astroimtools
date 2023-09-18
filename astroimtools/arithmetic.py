@@ -162,13 +162,13 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     # propagate errors
     if nddata1.uncertainty is not None and nddata2.uncertainty is not None:
         if operator in ['+', '-']:
-            error_out = np.sqrt(nddata1.uncertainty.array**2 +
-                                nddata2.uncertainty.array**2)
+            error_out = np.sqrt(nddata1.uncertainty.array**2
+                                + nddata2.uncertainty.array**2)
         elif operator in ['*', '/']:
-            error_out = mdata * np.sqrt((nddata1.uncertainty.array /
-                                         mdata1)**2 +
-                                        (nddata2.uncertainty.array /
-                                         mdata2)**2)
+            error_out = mdata * np.sqrt((nddata1.uncertainty.array
+                                         / mdata1)**2
+                                        + (nddata2.uncertainty.array
+                                           / mdata2)**2)
         else:
             log.info("Error propagation is not performed for the '//', "
                      "'min', and 'max' operators.")

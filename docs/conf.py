@@ -59,7 +59,7 @@ plot_formats = ['png', 'hires.png', 'pdf', 'svg']
 
 # This is added to the end of RST files - a good place to put
 # substitutions to be used globally.
-rst_epilog += """
+rst_epilog += """  # noqa: F405
 """
 
 # Turn off table of contents entries for functions and classes
@@ -106,10 +106,10 @@ html_theme_options = {
     'logotext1': 'astro',  # white,  semi-bold
     'logotext2': 'imtools',  # orange, light
     'logotext3': ':docs'   # white,  light
-    }
+}
 
 # Custom sidebar templates, maps document names to template names.
- # html_sidebars = {}
+# html_sidebars = {}
 
 # The name of an image file (relative to this directory) to place at the
 # top of the sidebar.
@@ -181,5 +181,5 @@ linkcheck_ignore = ['http://data.astropy.org',
 linkcheck_timeout = 180
 
 # -- Generate rst files for Jupyter notebooks --------------------------------
-extensions += ['nbsphinx']
+extensions += ['nbsphinx']  # noqa: F405
 # nbsphinx_prompt_width = 0  # to remove input/output cell prompts
