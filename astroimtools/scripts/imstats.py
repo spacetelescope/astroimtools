@@ -62,7 +62,6 @@ Example usage:
 """
 
 import argparse
-import numpy as np
 from astropy.stats import SigmaClip
 from astropy.table import Column
 
@@ -101,8 +100,8 @@ def main(args=None):
 
     columns = args.columns.replace(' ', '').split(',')
 
-     sigma_clip = SigmaClip(sigma=args.sigma, cenfunc='median',
-                            stdfunc='std', maxiters=args.iters)
+    sigma_clip = SigmaClip(sigma=args.sigma, cenfunc='median',
+                           stdfunc='std', maxiters=args.iters)
 
     tbl = nddata_stats(nddata, sigma_clip=sigma_clip, columns=columns,
                        lower_bound=args.lower, upper_bound=args.upper,
