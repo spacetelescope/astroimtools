@@ -22,6 +22,12 @@ Bug Fixes
 - Fixed ``make_cutouts`` to use the ``overwrite`` keyword instead of the
   removed ``clobber`` keyword when writing FITS files. [#91]
 
+API Changes
+^^^^^^^^^^^
+
+- The ``clobber`` keyword is deprecated in favor of ``overwrite`` in
+  ``make_cutouts`` and ``basic_nddata_to_fits``. [#99]
+
 
 0.3 (2020-08-03)
 ----------------

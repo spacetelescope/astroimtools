@@ -49,8 +49,8 @@ def main(args=None):
                         default=None, help='')
     parser.add_argument('-o', '--outfilename', metavar='outfilename',
                         type=str, default='imarith.fits', help='')
-    parser.add_argument('-c', '--clobber', default=False,
-                        action='store_true', help='')
+    parser.add_argument('--overwrite', default=False, action='store_true',
+                        help='Overwrite existing file')
 
     args = parser.parse_args(args)
 
@@ -76,4 +76,4 @@ def main(args=None):
     nddata = nddata_arith(nddata1, nddata2, args.operator,
                           fill_value=args.fill_value, keywords=keywords)
 
-    basic_nddata_to_fits(nddata, args.outfilename, clobber=args.clobber)
+    basic_nddata_to_fits(nddata, args.outfilename, overwrite=args.overwrite)
