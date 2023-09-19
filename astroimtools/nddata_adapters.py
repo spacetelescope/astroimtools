@@ -6,6 +6,7 @@ NDData tools for interfacing with FITS files.
 import astropy.io.fits as fits
 from astropy import log
 from astropy.nddata import NDData
+from astropy.utils.decorators import deprecated_renamed_argument
 
 __all__ = ['basic_fits_to_nddata', 'basic_nddata_to_fits']
 
@@ -45,7 +46,8 @@ def basic_fits_to_nddata(filename, exten=0):
     return NDData(data, meta=header)
 
 
-def basic_nddata_to_fits(nddata, filename, clobber=False):
+@deprecated_renamed_argument('clobber', 'overwrite', '0.4')
+def basic_nddata_to_fits(nddata, filename, overwrite=False):
     """
     Write a `~astropy.nddata.NDData` object to a FITS file.
 
@@ -65,7 +67,7 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
     filename : str
         The path of the output FITS file.
 
-    clobber : bool, optional
+    overwrite : bool, optional
         Set to `True` to overwrite ``filename`` if it already exists.
         The default is `False`.
     """
@@ -88,7 +90,7 @@ def basic_nddata_to_fits(nddata, filename, clobber=False):
         hdus[-1].header['EXTNAME'] = 'MASK'
 
     hdulist = fits.HDUList(hdus)
-    hdulist.writeto(filename, clobber=clobber)
+    hdulist.writeto(filename, overwrite=overwrite)
     log.info(f'Wrote {filename}')
 
     return

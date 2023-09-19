@@ -13,12 +13,14 @@ from astropy.io import fits
 from astropy.nddata.utils import Cutout2D, NoOverlapError
 from astropy.table import QTable
 from astropy.wcs import WCS, NoConvergence
+from astropy.utils.decorators import deprecated_renamed_argument
 
 __all__ = ['make_cutouts', 'show_cutout_with_slit']
 
 
+@deprecated_renamed_argument('clobber', 'overwrite', '0.4')
 def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
-                 table_format='ascii.ecsv', image_ext=0, clobber=False,
+                 table_format='ascii.ecsv', image_ext=0, overwrite=False,
                  verbose=True):
     """Make cutouts from a 2D image and write them to FITS files.
 
@@ -73,12 +75,11 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
     image_ext : int, optional
         Image extension to extract header and data. Default is 0.
 
-    clobber : bool, optional
+    overwrite : bool, optional
         Overwrite existing files. Default is `False`.
 
     verbose : bool, optional
         Print extra info. Default is `True`.
-
     """
     # Optional dependencies...
     from reproject import reproject_interp
@@ -170,7 +171,7 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
         hdu.header['OBJ_RA'] = (position.ra.deg, 'Cutout object RA in deg')
         hdu.header['OBJ_DEC'] = (position.dec.deg, 'Cutout object DEC in deg')
 
-        hdu.writeto(fname, overwrite=clobber)
+        hdu.writeto(fname, overwrite=overwrite)
 
         if verbose:
             log.info(f'Wrote {fname}')
