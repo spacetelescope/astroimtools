@@ -38,7 +38,6 @@ def basic_fits_to_nddata(filename, exten=0):
         containing the FITS data array and a ``meta`` attribute,
         containing the FITS header as a python `dict`.
     """
-
     with fits.open(filename) as hdulist:
         header = hdulist[0].header
         header += hdulist[exten].header
@@ -71,7 +70,6 @@ def basic_nddata_to_fits(nddata, filename, overwrite=False):
         Set to `True` to overwrite ``filename`` if it already exists.
         The default is `False`.
     """
-
     hdu = fits.PrimaryHDU()
     if nddata.meta is not None:
         for k, v in nddata.meta.iteritems():

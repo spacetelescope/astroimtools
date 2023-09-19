@@ -43,6 +43,7 @@ imstats = "astroimtools.scripts.imstats:main"
 all = [
     'matplotlib>=3.5',
     'photutils>=1.5',
+    'reproject>=0.9',
 ]
 test = [
     'pytest-astropy>=0.10',

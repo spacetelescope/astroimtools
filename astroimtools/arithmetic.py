@@ -95,7 +95,6 @@ def nddata_arith(nddata1, nddata2, operator, fill_value=0., keywords=None):
     >>> nd.mask
     array([ True, False, False, False,  True]...)
     """
-
     allowed_operators = ['+', '-', '*', '/', '//', 'min', 'max']
     operator = operator.strip()
     if operator not in allowed_operators:

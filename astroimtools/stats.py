@@ -69,7 +69,6 @@ def minmax(data, mask=None, axis=None):
     (array([0.18391881, 0.20456028, 0.6531771 ]),
      array([0.92961609, 0.5955447 , 0.96451452]))
     """
-
     if mask is not None:
         funcs = [np.ma.min, np.ma.max]
         data = np.ma.masked_array(data, mask=mask)
@@ -180,7 +179,6 @@ class NDDataStats:
         """
         The number of good (unmasked/unclipped) pixels.
         """
-
         return len(self.goodvals)
 
     @lazyproperty
@@ -188,7 +186,6 @@ class NDDataStats:
         """
         The number of rejected (masked/clipped) pixels.
         """
-
         return self._original_npixels - self.npixels
 
     @lazyproperty
@@ -196,7 +193,6 @@ class NDDataStats:
         """
         The mean of pixel values.
         """
-
         return np.mean(self.goodvals)
 
     @lazyproperty
@@ -204,7 +200,6 @@ class NDDataStats:
         """
         The median of the pixel values.
         """
-
         return np.median(self.goodvals)
 
     @lazyproperty
@@ -214,7 +209,6 @@ class NDDataStats:
 
         The mode is estimated simply as ``(3 * median) - (2 * mean)``.
         """
-
         return 3. * np.median(self.goodvals) - 2. * np.mean(self.goodvals)
 
     @lazyproperty
@@ -222,7 +216,6 @@ class NDDataStats:
         """
         The standard deviation of the pixel values.
         """
-
         return np.std(self.goodvals)
 
     @lazyproperty
@@ -230,7 +223,6 @@ class NDDataStats:
         """
         The minimum pixel value.
         """
-
         return np.min(self.goodvals)
 
     @lazyproperty
@@ -238,7 +230,6 @@ class NDDataStats:
         """
         The maximum pixel value.
         """
-
         return np.max(self.goodvals)
 
     @lazyproperty
@@ -259,7 +250,6 @@ class NDDataStats:
         where :math:`\Phi^{-1}(P)` is the normal inverse cumulative
         distribution function evaluated at probability :math:`P = 3/4`.
         """
-
         return mad_std(self.goodvals)
 
     @lazyproperty
@@ -267,7 +257,6 @@ class NDDataStats:
         """
         The biweight location of the pixel values.
         """
-
         return biweight_location(self.goodvals)
 
     @lazyproperty
@@ -275,7 +264,6 @@ class NDDataStats:
         """
         The biweight midvariance of the pixel values.
         """
-
         return biweight_midvariance(self.goodvals)
 
     @lazyproperty
@@ -283,7 +271,6 @@ class NDDataStats:
         """
         The skew of the pixel values.
         """
-
         from scipy.stats import skew
         return skew(self.goodvals)
 
@@ -292,7 +279,6 @@ class NDDataStats:
         """
         The kurtosis of the pixel values.
         """
-
         from scipy.stats import kurtosis
         return kurtosis(self.goodvals)
 
@@ -378,7 +364,6 @@ def nddata_stats(nddata, sigma_clip=None, columns=None, lower_bound=None,
     ---- ------ ---- --------- --------- --- ---
        5      5    5 2.5819889 2.9652044   1   9
     """
-
     stats = []
     if not isinstance(nddata, list):
         nddata = np.atleast_1d(nddata)

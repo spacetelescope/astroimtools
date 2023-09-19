@@ -46,7 +46,6 @@ def radial_distance(position, shape):
            [1.        , 0.        , 1.        ],
            [1.41421356, 1.        , 1.41421356]])
     """
-
     if len(position) != 2:
         raise ValueError('position must have only 2 elements')
     if len(shape) != 2:
@@ -126,7 +125,6 @@ def listpixels(data, position, shape, subarray_indices=False, wcs=None):
      11   9  0.23049655
      12   9  0.22835371
     """
-
     if isinstance(position, SkyCoord):
         if wcs is None:
             raise ValueError('wcs must be input if positions is a SkyCoord')
@@ -197,7 +195,6 @@ def mask_databounds(data, mask=None, lower_bound=None, upper_bound=None,
     >>> mask_databounds(data, lower_bound=2, upper_bound=5, value=3)
     array([ True,  True, False,  True, False, False,  True]...)
     """
-
     if mask is None:
         data = np.ma.MaskedArray(data, mask=None)
     else:
@@ -304,7 +301,6 @@ def nddata_cutout2d(nddata, position, size, mode='trim', fill_value=np.nan):
     >>> cutout.unit
     Unit("electron / s")
     """
-
     if not isinstance(nddata, NDData):
         raise TypeError('nddata input must be an NDData object')
 

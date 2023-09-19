@@ -22,9 +22,11 @@ __all__ = ['make_cutouts', 'show_cutout_with_slit']
 def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
                  table_format='ascii.ecsv', image_ext=0, overwrite=False,
                  verbose=True):
-    """Make cutouts from a 2D image and write them to FITS files.
+    """
+    Make cutouts from a 2D image and write them to FITS files.
 
-    Catalog must have the following columns with unit info, where applicable:
+    Catalog must have the following columns with unit info, where
+    applicable:
 
         * ``'id'`` - ID string; no unit necessary.
         * ``'ra'`` - RA (e.g., in degrees).
@@ -48,8 +50,8 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
             <image_label>_cutouts/
                 <id>_<image_label>_cutout.fits
 
-    Each cutout image is a simple single-extension FITS with updated WCS.
-    Its header has the following special keywords:
+    Each cutout image is a simple single-extension FITS with updated
+    WCS. Its header has the following special keywords:
 
         * ``OBJ_RA`` - RA of the cutout object in degrees.
         * ``OBJ_DEC`` - DEC of the cutout object in degrees.
@@ -81,7 +83,6 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
     verbose : bool, optional
         Print extra info. Default is `True`.
     """
-    # Optional dependencies...
     from reproject import reproject_interp
 
     table = QTable.read(catalogname, format=table_format)
@@ -182,7 +183,8 @@ def show_cutout_with_slit(hdr, data=None, slit_ra=None, slit_dec=None,
                           slit_length=3.3, slit_angle=90, slit_radius=0.2,
                           slit_rout=0.5, cmap='Greys_r', plotname='',
                           **kwargs):
-    """Show a cutout image with the slit(s) superimposed.
+    """
+    Show a cutout image with the slit(s) superimposed.
 
     Parameters
     ----------
@@ -231,9 +233,7 @@ def show_cutout_with_slit(hdr, data=None, slit_ra=None, slit_dec=None,
     See Also
     --------
     make_cutouts
-
     """
-    # Optional dependencies...
     import matplotlib.pyplot as plt
     from photutils import (SkyCircularAnnulus, SkyCircularAperture,
                            SkyRectangularAperture)
