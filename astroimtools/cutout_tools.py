@@ -12,8 +12,8 @@ from astropy.coordinates import SkyCoord
 from astropy.io import fits
 from astropy.nddata.utils import Cutout2D, NoOverlapError
 from astropy.table import QTable
-from astropy.wcs import WCS, NoConvergence
 from astropy.utils.decorators import deprecated_renamed_argument
+from astropy.wcs import WCS, NoConvergence
 
 __all__ = ['make_cutouts', 'show_cutout_with_slit']
 
