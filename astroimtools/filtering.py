@@ -43,7 +43,6 @@ def circular_footprint(radius, dtype=int):
            [0, 1, 1, 1, 0],
            [0, 0, 1, 0, 0]])
     """
-
     x = np.arange(-radius, radius + 1)
     xx, yy = np.meshgrid(x, x)
     return np.array((xx**2 + yy**2) <= radius**2, dtype=dtype)
@@ -85,7 +84,6 @@ def circular_annulus_footprint(radius_inner, radius_outer, dtype=int):
            [0, 1, 0, 1, 0],
            [0, 0, 1, 0, 0]])
     """
-
     if radius_inner > radius_outer:
         raise ValueError('radius_outer must be >= radius_inner')
 
@@ -143,7 +141,6 @@ def elliptical_footprint(a, b, theta=0, dtype=int):
            [0, 1, 1, 1, 0],
            [0, 0, 1, 0, 0]])
     """
-
     if b > a:
         raise ValueError('a must be >= b')
 
@@ -211,7 +208,6 @@ def elliptical_annulus_footprint(a_inner, a_outer, b_inner, theta=0,
            [0, 1, 1, 1, 0],
            [0, 0, 1, 0, 0]])
     """
-
     if a_inner > a_outer:
         raise ValueError('a_outer must be >= a_inner')
 
