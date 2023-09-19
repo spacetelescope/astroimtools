@@ -13,7 +13,7 @@ Astroimtools has the following strict requirements:
 
 * `Astropy`_ 5.0 or later
 
-* `SciPy <https://scipy.org/>`_ 1.7 or later
+* `SciPy <https://scipy.org/>`_ 1.7.2 or later
 
 `pytest-astropy <https://github.com/astropy/pytest-astropy>`_ (0.10 or
 later) is required to run the test suite.
