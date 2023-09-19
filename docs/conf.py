@@ -53,7 +53,7 @@ del intersphinx_mapping['h5py']  # noqa: F405
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-# exclude_patterns.append('_templates')  # noqa: F405
+# exclude_patterns.append('_templates')
 
 plot_formats = ['png', 'hires.png', 'pdf', 'svg']
 
@@ -71,9 +71,9 @@ project = project_meta['name']
 author = project_meta['authors'][0]['name']
 copyright = f'2015-{datetime.utcnow().year}, {author}'
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
+# The version info for the project you're documenting, acts as
+# replacement for |version| and |release|, also used in various other
+# places throughout the built documents.
 __import__(project)
 package = sys.modules[project]
 
@@ -84,7 +84,6 @@ release = package.__version__
 
 
 # -- Options for HTML output --------------------------------------------------
-
 # A NOTE ON HTML THEMES
 # The global astropy configuration uses a custom theme,
 # 'bootstrap-astropy', which is installed along with astropy. A
@@ -137,7 +136,6 @@ htmlhelp_basename = project + 'doc'
 # start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [('index', project + '.tex', project + ' Documentation',
                     author, 'manual')]
-latex_logo = '_static/photutils_banner.pdf'
 
 # -- Options for manual page output -------------------------------------------
 # One entry per manual page. List of tuples (source start file, name,
@@ -180,6 +178,7 @@ linkcheck_retry = 5
 linkcheck_ignore = ['http://data.astropy.org',
                     r'https://github\.com/spacetelescope/astroimtools/(?:issues|pull)/\d+']
 linkcheck_timeout = 180
+linkcheck_anchors = False
 
 # -- Generate rst files for Jupyter notebooks --------------------------------
 extensions += ['nbsphinx']  # noqa: F405
