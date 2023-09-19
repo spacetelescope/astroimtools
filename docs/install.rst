@@ -27,6 +27,9 @@ dependencies are installed:
 * `Matplotlib <https://matplotlib.org/>`_ 3.5 or later:  Used in
   cutout tools.
 
+* `reproject <https://reproject.readthedocs.io/en/stable/>`_ 0.9 or
+  later: Used in cutout tools.
+
 
 Installing the latest released version
 ======================================
