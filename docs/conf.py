@@ -53,7 +53,7 @@ del intersphinx_mapping['h5py']  # noqa: F405
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns.append('_templates')  # noqa: F405
+# exclude_patterns.append('_templates')  # noqa: F405
 
 plot_formats = ['png', 'hires.png', 'pdf', 'svg']
 
