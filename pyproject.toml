@@ -32,8 +32,8 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = 'https://github.com/spacetelescope/astroimtools'
-documentation = 'https://astroimtools.readthedocs.io/en/stable/'
+Homepage = 'https://github.com/spacetelescope/astroimtools'
+Documentation = 'https://astroimtools.readthedocs.io/en/stable/'
 
 [project.scripts]
 imarith = "astroimtools.scripts.imarith:main"
