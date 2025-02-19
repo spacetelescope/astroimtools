@@ -13,6 +13,9 @@ Bug Fixes
 API Changes
 ^^^^^^^^^^^
 
+- The ``astroimtools.test`` function has been removed. Instead use the
+  ``pytest --pyargs astroimtools`` command.
+
 
 0.4 (2023-09-18)
 ----------------
