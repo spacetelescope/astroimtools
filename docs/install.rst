@@ -15,9 +15,6 @@ Astroimtools has the following strict requirements:
 
 * `SciPy <https://scipy.org/>`_ 1.7.2 or later
 
-`pytest-astropy <https://github.com/astropy/pytest-astropy>`_ (0.10 or
-later) is required to run the test suite.
-
 Some functionality is available only if the following optional
 dependencies are installed:
 
@@ -48,19 +45,17 @@ dependencies, you can instead do::
 Testing an Installed Astroimtools
 =================================
 
-The easiest way to test your installed version of astroimtools is
-running correctly is to use the ``test()`` function:
+To test your installed version of astroimtools, you can
+run the test suite using the `pytest`_ command. Running
+the test suite requires installing the `pytest-astropy
+<https://github.com/astropy/pytest-astropy>`_ (0.11 or later) package.
 
-.. doctest-skip::
+To run the test suite, use the following command::
 
-    >>> import astroimtools
-    >>> astroimtools.test()
+    pytest --pyargs astroimtools
 
-Note that this may not work if you start Python from within the
-astroimtools source distribution directory.
-
-The tests should run and print out any failures, which you can report
-to the `astroimtools issue tracker
+Any test failures can be reported to the `astroimtools issue tracker
 <https://github.com/spacetelescope/astroimtools/issues>`_.
 
 .. _pip: https://pip.pypa.io/en/latest/
+.. _pytest: https://docs.pytest.org/en/latest/
