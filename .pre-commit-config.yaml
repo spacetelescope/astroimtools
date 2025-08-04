@@ -81,8 +81,7 @@ repos:
     rev: v2.4.1
     hooks:
       - id: codespell
-        args: ["--write-changes", "--ignore-words-list", "exten, nd",
-               "--skip", "*.ipynb"]
+        args: ["--write-changes", "--skip", "*.ipynb"]
         additional_dependencies:
           - tomli
 

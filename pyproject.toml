@@ -166,6 +166,11 @@ ignore = [
     'PY005',  # ignore having a tests/ folder
 ]
 
+[tool.codespell]
+ignore-words-list = """
+    exten, nd
+"""
+
 [tool.docformatter]
     wrap-summaries = 72
     pre-summary-newline = true
