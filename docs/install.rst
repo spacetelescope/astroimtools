@@ -7,24 +7,24 @@ Requirements
 
 Astroimtools has the following strict requirements:
 
-* `Python <https://www.python.org/>`_ 3.9 or later
+* `Python <https://www.python.org/>`_ 3.11 or later
 
-* `NumPy <https://numpy.org/>`_ 1.22 or later
+* `NumPy <https://numpy.org/>`_ 1.25 or later
 
-* `Astropy`_ 5.0 or later
+* `Astropy`_ 6.0 or later
 
-* `SciPy <https://scipy.org/>`_ 1.7.2 or later
+* `SciPy <https://scipy.org/>`_ 1.11.1 or later
 
 Some functionality is available only if the following optional
 dependencies are installed:
 
-* `Photutils <https://photutils.readthedocs.io/en/latest/>`_ 1.5 or
+* `Photutils <https://photutils.readthedocs.io/en/latest/>`_ 1.9 or
   later:  Used in cutout tools.
 
-* `Matplotlib <https://matplotlib.org/>`_ 3.5 or later:  Used in
+* `Matplotlib <https://matplotlib.org/>`_ 3.8 or later:  Used in
   cutout tools.
 
-* `reproject <https://reproject.readthedocs.io/en/stable/>`_ 0.9 or
+* `reproject <https://reproject.readthedocs.io/en/stable/>`_ 0.11 or
   later: Used in cutout tools.
 
 
