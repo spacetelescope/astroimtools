@@ -236,8 +236,8 @@ class NDDataStats:
     def mad_std(self):
         r"""
         A robust standard deviation using the `median absolute deviation
-        (MAD)
-        <https://en.wikipedia.org/wiki/Median_absolute_deviation>`_.
+        (MAD) <https://en.wikipedia.org/wiki/Median_absolute_deviation>`_.
+
         The MAD is defined as ``median(abs(a - median(a)))``.
 
         The standard deviation estimator is given by:
@@ -364,15 +364,16 @@ def nddata_stats(nddata, sigma_clip=None, columns=None, lower_bound=None,
     ---- ------ ---- --------- --------- --- ---
        5      5    5 2.5819889 2.9652044   1   9
     """
-    stats = []
     if not isinstance(nddata, list):
         nddata = np.atleast_1d(nddata)
 
-    for nddata_obj in nddata:
-        stats.append(NDDataStats(
-            nddata_obj, sigma_clip=sigma_clip, lower_bound=lower_bound,
-            upper_bound=upper_bound, mask_value=mask_value,
-            mask_invalid=mask_invalid))
+    stats = [NDDataStats(nddata_obj,
+                         sigma_clip=sigma_clip,
+                         lower_bound=lower_bound,
+                         upper_bound=upper_bound,
+                         mask_value=mask_value,
+                         mask_invalid=mask_invalid)
+             for nddata_obj in nddata]
 
     output_columns = None
     default_columns = ['npixels', 'mean', 'std', 'min', 'max']
@@ -380,10 +381,11 @@ def nddata_stats(nddata, sigma_clip=None, columns=None, lower_bound=None,
                        'kurtosis', 'mad_std', 'max', 'mean', 'median', 'min',
                        'mode', 'npixels', 'nrejected', 'skew', 'std']
 
-    if columns is None:
-        output_columns = default_columns
-    else:
-        output_columns = np.atleast_1d(columns)
+    output_columns = (default_columns
+                      if columns is None else np.atleast_1d(columns))
+
+    output_columns = (default_columns
+                      if columns is None else np.atleast_1d(columns))
 
     output_table = Table()
     for column in output_columns:

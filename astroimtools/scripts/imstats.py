@@ -46,7 +46,6 @@ Example usage:
      ------------- -------- ------ ------ -------
      filename.fits 0.438514 0.4271 0.6974 0.68134
 
-
 3.  Calculate sigma-clipped (at 3 standard deviations) image statistics
     on the data in the first FITS extension::
 
@@ -95,9 +94,8 @@ def main(args=None):
     args = parser.parse_args(args)
 
     # TODO: better FITS to NDData object adapters!
-    nddata = []
-    for fits_fn in args.fits_filename:
-        nddata.append(basic_fits_to_nddata(fits_fn, exten=args.exten))
+    nddata = [basic_fits_to_nddata(fits_fn, exten=args.exten)
+              for fits_fn in args.fits_filename]
 
     columns = args.columns.replace(' ', '').split(',')
 

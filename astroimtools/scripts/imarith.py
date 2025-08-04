@@ -41,7 +41,7 @@ def main(args=None):
     parser.add_argument('-e2', '--exten2', metavar='exten2', type=int,
                         default=0, help='')
     parser.add_argument('operator', metavar='operator',
-                        help="Arithmetic operator.  Must be one "
+                        help='Arithmetic operator.  Must be one '
                         "of '+', '-', '*', '/', '//', 'min', or 'max'")
     parser.add_argument('-f', '--fill_value', metavar='fill_value',
                         type=float, default=0., help='')

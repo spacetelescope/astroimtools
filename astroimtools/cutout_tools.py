@@ -1,5 +1,7 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-"""Utility functions for cutout images."""
+"""
+Utility functions for cutout images.
+"""
 
 import math
 import os
@@ -95,7 +97,6 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
     c = SkyCoord(table['ra'], table['dec'])
     x = (table['cutout_x_size'] / table['spatial_pixel_scale']).value  # pix
     y = (table['cutout_y_size'] / table['spatial_pixel_scale']).value  # pix
-    pscl = table['spatial_pixel_scale'].to(u.deg / u.pix)
 
     # Do not rotate if column is missing.
     if 'cutout_pa' not in table.colnames:
@@ -108,7 +109,7 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
 
     cutcls = partial(Cutout2D, data, wcs=wcs, mode='partial')
 
-    for position, x_pix, y_pix, pix_scl, row in zip(c, x, y, pscl, table):
+    for position, x_pix, y_pix, row in zip(c, x, y, table):
 
         if apply_rotation:
             pix_rot = row['cutout_pa'].to(u.degree).value
@@ -226,7 +227,7 @@ def show_cutout_with_slit(hdr, data=None, slit_ra=None, slit_dec=None,
     plotname : str, optional
         Filename to save plot as. If not given, it is not saved.
 
-    kwargs : dict, optional
+    **kwargs : dict, optional
         Keyword argument(s) for the aperture overlay.
         If ``ax`` is given, it will also be used for image display.
 

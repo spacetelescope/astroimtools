@@ -16,21 +16,21 @@ except ImportError:
 
 class TestMinMax:
     def setup_class(self):
-        np.random.seed(12345)
-        self.data = np.random.random((3, 3))
+        rng = np.random.default_rng(12345)
+        self.data = rng.uniform(0, 1, (3, 3))
 
     def test_minmax(self):
-        ref = (0.18391881167709445, 0.96451451973562163)
+        ref = np.min(self.data), np.max(self.data)
         assert_allclose(minmax(self.data), ref)
 
     def test_mask(self):
         mask = (self.data < 0.3)
-        ref = (0.3163755545817859, 0.96451451973562163)
+        data2 = self.data[self.data >= 0.3]
+        ref = (np.min(data2), np.max(data2))
         assert_allclose(minmax(self.data, mask=mask), ref)
 
     def test_axis(self):
-        ref = (np.array([0.18391881, 0.20456028, 0.6531771]),
-               np.array([0.92961609, 0.5955447, 0.96451452]))
+        ref = (np.min(self.data, axis=1), np.max(self.data, axis=1))
         assert_allclose(minmax(self.data, axis=1), ref)
 
 

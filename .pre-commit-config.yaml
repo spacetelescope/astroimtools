@@ -29,6 +29,8 @@ repos:
         # source.
       - id: detect-private-key
         # Checks for the existence of private keys.
+      - id: double-quote-string-fixer
+        # Replace double-quoted strings with single-quoted strings.
       - id: end-of-file-fixer
         # Makes sure files end in a newline and only a newline.
         exclude: ".*(svg.*|extern.*|_templates.*)$"
@@ -51,12 +53,16 @@ repos:
       - id: python-check-blanket-noqa
         # Enforce that all noqa annotations always occur with specific codes.
 
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.12.7"
     hooks:
-      - id: pyupgrade
-        args: ["--py39-plus"]
-        exclude: ".*(extern.*)$"
+      - id: ruff
+        args: ["--fix", "--show-fixes"]
+
+  - repo: https://github.com/scientific-python/cookie
+    rev: 2025.05.02
+    hooks:
+      - id: sp-repo-review
 
   - repo: https://github.com/pycqa/isort
     rev: 6.0.1
@@ -71,11 +77,6 @@ repos:
       - id: flake8
         args: ["--ignore", "E501,W503"]
 
-  - repo: https://github.com/asottile/yesqa
-    rev: v1.5.0
-    hooks:
-      - id: yesqa
-
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
     hooks:
@@ -85,12 +86,27 @@ repos:
         additional_dependencies:
           - tomli
 
+  - repo: https://github.com/numpy/numpydoc
+    rev: v1.9.0
+    hooks:
+      - id: numpydoc-validation
+        exclude: "extern/"
+
+  # Formats docstrings to follow PEP 257
+  - repo: https://github.com/PyCQA/docformatter
+    rev: v1.7.7
+    hooks:
+      - id: docformatter
+        args: [--in-place, --config, ./pyproject.toml]
+        exclude: "extern/"
+
   - repo: https://github.com/woodruffw/zizmor-pre-commit
     rev: v1.11.0
     hooks:
     - id: zizmor
 
-  # - repo: https://github.com/MarcoGorelli/absolufy-imports
-  #   rev: v0.3.1
-  #   hooks:
-  #   - id: absolufy-imports
+  - repo: https://github.com/sphinx-contrib/sphinx-lint
+    rev: v1.0.0
+    hooks:
+      - id: sphinx-lint
+        exclude: "(docs/_build/|regions/extern/)"

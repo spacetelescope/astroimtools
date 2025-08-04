@@ -156,7 +156,7 @@ def elliptical_footprint(a, b, theta=0, dtype=int):
 
 def elliptical_annulus_footprint(a_inner, a_outer, b_inner, theta=0,
                                  dtype=int):
-    """
+    r"""
     Create an elliptical annulus footprint.
 
     A pixel is considered to be entirely in or out of the footprint
@@ -177,8 +177,8 @@ def elliptical_annulus_footprint(a_inner, a_outer, b_inner, theta=0,
         calculated using the same axis ratio as the semimajor axis:
 
         .. math::
-            b_{outer} = b_{inner} \\left( \\frac{a_{outer}}{a_{inner}}
-            \\right)
+            b_{outer} = b_{inner} \left( \frac{a_{outer}}{a_{inner}}
+            \right)
 
     theta : float, optional
         The rotation angle in radians of the semimajor axis.  The angle

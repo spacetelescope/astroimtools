@@ -14,7 +14,7 @@
 
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 if sys.version_info < (3, 11):
@@ -65,7 +65,7 @@ rst_epilog = """
 # -- Project information ------------------------------------------------------
 project = project_meta['name']
 author = project_meta['authors'][0]['name']
-copyright = f'2015-{datetime.now(tz=timezone.utc).year}, {author}'
+copyright = f'2015-{datetime.now(tz=UTC).year}, {author}'
 
 # The version info for the project you're documenting, acts as
 # replacement for |version| and |release|, also used in various other
@@ -161,12 +161,13 @@ nitpick_ignore = []
 # Uncomment the following lines to enable the exceptions:
 nitpick_filename = 'nitpick-exceptions.txt'
 if os.path.isfile(nitpick_filename):
-    for line in open(nitpick_filename):
-        if line.strip() == "" or line.startswith("#"):
-            continue
-        dtype, target = line.split(None, 1)
-        target = target.strip()
-        nitpick_ignore.append((dtype, target))
+    with open(nitpick_filename) as fh:
+        for line in fh:
+            if line.strip() == '' or line.startswith('#'):
+                continue
+            dtype, target = line.split(None, 1)
+            target = target.strip()
+            nitpick_ignore.append((dtype, target))
 
 # -- Options for linkcheck output ---------------------------------------------
 linkcheck_retry = 5
