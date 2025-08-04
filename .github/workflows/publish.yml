@@ -2,8 +2,8 @@ name: Wheel building
 
 on:
   schedule:
-    # run every Monday at 5am UTC
-    - cron: '0 5 * * 1'
+    # run every day at 4:30am UTC
+    - cron: '30 4 * * *'
   pull_request:
     # We also want this workflow triggered if the 'Build all wheels'
     # label is added or present when PR is updated
@@ -19,6 +19,10 @@ on:
       - '!*pre*'
       - '!*post*'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
