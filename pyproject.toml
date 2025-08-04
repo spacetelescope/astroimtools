@@ -24,11 +24,11 @@ classifiers = [
     'Topic :: Scientific/Engineering :: Astronomy',
 ]
 dynamic = ['version']
-requires-python = '>=3.9'
+requires-python = '>= 3.9'
 dependencies = [
-    'numpy>=1.22',
-    'astropy>=5.0',
-    'scipy>=1.7.2',
+    'numpy >= 1.22',
+    'astropy >= 5.0',
+    'scipy >= 1.7.2',
 ]
 
 [project.urls]
@@ -41,26 +41,26 @@ imstats = "astroimtools.scripts.imstats:main"
 
 [project.optional-dependencies]
 all = [
-    'matplotlib>=3.5',
-    'photutils>=1.5',
-    'reproject>=0.9',
+    'matplotlib >= 3.5',
+    'photutils >= 1.5',
+    'reproject >= 0.9',
 ]
 test = [
-    'pytest-astropy>=0.10',
+    'pytest-astropy >= 0.11',
 ]
 docs = [
     'astroimtools[all]',
     'ipython',
     'nbsphinx',
     'sphinx',
-    'sphinx-astropy>=1.6',
+    'sphinx-astropy >= 1.9',
     'tomli; python_version < "3.11"',
 ]
 
 [build-system]
 requires = [
-    'setuptools>=61.2',
-    'setuptools_scm>=6.2',
+    'setuptools >= 77.0',
+    'setuptools_scm >= 8.0',
 ]
 build-backend = 'setuptools.build_meta'
 
@@ -134,9 +134,6 @@ exclude_lines = [
     'pragma: py{ignore_python_version}',
     'def _ipython_key_completions_',
 ]
-
-[tool.build-sphinx]
-github_project = 'spacetelescope/astroimtools'
 
 [tool.isort]
 skip_glob = [
