@@ -14,13 +14,10 @@
 
 import os
 import sys
-from datetime import datetime, timezone
+import tomllib
+from datetime import UTC, datetime
+from importlib import metadata
 from pathlib import Path
-
-if sys.version_info < (3, 11):
-    import tomli as tomllib
-else:
-    import tomllib
 
 try:
     from sphinx_astropy.conf.v1 import *  # noqa: F403
@@ -31,8 +28,7 @@ except ImportError:
 
 # Get configuration information from pyproject.toml
 with (Path(__file__).parents[1] / 'pyproject.toml').open('rb') as fh:
-    conf = tomllib.load(fh)
-    project_meta = conf['project']
+    project_meta = tomllib.load(fh)['project']
 
 # -- General configuration ----------------------------------------------------
 # By default, highlight as Python 3.
@@ -42,7 +38,9 @@ highlight_language = 'python3'
 # needs_sphinx = '3.0'
 
 # Extend astropy intersphinx_mapping with packages we use here
-# intersphinx_mapping['skimage'] = ('https://scikit-image.org/docs/stable/', None) noqa: F405
+intersphinx_mapping.update(  # noqa: F405
+    {'photutils': ('https://photutils.readthedocs.io/en/stable/', None),
+     })
 
 # Exclude astropy intersphinx_mapping for unused packages
 del intersphinx_mapping['h5py']  # noqa: F405
@@ -65,19 +63,16 @@ rst_epilog = """
 # -- Project information ------------------------------------------------------
 project = project_meta['name']
 author = project_meta['authors'][0]['name']
-copyright = f'2015-{datetime.now(tz=timezone.utc).year}, {author}'
+project_copyright = f'2015-{datetime.now(tz=UTC).year}, {author}'
+github_project = 'spacetelescope/astroimtools'
 
 # The version info for the project you're documenting, acts as
 # replacement for |version| and |release|, also used in various other
 # places throughout the built documents.
-__import__(project)
-package = sys.modules[project]
-
+release = metadata.version(project)
 # The short X.Y version.
-version = package.__version__.split('-', 1)[0]
-# The full version, including alpha/beta/rc tags.
-release = package.__version__
-
+version = '.'.join(release.split('.')[:2])
+dev = 'dev' in release
 
 # -- Options for HTML output --------------------------------------------------
 # The global astropy configuration uses a custom theme,
@@ -126,6 +121,23 @@ html_title = f'{project} {release}'
 # Output file base name for HTML help builder.
 htmlhelp_basename = project + 'doc'
 
+# Set canonical URL from the Read the Docs Domain
+html_baseurl = os.environ.get('READTHEDOCS_CANONICAL_URL', '')
+
+# A dictionary of values to pass into the template engine's context for
+# all pages.
+html_context = {
+    'default_mode': 'light',
+    'to_be_indexed': ['stable', 'latest'],
+    'is_development': dev,
+    'github_user': 'spacetelescope',
+    'github_repo': 'astroimtools',
+    'github_version': 'main',
+    'doc_path': 'docs',
+    # Tell Jinja2 templates the build is running on Read the Docs
+    'READTHEDOCS': os.environ.get('READTHEDOCS', '') == 'True',
+}
+
 # -- Options for LaTeX output -------------------------------------------------
 # Grouping the document tree into LaTeX files. List of tuples (source
 # start file, target name, title, author, documentclass [howto/manual]).
@@ -139,7 +151,6 @@ man_pages = [('index', project.lower(), project + ' Documentation',
               [author], 1)]
 
 # -- Resolving issue number to links in changelog -----------------------------
-github_project = conf['tool']['build-sphinx']['github_project']
 github_issues_url = f'https://github.com/{github_project}/issues/'
 
 # -- Turn on nitpicky mode for sphinx (to warn about references not found) ----
@@ -161,12 +172,13 @@ nitpick_ignore = []
 # Uncomment the following lines to enable the exceptions:
 nitpick_filename = 'nitpick-exceptions.txt'
 if os.path.isfile(nitpick_filename):
-    for line in open(nitpick_filename):
-        if line.strip() == "" or line.startswith("#"):
-            continue
-        dtype, target = line.split(None, 1)
-        target = target.strip()
-        nitpick_ignore.append((dtype, target))
+    with open(nitpick_filename) as fh:
+        for line in fh:
+            if line.strip() == '' or line.startswith('#'):
+                continue
+            dtype, target = line.split(None, 1)
+            target = target.strip()
+            nitpick_ignore.append((dtype, target))
 
 # -- Options for linkcheck output ---------------------------------------------
 linkcheck_retry = 5

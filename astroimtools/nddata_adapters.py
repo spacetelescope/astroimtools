@@ -3,8 +3,8 @@
 NDData tools for interfacing with FITS files.
 """
 
-import astropy.io.fits as fits
 from astropy import log
+from astropy.io import fits
 from astropy.nddata import NDData
 from astropy.utils.decorators import deprecated_renamed_argument
 
@@ -90,5 +90,3 @@ def basic_nddata_to_fits(nddata, filename, overwrite=False):
     hdulist = fits.HDUList(hdus)
     hdulist.writeto(filename, overwrite=overwrite)
     log.info(f'Wrote {filename}')
-
-    return

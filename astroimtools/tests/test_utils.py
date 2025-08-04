@@ -65,7 +65,7 @@ class TestMaskDataBounds:
 
 class TestNDDataCutout2D:
     def test_nddata_cutout2d(self):
-        data = np.random.random((100, 100))
+        data = np.random.default_rng(42).random((100, 100))
         unit = u.electron / u.s
         mask = (data > 0.7)
         meta = {'exptime': 1234 * u.s}

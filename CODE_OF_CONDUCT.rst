@@ -15,12 +15,12 @@ and continued growth.
 
 As members of the community,
 
-- We pledge to treat all people with respect and provide a harassment-
-  and bullying-free environment, regardless of sex, sexual orientation
-  and/or gender identity, disability, physical appearance, body size,
-  race, nationality, ethnicity, and religion. In particular, sexual
-  language and imagery, sexist, racist, or otherwise exclusionary
-  jokes are not appropriate.
+- We pledge to treat all people with respect and provide a
+  harassment-free and bullying-free environment, regardless of sex,
+  sexual orientation and/or gender identity, disability, physical
+  appearance, body size, race, nationality, ethnicity, and religion. In
+  particular, sexual language and imagery, sexist, racist, or otherwise
+  exclusionary jokes are not appropriate.
 
 - We pledge to respect the work of others by recognizing
   acknowledgment/citation requests of original authors. As authors, we
