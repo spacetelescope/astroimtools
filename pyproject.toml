@@ -5,7 +5,7 @@ readme = 'README.rst'
 license = 'BSD-3-Clause'
 license-files = ['LICENSE.rst']
 authors = [
-    {name = 'Astroimtools Developers', email = 'help@stsci.edu'},
+    {name = 'Astroimtools Developers'},
 ]
 keywords = [
     'astronomy',
