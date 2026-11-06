@@ -24,6 +24,9 @@ New Features
 Bug Fixes
 ^^^^^^^^^
 
+- Fixed ``show_cutout_with_slit`` to import the aperture classes from
+  ``photutils.aperture``, which is required for photutils 2.0 and later.
+
 API Changes
 ^^^^^^^^^^^
 
