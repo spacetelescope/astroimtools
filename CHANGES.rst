@@ -4,6 +4,14 @@
 General
 ^^^^^^^
 
+- The minimum required Python version is 3.12.
+
+- The minimum required NumPy version is 2.0.
+
+- The minimum required Astropy version is 6.1.
+
+- The minimum required SciPy version is 1.13.
+
 New Features
 ^^^^^^^^^^^^
 

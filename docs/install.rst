@@ -7,13 +7,13 @@ Requirements
 
 Astroimtools has the following strict requirements:
 
-* `Python <https://www.python.org/>`_ 3.11 or later
+* `Python <https://www.python.org/>`_ 3.12 or later
 
-* `NumPy <https://numpy.org/>`_ 1.25 or later
+* `NumPy <https://numpy.org/>`_ 2.0 or later
 
-* `Astropy`_ 6.0 or later
+* `Astropy`_ 6.1 or later
 
-* `SciPy <https://scipy.org/>`_ 1.11.1 or later
+* `SciPy <https://scipy.org/>`_ 1.13 or later
 
 Some functionality is available only if the following optional
 dependencies are installed:
