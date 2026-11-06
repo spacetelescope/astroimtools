@@ -2,7 +2,6 @@
 import numpy as np
 import pytest
 from astropy.nddata import NDData
-from astropy.utils import minversion
 from numpy.testing import assert_allclose
 
 from ..stats import NDDataStats, minmax, nddata_stats
@@ -44,7 +43,6 @@ def test_nddata_stats_class():
 
 
 @pytest.mark.skipif('not HAS_SCIPY')
-@pytest.mark.skipif(minversion(np, '1.25.0'), reason='numpy 1.25 deprecation')
 def test_nddata_stats_func():
     nddata = NDData(np.arange(10))
     columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']
@@ -53,8 +51,6 @@ def test_nddata_stats_func():
                'mad_std', 'max', 'mean', 'median', 'min', 'mode', 'npixels',
                'nrejected', 'skew', 'std']
 
-    # Numpy 1.25 deprecation warning coming from
-    # scipy/stats/_stats_py.py:1069
     tbl = nddata_stats(nddata, columns=columns)
     assert len(tbl) == 1
     assert tbl.colnames == columns

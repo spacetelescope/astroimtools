@@ -59,11 +59,11 @@ def minmax(data, mask=None, axis=None):
     >>> np.random.seed(12345)
     >>> data = np.random.random((3, 3))
     >>> minmax(data)  # doctest: +FLOAT_CMP
-    (0.18391881167709445, 0.9645145197356216)
+    (np.float64(0.18391881167709445), np.float64(0.9645145197356216))
 
     >>> mask = (data < 0.3)
     >>> minmax(data, mask=mask)  # doctest: +FLOAT_CMP
-    (0.3163755545817859, 0.9645145197356216)
+    (np.float64(0.3163755545817859), np.float64(0.9645145197356216))
 
     >>> minmax(data, axis=1)  # doctest: +FLOAT_CMP
     (array([0.18391881, 0.20456028, 0.6531771 ]),
@@ -125,20 +125,20 @@ class NDDataStats:
     >>> nddata = NDData(data)
     >>> stats = NDDataStats(nddata)
     >>> stats.mean
-    14.5
+    np.float64(14.5)
     >>> stats.std  # doctest: +FLOAT_CMP
-    28.605069480775605
+    np.float64(28.605069480775605)
     >>> stats.mad_std  # doctest: +FLOAT_CMP
-    3.706505546264005
+    np.float64(3.706505546264005)
     >>> from astropy.stats import SigmaClip
     >>> sigclip = SigmaClip(sigma=2.5)
     >>> stats = NDDataStats(nddata, sigma_clip=sigclip)
     >>> stats.mean
-    5.0
+    np.float64(5.0)
     >>> stats.std  # doctest: +FLOAT_CMP
-    2.581988897471611
+    np.float64(2.581988897471611)
     >>> stats.mad_std  # doctest: +FLOAT_CMP
-    2.965204437011204
+    np.float64(2.965204437011204)
     """
 
     @deprecated_renamed_argument('sigma', 'sigma_clip', '0.2')
