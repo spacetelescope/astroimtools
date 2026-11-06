@@ -12,6 +12,12 @@ General
 
 - The minimum required SciPy version is 1.13.
 
+- The minimum required matplotlib version is 3.10.
+
+- The minimum required photutils version is 2.0.
+
+- The minimum required reproject version is 0.13.1.
+
 New Features
 ^^^^^^^^^^^^
 

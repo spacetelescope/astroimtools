@@ -18,13 +18,13 @@ Astroimtools has the following strict requirements:
 Some functionality is available only if the following optional
 dependencies are installed:
 
-* `Photutils <https://photutils.readthedocs.io/en/latest/>`_ 1.9 or
+* `Photutils <https://photutils.readthedocs.io/en/latest/>`_ 2.0 or
   later:  Used in cutout tools.
 
-* `Matplotlib <https://matplotlib.org/>`_ 3.8 or later:  Used in
+* `Matplotlib <https://matplotlib.org/>`_ 3.10 or later:  Used in
   cutout tools.
 
-* `reproject <https://reproject.readthedocs.io/en/stable/>`_ 0.11 or
+* `reproject <https://reproject.readthedocs.io/en/stable/>`_ 0.13.1 or
   later: Used in cutout tools.
 
 

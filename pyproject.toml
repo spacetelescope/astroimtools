@@ -41,12 +41,12 @@ imstats = "astroimtools.scripts.imstats:main"
 
 [project.optional-dependencies]
 all = [
-    'matplotlib >= 3.8',
-    'photutils >= 1.9',
-    'reproject >= 0.11',
+    'matplotlib >= 3.10',
+    'photutils >= 2.0',
+    'reproject >= 0.13.1',
 ]
 test = [
-    'pytest >= 7.0',
+    'pytest >= 8.0',
     'pytest-astropy-header >= 0.2.1',
     'pytest-doctestplus >= 1.0',
 ]
@@ -81,7 +81,7 @@ namespaces = false
 ]
 
 [tool.pytest.ini_options]
-minversion = 7.0
+minversion = "8.0"
 testpaths = [
     'astroimtools',
     'docs',
