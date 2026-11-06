@@ -46,7 +46,9 @@ all = [
     'reproject >= 0.11',
 ]
 test = [
-    'pytest-astropy >= 0.11',
+    'pytest >= 7.0',
+    'pytest-astropy-header >= 0.2.1',
+    'pytest-doctestplus >= 1.0',
 ]
 docs = [
     'astroimtools[all]',
@@ -102,7 +104,6 @@ addopts = [
 log_level = 'INFO'
 log_cli_level = 'INFO'
 xfail_strict = true
-remote_data_strict = true
 filterwarnings = [
     'error',  # turn warnings into exceptions
 ]
