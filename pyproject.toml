@@ -24,11 +24,11 @@ classifiers = [
     'Topic :: Scientific/Engineering :: Astronomy',
 ]
 dynamic = ['version']
-requires-python = '>= 3.12'
+requires-python = '>=3.12'
 dependencies = [
-    'numpy >= 2.0',
-    'astropy >= 7.0',
-    'scipy >= 1.15',
+    'numpy>=2.0',
+    'astropy>=7.0',
+    'scipy>=1.15',
 ]
 
 [project.urls]
@@ -41,27 +41,27 @@ imstats = "astroimtools.scripts.imstats:main"
 
 [project.optional-dependencies]
 all = [
-    'matplotlib >= 3.10',
-    'photutils >= 2.0',
-    'reproject >= 0.15',
+    'matplotlib>=3.10',
+    'photutils>=2.0',
+    'reproject>=0.15',
 ]
 test = [
-    'pytest >= 8.0',
-    'pytest-astropy-header >= 0.2.2',
-    'pytest-doctestplus >= 1.4',
+    'pytest>=8.0',
+    'pytest-astropy-header>=0.2.2',
+    'pytest-doctestplus>=1.4',
 ]
 docs = [
     'astroimtools[all]',
     'ipython',
     'nbsphinx',
     'sphinx',
-    'sphinx-astropy >= 1.9',
+    'sphinx-astropy>=1.9',
 ]
 
 [build-system]
 requires = [
-    'setuptools >= 77.0',
-    'setuptools_scm >= 8.0',
+    'setuptools>=77.0',
+    'setuptools_scm>=8.0',
 ]
 build-backend = 'setuptools.build_meta'
 
