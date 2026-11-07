@@ -4,11 +4,28 @@
 General
 ^^^^^^^
 
+- The minimum required Python version is 3.12. [#137]
+
+- The minimum required NumPy version is 2.0. [#137]
+
+- The minimum required Astropy version is 7.0. [#137]
+
+- The minimum required SciPy version is 1.15. [#137]
+
+- The minimum required matplotlib version is 3.10. [#137]
+
+- The minimum required photutils version is 2.0. [#137]
+
+- The minimum required reproject version is 0.15. [#137]
+
 New Features
 ^^^^^^^^^^^^
 
 Bug Fixes
 ^^^^^^^^^
+
+- Fixed ``show_cutout_with_slit`` to import the aperture classes from
+  ``photutils.aperture``, which is required for photutils 2.0 and later. [#137]
 
 API Changes
 ^^^^^^^^^^^

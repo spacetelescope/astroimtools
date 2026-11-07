@@ -236,8 +236,8 @@ def show_cutout_with_slit(hdr, data=None, slit_ra=None, slit_dec=None,
     make_cutouts
     """
     import matplotlib.pyplot as plt
-    from photutils import (SkyCircularAnnulus, SkyCircularAperture,
-                           SkyRectangularAperture)
+    from photutils.aperture import (SkyCircularAnnulus, SkyCircularAperture,
+                                    SkyRectangularAperture)
 
     if slit_ra is None:
         slit_ra = hdr['OBJ_RA']

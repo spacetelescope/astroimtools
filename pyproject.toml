@@ -24,11 +24,11 @@ classifiers = [
     'Topic :: Scientific/Engineering :: Astronomy',
 ]
 dynamic = ['version']
-requires-python = '>= 3.11'
+requires-python = '>=3.12'
 dependencies = [
-    'numpy >= 1.25',
-    'astropy >= 6.0',
-    'scipy >= 1.11.1',
+    'numpy>=2.0',
+    'astropy>=7.0',
+    'scipy>=1.15',
 ]
 
 [project.urls]
@@ -41,26 +41,27 @@ imstats = "astroimtools.scripts.imstats:main"
 
 [project.optional-dependencies]
 all = [
-    'matplotlib >= 3.8',
-    'photutils >= 1.9',
-    'reproject >= 0.11',
+    'matplotlib>=3.10',
+    'photutils>=2.0',
+    'reproject>=0.15',
 ]
 test = [
-    'pytest-astropy >= 0.11',
+    'pytest>=8.0',
+    'pytest-astropy-header>=0.2.2',
+    'pytest-doctestplus>=1.4',
 ]
 docs = [
     'astroimtools[all]',
     'ipython',
     'nbsphinx',
     'sphinx',
-    'sphinx-astropy >= 1.9',
-    'tomli; python_version < "3.11"',
+    'sphinx-astropy>=1.9',
 ]
 
 [build-system]
 requires = [
-    'setuptools >= 77.0',
-    'setuptools_scm >= 8.0',
+    'setuptools>=77.0.1',
+    'setuptools_scm>=8.2',
 ]
 build-backend = 'setuptools.build_meta'
 
@@ -80,7 +81,7 @@ namespaces = false
 ]
 
 [tool.pytest.ini_options]
-minversion = 7.0
+minversion = "8.0"
 testpaths = [
     'astroimtools',
     'docs',
@@ -102,26 +103,19 @@ addopts = [
 log_level = 'INFO'
 log_cli_level = 'INFO'
 xfail_strict = true
-remote_data_strict = true
 filterwarnings = [
     'error',  # turn warnings into exceptions
 ]
 
 [tool.coverage.run]
 omit = [
-    'astroimtools/_astropy_init*',
     'astroimtools/conftest.py',
-    'astroimtools/*setup_package*',
     'astroimtools/tests/*',
     'astroimtools/*/tests/*',
-    'astroimtools/extern/*',
     'astroimtools/version*',
-    '*/astroimtools/_astropy_init*',
     '*/astroimtools/conftest.py',
-    '*/astroimtools/*setup_package*',
     '*/astroimtools/tests/*',
     '*/astroimtools/*/tests/*',
-    '*/astroimtools/extern/*',
     '*/astroimtools/version*',
 ]
 
@@ -142,7 +136,6 @@ skip_glob = [
 ]
 known_first_party = [
     'astroimtools',
-    'extension_helpers',
 ]
 use_parentheses = true
 

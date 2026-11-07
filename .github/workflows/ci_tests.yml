@@ -31,14 +31,8 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            python: '3.11'
-            tox_env: 'py311-test-oldestdeps'
-            allow_failure: false
-            prefix: ''
-
-          - os: ubuntu-latest
-            python: '3.11'
-            tox_env: 'py311-test-alldeps'
+            python: '3.12'
+            tox_env: 'py312-test-oldestdeps'
             allow_failure: false
             prefix: ''
 
@@ -57,7 +51,6 @@ jobs:
           - os: ubuntu-latest
             python: '3.14'
             tox_env: 'py314-test-alldeps-cov'
-            toxposargs: --remote-data=any
             allow_failure: false
             prefix: ''
 
@@ -65,13 +58,18 @@ jobs:
           - os: ubuntu-latest
             python: '3.14'
             tox_env: 'py314-test'
-            toxposargs: --remote-data=any
             allow_failure: false
             prefix: ''
 
           - os: ubuntu-24.04-arm
             python: '3.14'
             tox_env: 'py314-test'
+            allow_failure: false
+            prefix: ''
+
+          - os: ubuntu-latest
+            python: '3.15'
+            tox_env: 'py315-test-alldeps'
             allow_failure: false
             prefix: ''
 
@@ -106,9 +104,8 @@ jobs:
             prefix: ''
 
           - os: ubuntu-latest
-            python: '3.14'
-            tox_env: 'py314-test-devdeps'
-            toxposargs: --remote-data=any
+            python: '3.15'
+            tox_env: 'py315-test-devdeps'
             allow_failure: true
             prefix: '(Allowed failure)'
 

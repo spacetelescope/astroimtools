@@ -19,7 +19,7 @@ and maximum values of an array (or along an array axis)::
            [0.20456028, 0.56772503, 0.5955447 ],
            [0.96451452, 0.6531771 , 0.74890664]])
     >>> minmax(data)  # doctest: +FLOAT_CMP
-    (0.18391881167709445, 0.9645145197356216)
+    (np.float64(0.18391881167709445), np.float64(0.9645145197356216))
 
 :func:`~astroimtools.stats.minmax` also accepts a mask array to ignore
 certain data values::
@@ -31,7 +31,7 @@ certain data values::
            [False, False, False]]...)
 
     >>> minmax(data, mask=mask)  # doctest: +FLOAT_CMP
-    (0.3163755545817859, 0.9645145197356216)
+    (np.float64(0.3163755545817859), np.float64(0.9645145197356216))
 
 The minimum and maximum can also be determined along a particular axis::
 
