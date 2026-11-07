@@ -60,8 +60,8 @@ docs = [
 
 [build-system]
 requires = [
-    'setuptools>=77.0',
-    'setuptools_scm>=8.0',
+    'setuptools>=77.0.1',
+    'setuptools_scm>=8.2',
 ]
 build-backend = 'setuptools.build_meta'
 
