@@ -26,8 +26,8 @@ classifiers = [
 dynamic = ['version']
 requires-python = '>=3.12'
 dependencies = [
-    'numpy>=2.0',
     'astropy>=7.0',
+    'numpy>=2.0',
     'scipy>=1.15',
 ]
 
@@ -49,13 +49,18 @@ test = [
     'pytest>=8.0',
     'pytest-astropy-header>=0.2.2',
     'pytest-doctestplus>=1.4',
+    'tox>=4.24',
 ]
 docs = [
     'astroimtools[all]',
     'ipython',
     'nbsphinx',
-    'sphinx',
+    'sphinx>=8.2',  # keep in sync with docs/conf.py
     'sphinx-astropy>=1.9',
+]
+dev = [
+    'astroimtools[docs,test]',
+    'pre-commit>=4.0',
 ]
 
 [build-system]
