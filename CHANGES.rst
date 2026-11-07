@@ -8,15 +8,15 @@ General
 
 - The minimum required NumPy version is 2.0. [#137]
 
-- The minimum required Astropy version is 6.1. [#137]
+- The minimum required Astropy version is 7.0. [#137]
 
-- The minimum required SciPy version is 1.13. [#137]
+- The minimum required SciPy version is 1.15. [#137]
 
 - The minimum required matplotlib version is 3.10. [#137]
 
 - The minimum required photutils version is 2.0. [#137]
 
-- The minimum required reproject version is 0.13.1. [#137]
+- The minimum required reproject version is 0.15. [#137]
 
 New Features
 ^^^^^^^^^^^^

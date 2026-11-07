@@ -11,9 +11,9 @@ Astroimtools has the following strict requirements:
 
 * `NumPy <https://numpy.org/>`_ 2.0 or later
 
-* `Astropy`_ 6.1 or later
+* `Astropy`_ 7.0 or later
 
-* `SciPy <https://scipy.org/>`_ 1.13 or later
+* `SciPy <https://scipy.org/>`_ 1.15 or later
 
 Some functionality is available only if the following optional
 dependencies are installed:
@@ -24,7 +24,7 @@ dependencies are installed:
 * `Matplotlib <https://matplotlib.org/>`_ 3.10 or later:  Used in
   cutout tools.
 
-* `reproject <https://reproject.readthedocs.io/en/stable/>`_ 0.13.1 or
+* `reproject <https://reproject.readthedocs.io/en/stable/>`_ 0.15 or
   later: Used in cutout tools.
 
 

@@ -27,8 +27,8 @@ dynamic = ['version']
 requires-python = '>= 3.12'
 dependencies = [
     'numpy >= 2.0',
-    'astropy >= 6.1',
-    'scipy >= 1.13',
+    'astropy >= 7.0',
+    'scipy >= 1.15',
 ]
 
 [project.urls]
@@ -43,7 +43,7 @@ imstats = "astroimtools.scripts.imstats:main"
 all = [
     'matplotlib >= 3.10',
     'photutils >= 2.0',
-    'reproject >= 0.13.1',
+    'reproject >= 0.15',
 ]
 test = [
     'pytest >= 8.0',
