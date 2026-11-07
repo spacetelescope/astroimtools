@@ -56,7 +56,7 @@ docs = [
     'ipython',
     'nbsphinx',
     'sphinx>=8.2',  # keep in sync with docs/conf.py
-    'sphinx-astropy>=1.9',
+    'sphinx-astropy>=1.11',
 ]
 dev = [
     'astroimtools[docs,test]',
@@ -229,7 +229,6 @@ ignore = [
     'PLW2901',
     'Q000',
     'SIM910',
-    'UP038',
 ]
 
 [tool.ruff.lint.flake8-copyright]
