@@ -1,0 +1,24 @@
+name: Check PR change log
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: read
+
+jobs:
+  changelog_checker:
+    name: Check if change log entry is correct
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.repository == 'spacetelescope/astroimtools'
+    steps:
+      - uses: scientific-python/action-check-changelogfile@92735146b118b1dd2951cb4a45d60c2d8b47a153 # 0.5
+        env:
+          CHANGELOG_FILENAME: CHANGES.rst
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
