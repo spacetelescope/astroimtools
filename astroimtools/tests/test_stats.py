@@ -1,16 +1,9 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 import numpy as np
-import pytest
 from astropy.nddata import NDData
 from numpy.testing import assert_allclose
 
 from ..stats import NDDataStats, minmax, nddata_stats
-
-try:
-    import scipy  # noqa: F401
-    HAS_SCIPY = True
-except ImportError:
-    HAS_SCIPY = False
 
 
 class TestMinMax:
@@ -42,7 +35,6 @@ def test_nddata_stats_class():
     assert_allclose(stats.mad_std, 3.7065055462640051)
 
 
-@pytest.mark.skipif('not HAS_SCIPY')
 def test_nddata_stats_func():
     nddata = NDData(np.arange(10))
     columns = ['mean', 'median', 'mode', 'std', 'mad_std', 'min', 'max']

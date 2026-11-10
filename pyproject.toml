@@ -46,7 +46,7 @@ all = [
     'reproject>=0.15',
 ]
 test = [
-    'pytest>=8.0',
+    'pytest>=9.0',
     'pytest-astropy-header>=0.2.2',
     'pytest-doctestplus>=1.4',
     'tox>=4.24',
@@ -71,7 +71,7 @@ requires = [
 build-backend = 'setuptools.build_meta'
 
 [tool.setuptools_scm]
-write_to = 'astroimtools/version.py'
+version_file = 'astroimtools/version.py'
 
 [tool.setuptools]
 zip-safe = false
@@ -85,8 +85,8 @@ namespaces = false
     'data/*',
 ]
 
-[tool.pytest.ini_options]
-minversion = "8.0"
+[tool.pytest]
+minversion = "9.0"
 testpaths = [
     'astroimtools',
     'docs',
@@ -95,6 +95,15 @@ norecursedirs = [
     'docs/_build',
 ]
 astropy_header = true
+astropy_header_packages = [
+    'astroimtools',
+    'astropy',
+    'numpy',
+    'scipy',
+    'matplotlib',
+    'photutils',
+    'reproject',
+]
 doctest_plus = 'enabled'
 text_file_format = 'rst'
 addopts = [
@@ -105,7 +114,6 @@ addopts = [
     '--strict-markers',
 ]
 log_level = 'INFO'
-log_cli_level = 'INFO'
 xfail_strict = true
 filterwarnings = [
     'error',  # turn warnings into exceptions
@@ -113,25 +121,21 @@ filterwarnings = [
 
 [tool.coverage.run]
 omit = [
-    'astroimtools/conftest.py',
-    'astroimtools/tests/*',
-    'astroimtools/*/tests/*',
+    'astroimtools/__init__*',
+    'astroimtools/**/conftest.py',
+    'astroimtools/**/tests/*',
     'astroimtools/version*',
-    '*/astroimtools/conftest.py',
-    '*/astroimtools/tests/*',
-    '*/astroimtools/*/tests/*',
+    '*/astroimtools/__init__*',
+    '*/astroimtools/**/conftest.py',
+    '*/astroimtools/**/tests/*',
     '*/astroimtools/version*',
 ]
 
 [tool.coverage.report]
 exclude_lines = [
     'pragma: no cover',
-    'except ImportError',
-    'raise AssertionError',
     'raise NotImplementedError',
     'def main\\(.*\\):',
-    'pragma: py{ignore_python_version}',
-    'def _ipython_key_completions_',
 ]
 
 [tool.isort]
@@ -144,6 +148,8 @@ known_first_party = [
 use_parentheses = true
 
 [tool.black]
+# Exclude every file so that black never reformats the code if an
+# editor or another tool runs it. This project does not use black.
 force-exclude = """
 (
   .*
@@ -190,8 +196,8 @@ checks = [
     'SS06',  # single-line summary
 ]
 
-# don't report on objects that match any of these regex;
-# remember to use single quotes for regex in TOML
+# Do not report on objects that match any of these regex.
+# Remember to use single quotes for regex in TOML.
 exclude = [
     '\._.*',  # private functions/methods
     '^test_*',  # test code
