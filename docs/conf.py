@@ -182,8 +182,10 @@ if os.path.isfile(nitpick_filename):
 
 # -- Options for linkcheck output ---------------------------------------------
 linkcheck_retry = 5
-linkcheck_ignore = ['http://data.astropy.org',
-                    r'https://github\.com/spacetelescope/astroimtools/(?:issues|pull)/\d+']
+linkcheck_ignore = [
+    'http://data.astropy.org',
+    r'https://github\.com/spacetelescope/astroimtools/(?:issues|pull)/\d+',
+]
 linkcheck_timeout = 180
 
 # -- Generate rst files for Jupyter notebooks --------------------------------

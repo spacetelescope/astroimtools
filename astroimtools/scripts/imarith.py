@@ -1,5 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-"""
+r"""
 ``imarith`` is a command-line script based on
 ``astroimtools.nddata_arith`` for performing basic arithmetic on arrays
 extracted from two FITS files.  The arithmetic is performed for the data
@@ -18,7 +18,8 @@ Example usage:
     values in the headers of the FITS files, placing the result in
     "result.fits"::
 
-    $ imarith filename1.fits filename2.fits '+' -e1 1 -e2 3 -k 'exptime' -o 'result.fits'
+    $ imarith filename1.fits filename2.fits '+' -e1 1 -e2 3 -k 'exptime' \
+        -o 'result.fits'
 
 .. highlight:: python3
 """

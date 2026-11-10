@@ -4,13 +4,13 @@
 version: 2
 updates:
   # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: ".github/workflows/"
+  - package-ecosystem: 'github-actions'
+    directory: '.github/workflows/'
     schedule:
-      interval: "monthly"
+      interval: 'monthly'
     cooldown:
       default-days: 7
     groups:
       actions:
         patterns:
-          - "*"
+          - '*'

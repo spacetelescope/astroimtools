@@ -93,7 +93,6 @@ testpaths = [
 ]
 norecursedirs = [
     'docs/_build',
-    'extern',
 ]
 astropy_header = true
 doctest_plus = 'enabled'
@@ -168,6 +167,7 @@ ignore = [
 ]
 
 [tool.codespell]
+skip = '*.ipynb'
 ignore-words-list = """
     exten, nd
 """
