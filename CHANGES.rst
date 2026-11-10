@@ -34,6 +34,10 @@ Bug Fixes
   ``imarith`` script, which uses it. The ``NDData`` uncertainty is now
   also correctly written to the ``ERROR`` extension. [#140]
 
+- Fixed ``make_cutouts`` with ``apply_rotation=True`` for images with a
+  WCS defined by CD or PC keywords. Previously, it raised an error or
+  wrote cutouts containing only NaN values. [#140]
+
 API Changes
 ^^^^^^^^^^^
 

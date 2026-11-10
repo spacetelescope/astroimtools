@@ -119,12 +119,13 @@ def make_cutouts(catalogname, imagename, image_label, apply_rotation=False,
             cutout_wcs.wcs.crval = [position.ra.deg, position.dec.deg]
             cutout_wcs.wcs.crpix = [(x_pix - 1) * 0.5, (y_pix - 1) * 0.5]
 
-            try:
-                cutout_wcs.wcs.cd = wcs.wcs.cd
-                cutout_wcs.rotateCD(-pix_rot)
-            except AttributeError:
-                cutout_wcs.wcs.cdelt = wcs.wcs.cdelt
-                cutout_wcs.wcs.crota = [0, -pix_rot]
+            # Rotate the image pixel scale matrix, which is defined
+            # whether the image WCS uses CD, PC and CDELT, or CROTA
+            # keywords
+            theta = np.deg2rad(pix_rot)
+            rotation = np.array([[np.cos(theta), -np.sin(theta)],
+                                 [np.sin(theta), np.cos(theta)]])
+            cutout_wcs.wcs.cd = wcs.pixel_scale_matrix @ rotation
 
             cutout_hdr = cutout_wcs.to_header()
 
