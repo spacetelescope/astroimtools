@@ -30,6 +30,10 @@ Bug Fixes
 - Fixed ``show_cutout_with_slit`` to import the aperture classes from
   ``photutils.aperture``, which is required for photutils 2.0 and later. [#137]
 
+- Fixed ``basic_nddata_to_fits``, which always raised an error, and the
+  ``imarith`` script, which uses it. The ``NDData`` uncertainty is now
+  also correctly written to the ``ERROR`` extension. [#140]
+
 API Changes
 ^^^^^^^^^^^
 

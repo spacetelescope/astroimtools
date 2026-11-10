@@ -72,7 +72,7 @@ def basic_nddata_to_fits(nddata, filename, overwrite=False):
     """
     hdu = fits.PrimaryHDU()
     if nddata.meta is not None:
-        for k, v in nddata.meta.iteritems():
+        for k, v in nddata.meta.items():
             hdu.header[k] = v
     hdus = [hdu]
 
@@ -80,7 +80,7 @@ def basic_nddata_to_fits(nddata, filename, overwrite=False):
     hdus[-1].header['EXTNAME'] = 'SCI'
 
     if nddata.uncertainty is not None:
-        hdus.append(fits.ImageHDU(data=nddata.uncertainty.value))
+        hdus.append(fits.ImageHDU(data=nddata.uncertainty.array))
         hdus[-1].header['EXTNAME'] = 'ERROR'
 
     if nddata.mask is not None:
