@@ -38,6 +38,9 @@ Bug Fixes
   WCS defined by CD or PC keywords. Previously, it raised an error or
   wrote cutouts containing only NaN values. [#140]
 
+- Fixed ``show_cutout_with_slit`` to save the plot when both ``ax`` and
+  ``plotname`` are input. [#140]
+
 API Changes
 ^^^^^^^^^^^
 

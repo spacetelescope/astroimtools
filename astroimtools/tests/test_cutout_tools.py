@@ -258,3 +258,20 @@ class TestShowCutoutWithSlit:
         plotname = tmp_path / 'slit.png'
         show_cutout_with_slit(header, data=data, plotname=plotname)
         assert plotname.stat().st_size > 0
+
+    def test_plotname_ax(self, plt, cutout, tmp_path):
+        header, data = cutout
+        fig, ax = plt.subplots()
+
+        # Make a different figure the current figure
+        plt.figure()
+
+        plotname = tmp_path / 'slit.png'
+        show_cutout_with_slit(header, data=data, ax=ax, plotname=plotname)
+        assert len(ax.images) == 1
+        assert plotname.stat().st_size > 0
+
+        # The saved figure must be the figure of the input axes
+        reference = tmp_path / 'reference.png'
+        fig.savefig(reference)
+        assert plotname.read_bytes() == reference.read_bytes()

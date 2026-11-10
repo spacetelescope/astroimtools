@@ -265,7 +265,9 @@ def show_cutout_with_slit(hdr, data=None, slit_ra=None, slit_dec=None,
 
     wcs = WCS(hdr)
     aper_pix = aper.to_pixel(wcs)
-    ax = kwargs.get('ax', plt)
+    ax = kwargs.get('ax')
+    if ax is None:
+        ax = plt.gca()
 
     if data is not None:
         ax.imshow(data, cmap=cmap, origin='lower')
@@ -273,4 +275,4 @@ def show_cutout_with_slit(hdr, data=None, slit_ra=None, slit_dec=None,
     aper_pix.plot(**kwargs)
 
     if plotname:
-        ax.savefig(plotname)
+        ax.figure.savefig(plotname)
