@@ -48,8 +48,8 @@ all = [
 test = [
     'pytest>=9.0',
     'pytest-astropy-header>=0.2.2',
+    'pytest-cov>=7.0',
     'pytest-doctestplus>=1.4',
-    'tox>=4.24',
 ]
 docs = [
     'astroimtools[all]',
@@ -61,6 +61,7 @@ docs = [
 dev = [
     'astroimtools[docs,test]',
     'pre-commit>=4.0',
+    'tox>=4.24',
 ]
 
 [build-system]
@@ -95,14 +96,16 @@ norecursedirs = [
     'docs/_build',
 ]
 astropy_header = true
+# Packages whose versions are shown in the pytest header. Keep this
+# list in sync with the dependencies and the "all" extra above.
 astropy_header_packages = [
     'astroimtools',
     'astropy',
-    'numpy',
-    'scipy',
     'matplotlib',
+    'numpy',
     'photutils',
     'reproject',
+    'scipy',
 ]
 doctest_plus = 'enabled'
 text_file_format = 'rst'
