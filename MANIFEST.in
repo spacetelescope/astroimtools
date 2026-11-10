@@ -1,0 +1,2 @@
+# Exclude the large example data files used by the docs notebook
+prune docs/notebooks/data
