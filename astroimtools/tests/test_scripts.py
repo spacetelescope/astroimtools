@@ -49,7 +49,7 @@ def test_imarith(fits_files, tmp_path):
     imarith.main([*fits_files, '+', '-e1', '1', '-e2', '1', '-k', 'exptime',
                   '-o', str(outfilename)])
     with fits.open(outfilename) as hdulist:
-        assert_allclose(hdulist[1].data,
+        assert_allclose(hdulist['SCI'].data,
                         np.arange(20.0).reshape(4, 5) * 3)
         assert hdulist[0].header['EXPTIME'] == 150.0
 
@@ -59,7 +59,7 @@ def test_imarith(fits_files, tmp_path):
                       str(outfilename)])
     imarith.main([*fits_files, '-', '-e1', '1', '-e2', '1', '-o',
                   str(outfilename), '--overwrite'])
-    assert_allclose(fits.getdata(outfilename, 1),
+    assert_allclose(fits.getdata(outfilename, 'SCI'),
                     -np.arange(20.0).reshape(4, 5))
 
 
@@ -67,7 +67,7 @@ def test_imarith_scalar(fits_files, tmp_path):
     outfilename = tmp_path / 'result.fits'
     imarith.main(['2', fits_files[0], '*', '-e2', '1', '-o',
                   str(outfilename)])
-    assert_allclose(fits.getdata(outfilename, 1),
+    assert_allclose(fits.getdata(outfilename, 'SCI'),
                     np.arange(20.0).reshape(4, 5) * 2)
 
 

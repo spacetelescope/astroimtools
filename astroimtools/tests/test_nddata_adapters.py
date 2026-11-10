@@ -41,9 +41,36 @@ def test_round_trip(nddata, tmp_path):
     # Write the NDData object read from the FITS file
     filename2 = tmp_path / 'test2.fits'
     basic_nddata_to_fits(nddata2, filename2)
-    nddata3 = basic_fits_to_nddata(filename2, exten=1)
+    nddata3 = basic_fits_to_nddata(filename2, exten='SCI')
     assert_equal(nddata3.data, nddata.data)
     assert nddata3.meta['OBJECT'] == 'test'
+
+
+def test_structural_keywords(tmp_path):
+    header = fits.Header()
+    header['XTENSION'] = 'IMAGE'
+    header['BITPIX'] = 16
+    header['NAXIS'] = 1
+    header['NAXIS1'] = 10
+    header['EXTNAME'] = 'SCI'
+    header['EXTVER'] = 2
+    header['OBJECT'] = 'test'
+    nddata = NDData(np.arange(12.0).reshape(3, 4), meta=header)
+
+    filename = tmp_path / 'test.fits'
+    basic_nddata_to_fits(nddata, filename)
+    with fits.open(filename) as hdulist:
+        assert hdulist.index_of('SCI') == 1
+        assert_equal(hdulist['SCI'].data, nddata.data)
+        primary_header = hdulist[0].header
+        assert primary_header['OBJECT'] == 'test'
+        assert primary_header['NAXIS'] == 0
+        for keyword in ('XTENSION', 'NAXIS1', 'EXTNAME', 'EXTVER'):
+            assert keyword not in primary_header
+
+    nddata2 = basic_fits_to_nddata(filename, exten='SCI')
+    assert_equal(nddata2.data, nddata.data)
+    assert nddata2.meta['OBJECT'] == 'test'
 
 
 def test_data_only(tmp_path):

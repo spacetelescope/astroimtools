@@ -28,7 +28,8 @@ Bug Fixes
 ^^^^^^^^^
 
 - Fixed ``show_cutout_with_slit`` to import the aperture classes from
-  ``photutils.aperture``, which is required for photutils 2.0 and later. [#137]
+  ``photutils.aperture``, which is required for photutils 2.0 and later.
+  [#137]
 
 - Fixed ``basic_nddata_to_fits``, which always raised an error, and the
   ``imarith`` script, which uses it. The ``NDData`` uncertainty is now
@@ -40,6 +41,12 @@ Bug Fixes
 
 - Fixed ``show_cutout_with_slit`` to save the plot when both ``ax`` and
   ``plotname`` are input. [#140]
+
+- Fixed ``basic_nddata_to_fits`` to not copy meta keywords that describe
+  the structure of a FITS extension (e.g., ``EXTNAME``) to the primary
+  header, and fixed ``basic_fits_to_nddata`` to not add the extension
+  keywords to the primary HDU. Previously, a FITS extension could not
+  be read back by its name. [#140]
 
 API Changes
 ^^^^^^^^^^^
