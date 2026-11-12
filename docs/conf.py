@@ -1,30 +1,16 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-#
-# Documentation build configuration file.
-#
-# This file is execfile()d with the current directory set to its
-# containing dir.
-#
-# Note that not all possible configuration values are present in this
-# file.
-#
-# All configuration values have a default. Some values are defined in
-# the global Astropy configuration which is loaded here before anything
-# else. See astropy.sphinx.conf for which values are set there.
+"""
+Documentation build configuration file.
+"""
 
 import os
-import sys
 import tomllib
 from datetime import UTC, datetime
 from importlib import metadata
 from pathlib import Path
 
-try:
-    from sphinx_astropy.conf.v1 import *  # noqa: F403
-except ImportError:
-    print('ERROR: the documentation requires the sphinx-astropy package to '
-          'be installed')
-    sys.exit(1)
+from docutils import nodes
+from sphinx import addnodes
 
 # Get configuration information from pyproject.toml
 with (Path(__file__).parents[1] / 'pyproject.toml').open('rb') as fh:
@@ -34,31 +20,57 @@ with (Path(__file__).parents[1] / 'pyproject.toml').open('rb') as fh:
 # By default, highlight as Python 3.
 highlight_language = 'python3'
 
+# The reST default role (used for this markup: `text`) to use for all
+# documents.
+default_role = 'py:obj'
+
 # If your documentation needs a minimal Sphinx version, state it here.
 needs_sphinx = '8.2'  # keep in sync with pyproject.toml
 
-# Extend astropy intersphinx_mapping with packages we use here
-intersphinx_mapping.update(  # noqa: F405
-    {'photutils': ('https://photutils.readthedocs.io/en/stable/', None),
-     })
-
-# Exclude astropy intersphinx_mapping for unused packages
-del intersphinx_mapping['h5py']  # noqa: F405
+# Add any Sphinx extension module names here, as strings.
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.viewcode',
+    'sphinx_automodapi.automodapi',
+    'sphinx_copybutton',
+    'matplotlib.sphinxext.plot_directive',
+    'numpydoc',
+    'pytest_doctestplus.sphinx.doctestplus',
+    'sphinx_astropy.ext.changelog_links',
+    'nbsphinx',
+]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-# exclude_patterns.append('_templates')
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-plot_formats = ['png', 'hires.png', 'pdf', 'svg']
+# The suffix of source filenames.
+source_suffix = '.rst'
 
-# This is added to the end of RST files - a good place to put
+# The master toctree document.
+root_doc = 'index'
+
+# This is added to the end of RST files. It is a good place to put
 # substitutions to be used globally.
 rst_epilog = """
 .. _Astropy: https://www.astropy.org/
 """
 
-# Turn off table of contents entries for functions and classes
-# toc_object_entries = False
+# -- Intersphinx configuration ------------------------------------------------
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', None),
+    'numpy': ('https://numpy.org/doc/stable/', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/', None),
+    'matplotlib': ('https://matplotlib.org/stable/', None),
+    'astropy': ('https://docs.astropy.org/en/stable/', None),
+    'photutils': ('https://photutils.readthedocs.io/en/stable/', None),
+    'reproject': ('https://reproject.readthedocs.io/en/stable/', None),
+}
+
+# -- numpydoc configuration ---------------------------------------------------
+numpydoc_show_class_members = False
 
 # -- Project information ------------------------------------------------------
 project = project_meta['name']
@@ -69,54 +81,43 @@ github_project = 'spacetelescope/astroimtools'
 # The version info for the project you're documenting, acts as
 # replacement for |version| and |release|, also used in various other
 # places throughout the built documents.
+
+# The full version, including alpha/beta/rc tags.
 release = metadata.version(project)
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
 dev = 'dev' in release
 
 # -- Options for HTML output --------------------------------------------------
-# The global astropy configuration uses a custom theme,
-# 'bootstrap-astropy', which is installed along with astropy. A
-# different theme can be used or the options for this theme can be
-# modified by overriding some of the variables set in the global
-# configuration. The variables set in the global configuration are
-# listed below, commented out.
+html_static_path = ['_static']
+html_css_files = ['custom.css']
+html_title = f'{project} {release}'
+templates_path = ['_templates']
 
-# Add any paths that contain custom themes here, relative to this
-# directory.
-# html_theme_path = []
+html_theme = 'pydata_sphinx_theme'
+html_show_sourcelink = False
 
-# The theme to use for HTML and HTML Help pages. See the documentation
-# for a list of builtin themes. To override the custom theme, set this
-# to the name of a builtin theme or the name of a custom theme in
-# html_theme_path.
-# html_theme = None
-
-html_theme_options = {
-    'logotext1': 'astro',  # white,  semi-bold
-    'logotext2': 'imtools',  # orange, light
-    'logotext3': ':docs',   # white,  light
+# Remove (left) sidebars
+html_sidebars = {
+    '**': [],
 }
 
-# Custom sidebar templates, maps document names to template names.
-# html_sidebars = {}
-
-# The name of an image file (relative to this directory) to place at the
-# top of the sidebar.
-# html_logo = ''
-
-# The name of an image file (within the static path) to use as favicon
-# of the docs. This file should be a Windows icon file (.ico) being
-# 16x16 or 32x32 pixels large.
-# html_favicon = ''
-
-# A "Last built" timestamp is inserted at every page bottom, using the
-# given strftime format. Set to '' to omit this timestamp.
-# html_last_updated_fmt = '%d %b %Y'
-
-# The name for this set of Sphinx documents. If None, it defaults to
-# "<project> v<release>".
-html_title = f'{project} {release}'
+html_theme_options = {
+    'show_toc_level': 2,
+    'navbar_align': 'left',
+    'use_edit_page_button': False,
+    'logo': {'text': 'astroimtools', 'alt_text': 'astroimtools'},
+    # Show one dropdown for each index.rst section instead of a link to
+    # every page
+    'navbar_center': ['navbar-sections'],
+    'icon_links': [
+        {'name': 'GitHub',
+         'url': 'https://github.com/spacetelescope/astroimtools',
+         'icon': 'fa-brands fa-github',
+         'type': 'fontawesome',
+         },
+    ],
+}
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = project + 'doc'
@@ -185,9 +186,77 @@ linkcheck_retry = 5
 linkcheck_ignore = [
     'http://data.astropy.org',
     r'https://github\.com/spacetelescope/astroimtools/(?:issues|pull)/\d+',
+    r'https://ui\.adsabs\.harvard\.edu/.*',  # 405 Client Error
+    # Zenodo/doi: 403 Client Error: Forbidden for url
+    r'https://zenodo.org/records/*',
+    r'https://doi.org/*',
 ]
 linkcheck_timeout = 180
 
-# -- Generate rst files for Jupyter notebooks --------------------------------
-extensions += ['nbsphinx']  # noqa: F405
-# nbsphinx_prompt_width = 0  # to remove input/output cell prompts
+
+# -- Header navigation --------------------------------------------------------
+def get_nav_sections(app):
+    """
+    Return the root toctree entries grouped by their index.rst section.
+
+    Parameters
+    ----------
+    app : `~sphinx.application.Sphinx`
+        The Sphinx application.
+
+    Returns
+    -------
+    sections : list of tuple
+        A ``(title, entries)`` tuple for each toctree in the root
+        document, where ``title`` is the title of the section that
+        contains the toctree and ``entries`` is a list of ``(text,
+        docname)`` tuples for its pages.
+    """
+    env = app.env
+    doctree = env.get_doctree(app.config.root_doc)
+    sections = []
+    for toctree in doctree.findall(addnodes.toctree):
+        section = toctree.parent
+        while not isinstance(section, nodes.section):
+            section = section.parent
+        title = section.next_node(nodes.title).astext()
+        entries = [(text or env.titles[docname].astext(), docname)
+                   for text, docname in toctree['entries']]
+        sections.append((title, entries))
+    return sections
+
+
+def add_nav_sections(app, pagename, templatename, context, doctree):
+    """
+    Add the header navigation sections to the HTML page context.
+
+    Parameters
+    ----------
+    app : `~sphinx.application.Sphinx`
+        The Sphinx application.
+
+    pagename : str
+        The name of the page being rendered.
+
+    templatename : str
+        The name of the page template.
+
+    context : dict
+        The page context, which is updated in place.
+
+    doctree : `~docutils.nodes.document` or None
+        The doctree of the page, or `None` for pages without one.
+    """
+    context['nav_sections'] = get_nav_sections(app)
+
+
+def setup(app):
+    """
+    Connect the header navigation to the HTML page context.
+
+    Parameters
+    ----------
+    app : `~sphinx.application.Sphinx`
+        The Sphinx application.
+    """
+    app.connect('html-page-context', add_nav_sections)
