@@ -4,19 +4,22 @@
 General
 ^^^^^^^
 
-- The minimum required Python version is 3.12. [#137]
+- The minimum required Python is now 3.12. [#137]
 
-- The minimum required NumPy version is 2.0. [#137]
+- The minimum required NumPy is now 2.0. [#137]
 
-- The minimum required Astropy version is 7.0. [#137]
+- The minimum required Astropy is now 7.0. [#137]
 
-- The minimum required SciPy version is 1.15. [#137]
+- The minimum required SciPy is now 1.15. [#137]
 
-- The minimum required matplotlib version is 3.10. [#137]
+- The minimum required Matplotlib is now 3.10. [#137]
 
-- The minimum required photutils version is 2.0. [#137]
+- The minimum required photutils is now 2.0. [#137]
 
-- The minimum required reproject version is 0.15. [#137]
+- The minimum required reproject is now 0.15. [#137]
+
+- The source distribution no longer includes the example data files
+  used by the cutouts notebook in the documentation. [#139]
 
 New Features
 ^^^^^^^^^^^^
@@ -31,7 +34,7 @@ API Changes
 ^^^^^^^^^^^
 
 - The ``astroimtools.test`` function has been removed. Instead use the
-  ``pytest --pyargs astroimtools`` command.
+  ``pytest --pyargs astroimtools`` command. [#106]
 
 
 0.4 (2023-09-18)
@@ -40,17 +43,17 @@ API Changes
 General
 ^^^^^^^
 
-- The minimum required Python version is 3.9. [#92]
+- The minimum required Python is now 3.9. [#92]
 
-- The minimum required Numpy version is 1.22. [#92]
+- The minimum required NumPy is now 1.22. [#92]
 
-- The minimum required Astropy version is 5.0. [#82]
+- The minimum required Astropy is now 5.0. [#82]
 
-- The minimum required Scipy version is 1.7.2. [#92]
+- The minimum required SciPy is now 1.7.2. [#92]
 
-- The minimum required matplotlib version is 3.5. [#92]
+- The minimum required Matplotlib is now 3.5. [#92]
 
-- The minimum required photutils version is 1.5. [#92]
+- The minimum required photutils is now 1.5. [#92]
 
 Bug Fixes
 ^^^^^^^^^
@@ -71,13 +74,13 @@ API Changes
 General
 ^^^^^^^
 
-- The minimum required Python version is 3.6. [#70]
+- The minimum required Python is now 3.6. [#70]
 
-- The minimum required Numpy version is 1.16. [#70]
+- The minimum required NumPy is now 1.16. [#70]
 
-- The minimum required Astropy version is 3.2. [#70]
+- The minimum required Astropy is now 3.2. [#70]
 
-API changes
+API Changes
 ^^^^^^^^^^^
 
 - The ``mask_databounds`` function no longer raises a warning if the
@@ -102,7 +105,7 @@ New Features
 - Added ``cutout_tools`` module, including relevant documentation and
   example Jupyter notebooks. [#31]
 
-API changes
+API Changes
 ^^^^^^^^^^^
 
 - ``nddata_stats`` and ``NDDataStats`` sigma-clipping parameters are

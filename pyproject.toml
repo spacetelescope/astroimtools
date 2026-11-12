@@ -46,21 +46,26 @@ all = [
     'reproject>=0.15',
 ]
 test = [
-    'pytest>=8.0',
+    'pytest>=9.0',
     'pytest-astropy-header>=0.2.2',
+    'pytest-cov>=7.0',
     'pytest-doctestplus>=1.4',
-    'tox>=4.24',
 ]
 docs = [
     'astroimtools[all]',
     'ipython',
     'nbsphinx',
+    'numpydoc>=1.8',
+    'pydata-sphinx-theme>=0.16',
     'sphinx>=8.2',  # keep in sync with docs/conf.py
     'sphinx-astropy>=1.11',
+    'sphinx-automodapi>=0.18',
+    'sphinx-copybutton>=0.5',
 ]
 dev = [
     'astroimtools[docs,test]',
     'pre-commit>=4.0',
+    'tox>=4.24',
 ]
 
 [build-system]
@@ -71,7 +76,7 @@ requires = [
 build-backend = 'setuptools.build_meta'
 
 [tool.setuptools_scm]
-write_to = 'astroimtools/version.py'
+version_file = 'astroimtools/version.py'
 
 [tool.setuptools]
 zip-safe = false
@@ -85,17 +90,27 @@ namespaces = false
     'data/*',
 ]
 
-[tool.pytest.ini_options]
-minversion = "8.0"
+[tool.pytest]
+minversion = "9.0"
 testpaths = [
     'astroimtools',
     'docs',
 ]
 norecursedirs = [
     'docs/_build',
-    'extern',
 ]
 astropy_header = true
+# Packages whose versions are shown in the pytest header. Keep this
+# list in sync with the dependencies and the "all" extra above.
+astropy_header_packages = [
+    'astroimtools',
+    'astropy',
+    'matplotlib',
+    'numpy',
+    'photutils',
+    'reproject',
+    'scipy',
+]
 doctest_plus = 'enabled'
 text_file_format = 'rst'
 addopts = [
@@ -106,7 +121,6 @@ addopts = [
     '--strict-markers',
 ]
 log_level = 'INFO'
-log_cli_level = 'INFO'
 xfail_strict = true
 filterwarnings = [
     'error',  # turn warnings into exceptions
@@ -114,25 +128,21 @@ filterwarnings = [
 
 [tool.coverage.run]
 omit = [
-    'astroimtools/conftest.py',
-    'astroimtools/tests/*',
-    'astroimtools/*/tests/*',
+    'astroimtools/__init__*',
+    'astroimtools/**/conftest.py',
+    'astroimtools/**/tests/*',
     'astroimtools/version*',
-    '*/astroimtools/conftest.py',
-    '*/astroimtools/tests/*',
-    '*/astroimtools/*/tests/*',
+    '*/astroimtools/__init__*',
+    '*/astroimtools/**/conftest.py',
+    '*/astroimtools/**/tests/*',
     '*/astroimtools/version*',
 ]
 
 [tool.coverage.report]
 exclude_lines = [
     'pragma: no cover',
-    'except ImportError',
-    'raise AssertionError',
     'raise NotImplementedError',
     'def main\\(.*\\):',
-    'pragma: py{ignore_python_version}',
-    'def _ipython_key_completions_',
 ]
 
 [tool.isort]
@@ -145,6 +155,8 @@ known_first_party = [
 use_parentheses = true
 
 [tool.black]
+# Exclude every file so that black never reformats the code if an
+# editor or another tool runs it. This project does not use black.
 force-exclude = """
 (
   .*
@@ -168,6 +180,7 @@ ignore = [
 ]
 
 [tool.codespell]
+skip = '*.ipynb'
 ignore-words-list = """
     exten, nd
 """
@@ -190,46 +203,45 @@ checks = [
     'SS06',  # single-line summary
 ]
 
-# don't report on objects that match any of these regex;
-# remember to use single quotes for regex in TOML
+# Do not report on objects that match any of these regex.
+# Remember to use single quotes for regex in TOML.
 exclude = [
     '\._.*',  # private functions/methods
     '^test_*',  # test code
     '^conftest.*$',  # pytest configuration
 ]
 
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint.pylint]
+max-statements = 130
+
 [tool.ruff.lint]
 select = [
-    'B', 'CPY', 'D', 'E', 'F', 'FLY', 'I', 'INT', 'N', 'NPY', 'PERF', 'PL',
-    'Q', 'RSE', 'SIM', 'UP', 'W'
+    'B', 'COM', 'CPY', 'D', 'E', 'F', 'FLY', 'I', 'INT', 'N', 'NPY', 'PERF',
+    'PL', 'Q', 'RSE', 'SIM', 'UP', 'W'
 ]
 ignore = [
-    'E501',
-    'B028',
     'B905',  # revisit
     'D100',
     'D101',
     'D102',
     'D103',
     'D105',
-    'D107',
     'D200',
     'D205',
-    'D212',
     'D401',
-    'D404',
     'I001',
     'PLC0415',  # import-outside-top-level
     'PLR0912',
     'PLR0913',
-    'PLR0915',
     'PLR0917',  # too-many-positional-arguments
     'PLR2004',
-    'PLW1641',  # eq-without-hash
-    'PLW2901',
-    'Q000',
-    'SIM910',
 ]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = 'single'
 
 [tool.ruff.lint.flake8-copyright]
 min-file-size = 1  # skip empty files (< 1 byte), e.g., __init__.py
@@ -238,7 +250,7 @@ notice-rgx = 'Licensed under a 3-clause BSD style license - see LICENSE.rst'
 [tool.ruff.lint.per-file-ignores]
 '__init__.py' = ['D104', 'I']
 'docs/conf.py' = ['ERA001', 'INP001', 'TRY400']
-'*.ipynb' = ['CPY001']
+'*.ipynb' = ['CPY001', 'E501']
 
 [tool.ruff.lint.pydocstyle]
 convention = 'numpy'

@@ -1,0 +1,24 @@
+{# Header nav with one dropdown for each section of the root toctree. The
+   sections come from nav_sections, which docs/conf.py adds to the page
+   context. #}
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    {%- for title, entries in nav_sections %}
+    <li class="nav-item dropdown">
+      <button class="btn dropdown-toggle nav-item" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false"
+              aria-controls="pst-nav-section-{{ loop.index }}">
+        {{ title }}
+      </button>
+      <ul id="pst-nav-section-{{ loop.index }}" class="dropdown-menu">
+        {%- for text, docname in entries %}
+        <li class="{{ 'current active' if docname == pagename }}">
+          <a class="nav-link dropdown-item nav-internal"
+             href="{{ pathto(docname) }}">{{ text }}</a>
+        </li>
+        {%- endfor %}
+      </ul>
+    </li>
+    {%- endfor %}
+  </ul>
+</nav>

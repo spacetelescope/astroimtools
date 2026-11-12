@@ -45,10 +45,11 @@ dependencies, you can instead do::
 Testing an Installed Astroimtools
 =================================
 
-To test your installed version of astroimtools, you can
-run the test suite using the `pytest`_ command. Running
-the test suite requires installing the `pytest-astropy
-<https://github.com/astropy/pytest-astropy>`_ (0.11 or later) package.
+To test your installed version of astroimtools, you can run the test
+suite using the `pytest`_ command. Running the test suite requires
+installing the testing dependencies, which you can do with::
+
+    pip install "astroimtools[test]"
 
 To run the test suite, use the following command::
 
