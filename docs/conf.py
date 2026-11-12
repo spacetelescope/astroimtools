@@ -95,7 +95,7 @@ dev = 'dev' in release
 html_theme_options = {
     'logotext1': 'astro',  # white,  semi-bold
     'logotext2': 'imtools',  # orange, light
-    'logotext3': ':docs'   # white,  light
+    'logotext3': ':docs',   # white,  light
 }
 
 # Custom sidebar templates, maps document names to template names.

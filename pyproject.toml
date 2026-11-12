@@ -198,38 +198,37 @@ exclude = [
     '^conftest.*$',  # pytest configuration
 ]
 
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint.pylint]
+max-statements = 130
+
 [tool.ruff.lint]
 select = [
-    'B', 'CPY', 'D', 'E', 'F', 'FLY', 'I', 'INT', 'N', 'NPY', 'PERF', 'PL',
-    'Q', 'RSE', 'SIM', 'UP', 'W'
+    'B', 'COM', 'CPY', 'D', 'E', 'F', 'FLY', 'I', 'INT', 'N', 'NPY', 'PERF',
+    'PL', 'Q', 'RSE', 'SIM', 'UP', 'W'
 ]
 ignore = [
-    'E501',
-    'B028',
     'B905',  # revisit
     'D100',
     'D101',
     'D102',
     'D103',
     'D105',
-    'D107',
     'D200',
     'D205',
-    'D212',
     'D401',
-    'D404',
     'I001',
     'PLC0415',  # import-outside-top-level
     'PLR0912',
     'PLR0913',
-    'PLR0915',
     'PLR0917',  # too-many-positional-arguments
     'PLR2004',
-    'PLW1641',  # eq-without-hash
-    'PLW2901',
-    'Q000',
-    'SIM910',
 ]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = 'single'
 
 [tool.ruff.lint.flake8-copyright]
 min-file-size = 1  # skip empty files (< 1 byte), e.g., __init__.py
@@ -238,7 +237,7 @@ notice-rgx = 'Licensed under a 3-clause BSD style license - see LICENSE.rst'
 [tool.ruff.lint.per-file-ignores]
 '__init__.py' = ['D104', 'I']
 'docs/conf.py' = ['ERA001', 'INP001', 'TRY400']
-'*.ipynb' = ['CPY001']
+'*.ipynb' = ['CPY001', 'E501']
 
 [tool.ruff.lint.pydocstyle]
 convention = 'numpy'
